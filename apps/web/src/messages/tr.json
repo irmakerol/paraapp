@@ -22,7 +22,11 @@
     "themeDark": "Koyu",
     "themeSystem": "Sistem",
     "messages": "Mesajlar",
-    "admin": "Yönetim"
+    "admin": "Yönetim",
+    "events": "Etkinlikler",
+    "safety": "Güvenlik",
+    "rides": "Yolculuklar",
+    "sosLabel": "SOS: acil yardım ve konumunuz"
   },
   "footer": {
     "privacyNotice": "Aydınlatma metni",
@@ -500,7 +504,8 @@
     "topicNews": "Kulüp haberleri (“Kulüp haberleri ve kampanyalar” onayı gerekir)",
     "topicAds": "İlanlarım (süre hatırlatmaları)",
     "consentLink": "Kulüp haberlerini almak için Gizlilik sekmesinde “Kulüp haberleri ve duyurular” iznini açın.",
-    "topicEquipment": "Ekipman kontrolleri ve yedek paraşüt katlamaları"
+    "topicEquipment": "Ekipman kontrolleri ve yedek paraşüt katlamaları",
+    "topicSafety": "Yeni olay raporları (güvenlik sorumluları)"
   },
   "admin": {
     "title": "Yönetim",
@@ -515,7 +520,8 @@
       "openReports": "Açık şikâyetler",
       "pendingTips": "İncelenecek ipuçları",
       "openRequests": "Açık veri talepleri",
-      "users": "Kullanıcılar"
+      "users": "Kullanıcılar",
+      "openIncidents": "Açık olay raporları"
     },
     "newsForm": {
       "new": "Yeni haber",
@@ -572,13 +578,16 @@
         "chat": "Sohbet",
         "message": "Mesaj",
         "news_comment": "Yorum",
-        "tip": "İpucu"
+        "tip": "İpucu",
+        "ride": "Yolculuk ilanı",
+        "event": "Etkinlik"
       },
       "statuses": {
         "open": "Açık",
         "actioned": "İşlem yapıldı",
         "dismissed": "Reddedildi"
-      }
+      },
+      "removeRide": "Yolculuk ilanını kaldır"
     },
     "usersAdmin": {
       "search": "Ada göre ara",
@@ -637,6 +646,79 @@
       "markdownHelp": "Markdown desteklenir.",
       "verified": "Kulüp tarafından doğrulandı",
       "deleteConfirm": "Bu alan silinsin mi? Uçuşlar istatistiklerini korur ama alan bağlantısını kaybeder."
+    },
+    "events": "Etkinlikler",
+    "safety": "Güvenlik",
+    "eventsAdmin": {
+      "new": "Yeni etkinlik",
+      "edit": "Etkinliği düzenle",
+      "empty": "Henüz etkinlik yok.",
+      "eventTitle": "Başlık",
+      "kind": "Tür",
+      "status": "Durum",
+      "statuses": {
+        "draft": "Taslak",
+        "published": "Yayında",
+        "cancelled": "İptal edildi"
+      },
+      "startsAt": "Başlangıç",
+      "endsAt": "Bitiş",
+      "timeHelp": "Türkiye saati.",
+      "site": "Uçuş yeri",
+      "location": "Yer (isteğe bağlı)",
+      "capacity": "Kontenjan",
+      "capacityHelp": "Sınır yoksa boş bırakın.",
+      "deadline": "Son katılım tarihi (isteğe bağlı)",
+      "description": "Açıklama",
+      "markdownHelp": "Markdown: **kalın**, *italik*, listeler ve bağlantılar.",
+      "membersOnly": "Yalnızca üyeler (sadece kulüp üyeleri görür)",
+      "attendees": "Katılanlar",
+      "noAttendees": "Henüz yanıt veren yok.",
+      "deleteConfirm": "Bu etkinlik ve tüm katılım yanıtları silinsin mi? Bu işlem geri alınamaz."
+    },
+    "safetyAdmin": {
+      "back": "Olay raporları",
+      "lessons": "Güvenlik dersleri",
+      "writeLesson": "Güvenlik dersi yaz",
+      "editLesson": "Güvenlik dersini düzenle",
+      "auditNote": "Bir raporu açmak kayıt altına alınır. Bu alanı yalnızca güvenlik sorumluları görebilir; yöneticiler göremez.",
+      "injured": "yaralı",
+      "occurred": "Olay tarihi",
+      "site": "Uçuş yeri",
+      "category": "Tür",
+      "severity": "Ciddiyet",
+      "anonymity": "Bildirim şekli",
+      "reporter": "Bildiren",
+      "reporterUnknown": "Tamamen anonim: saklanmıyor",
+      "reporterPurged": "Saklama süresi sonunda silindi",
+      "contact": "Bildirenle iletişime geçilebilir mi?",
+      "yes": "Evet",
+      "no": "Hayır",
+      "received": "Alındı",
+      "assigned": "İlgilenen",
+      "description": "Ne oldu",
+      "conditions": "Koşullar",
+      "equipment": "Ekipman",
+      "reporterLessons": "Bildirenin çıkardığı dersler",
+      "injury": "Yaralanma bilgileri (sağlık verisi)",
+      "noInjuryDetails": "Yaralanma bilgisi verilmedi.",
+      "injuryUnreadable": "Yaralanma bilgileri çözülemiyor. INCIDENT_ENCRYPTION_KEY ayarını kontrol edin.",
+      "injuryAudited": "Sağlık verisi. Yalnızca gerekirse açın: her görüntüleme kayıt altına alınır.",
+      "showInjury": "Yaralanma bilgilerini göster",
+      "notes": "İç notlar",
+      "addNote": "Not ekle",
+      "status": "Durum",
+      "assignMe": "Bana ata",
+      "update": "Güncelle",
+      "retentionNote": "Rapor kapatıldıktan bir yıl sonra bildiren, iletişim izni ve yaralanma bilgileri otomatik olarak silinir.",
+      "lessonPrivacy": "Dersleri kimse tanınmayacak şekilde yazın: isim, tarih, kesin yer veya yalnızca ilgililerin bilebileceği ayrıntılar olmasın.",
+      "lessonTitle": "Başlık",
+      "language": "Dil",
+      "draft": "Taslak",
+      "published": "Yayında",
+      "summary": "Özet (isteğe bağlı)",
+      "body": "Ders",
+      "markdownHelp": "Markdown: **kalın**, *italik*, listeler ve bağlantılar."
     }
   },
   "roles": {
@@ -656,12 +738,17 @@
     "adExpiring": "“{title}” birkaç gün içinde yayından kalkacak. Yayında kalması için yenileyin.",
     "checkDueTitle": "Ekipman kontrolü yaklaşıyor",
     "repackDueTitle": "Yedek paraşüt katlaması yaklaşıyor",
-    "equipmentDue": "{model}: {date} tarihinde"
+    "equipmentDue": "{model}: {date} tarihinde",
+    "incidentTitle": "Yeni olay raporu",
+    "incidentBody": "Güvenlik alanında yeni bir rapor bekliyor.",
+    "newGroupMessage": "{name}, {group} grubunda"
   },
   "maps": {
     "load": "Haritayı göster",
     "remember": "Bu cihazda haritaları hep göster",
-    "notice": "Harita OpenFreeMap'ten (OpenStreetMap verisi) yüklenir. Açtığınızda IP adresiniz onların sunucularına gönderilir."
+    "notice": "Harita OpenFreeMap'ten (OpenStreetMap verisi) yüklenir. Açtığınızda IP adresiniz onların sunucularına gönderilir.",
+    "airspace": "Hava sahası",
+    "airspaceCredit": "Hava sahası © OpenAIP"
   },
   "logbook": {
     "title": "Uçuş defteri",
@@ -851,7 +938,8 @@
       "SW": "GB",
       "W": "B",
       "NW": "KB"
-    }
+    },
+    "weather": "Hava durumu ve uçulabilirlik"
   },
   "pilots": {
     "pilot": "Pilot",
@@ -875,5 +963,261 @@
     "compareLead": "Rekorlarınız onunkilerin yanında. Daha iyi olan sayı kalın yazılır.",
     "stat": "İstatistik",
     "you": "Siz"
+  },
+  "weather": {
+    "today": "Bugün",
+    "ratings": {
+      "good": "Uçulabilir",
+      "marginal": "Sınırda",
+      "no": "Uçulamaz"
+    },
+    "reasons": {
+      "rain": "yağmur",
+      "tooWindy": "çok rüzgârlı",
+      "gusty": "hamleli",
+      "crossWind": "rüzgâr yamaca uygun değil",
+      "strongish": "kuvvetli rüzgâr",
+      "overdevelopment": "aşırı gelişme riski",
+      "noData": "veri yok"
+    },
+    "goodHours": "{hours, plural, =0 {iyi saat yok} other {# iyi saat}}",
+    "hourly": "Saat saat",
+    "time": "Saat",
+    "wind": "Rüzgâr (km/sa)",
+    "gusts": "Hamle",
+    "rain": "Yağış (mm)",
+    "rating": "Değerlendirme",
+    "unavailable": "Tahmin şu anda alınamıyor.",
+    "disclaimer": "Bir hava modelinden kaba bir yönlendirme, uçuş kararı değildir. Koşulları her zaman yerinde kontrol edin ve yerel pilotlara danışın.",
+    "updated": "Güncelleme: {time}.",
+    "credit": "Hava verileri: Open-Meteo.com"
+  },
+  "safety": {
+    "title": "Güvenlik",
+    "lead": "Olay ve ramak kala durumlarını bildirin, dersleri okuyun, acil yardıma ulaşın.",
+    "sent": "Teşekkürler. Raporunuz güvenlik sorumlularına ulaştı.",
+    "reportButton": "Olay bildir",
+    "sosButton": "Acil durum (SOS)",
+    "justCulture": "Adil kültür ilkesini benimsiyoruz: raporlar suçlamak için değil, öğrenmek içindir. Ramak kala durumlar da kazalar kadar değerlidir.",
+    "myReports": "Raporlarım",
+    "anonymousNotListed": "Tamamen anonim raporlar sizinle ilişkilendirilmez, bu yüzden burada listelenmez.",
+    "lessons": "Güvenlik dersleri",
+    "noLessons": "Henüz yayımlanmış ders yok.",
+    "stats": "Yıllara göre raporlar",
+    "year": "Yıl",
+    "noStats": "Henüz rapor yok.",
+    "statsNote": "Yalnızca sayılar. Yer, tarih veya kişi gösterilmez.",
+    "lessonNote": "Bu ders kimse tanınmayacak şekilde yazılmıştır ve hiçbir raporla ilişkili değildir.",
+    "anonymity": {
+      "named": "İsimli",
+      "community_anonymous": "Topluluğa anonim",
+      "fully_anonymous": "Tamamen anonim"
+    },
+    "statuses": {
+      "submitted": "Alındı",
+      "in_review": "İnceleniyor",
+      "closed": "Kapatıldı"
+    },
+    "categories": {
+      "collapse": "Kapanma",
+      "spiral_or_spin": "Spiral veya spin",
+      "reserve_deployment": "Yedek paraşüt açılması",
+      "takeoff": "Kalkış",
+      "landing": "İniş",
+      "tree_landing": "Ağaca iniş",
+      "water_landing": "Suya iniş",
+      "collision": "Çarpışma veya ramak kala çarpışma",
+      "power_line": "Elektrik hattı",
+      "equipment_failure": "Ekipman arızası",
+      "weather": "Hava durumu",
+      "medical": "Sağlık",
+      "other": "Diğer"
+    },
+    "severities": {
+      "near_miss": "Ramak kala",
+      "minor": "Hafif",
+      "serious": "Ciddi",
+      "fatal": "Ölümlü"
+    },
+    "report": {
+      "title": "Olay bildir",
+      "lead": "Birkaç dakika sürer. Raporları yalnızca güvenlik sorumluları okur.",
+      "emergency": "Şu anda yaralı biri mi var? Önce 112’yi arayın.",
+      "who": "Nasıl bildirmek istersiniz?",
+      "anonymityHelp": {
+        "named": "Güvenlik sorumluları adınızı görür. Derslerde kimsenin adı geçmez.",
+        "community_anonymous": "Güvenlik sorumluları, ek soru sorabilmek için kim olduğunuzu görür. Başka hiç kimse görmez.",
+        "fully_anonymous": "Hesabınız raporla birlikte saklanmaz, güvenlik sorumluları bile göremez. Bu raporla ilgili size ulaşılamaz."
+      },
+      "date": "Tarih",
+      "site": "Uçuş yeri",
+      "otherSite": "Diğer veya bilinmiyor",
+      "siteName": "Yer adı",
+      "category": "Olayın türü nedir?",
+      "severity": "Ne kadar ciddi?",
+      "description": "Ne oldu?",
+      "descriptionHelp": "En az 20 karakter. Olayların sırasını anlatın.",
+      "conditions": "Koşullar (isteğe bağlı)",
+      "conditionsHelp": "Rüzgâr, termik, türbülans, görüş…",
+      "equipment": "Ekipman (isteğe bağlı)",
+      "equipmentHelp": "Kanat, harness, yedek paraşüt: model ve sınıf yeterli.",
+      "lessons": "Neyi farklı yapardınız? (isteğe bağlı)",
+      "lessonsHelp": "Kendi değerlendirmeniz diğer pilotlara en çok yardımcı olur.",
+      "noNames": "Lütfen raporda başka kişilerin adını vermeyin.",
+      "injured": "Yaralanan oldu",
+      "injuryIntro": "Yaralanma bilgileri sağlık verisidir. Şifrelenir, yalnızca güvenlik sorumluları okuyabilir, her görüntüleme kayıt altına alınır ve rapor kapatıldıktan bir yıl sonra silinir.",
+      "injuryConsent": "Bu sağlık bilgilerinin uçuş güvenliği analizi amacıyla işlenmesine açık rıza veriyorum (KVKK md. 6).",
+      "consentNeeded": "Rızanız olmadan yaralanma bilgilerini saklayamayız. Raporu bu bilgiler olmadan yine de gönderebilirsiniz.",
+      "injuryDetails": "Yaralanma bilgileri",
+      "injuryDetailsHelp": "Yalnızca güvenliğe yardımcı olanlar: ör. \"inişte ayak bileği burkuldu\".",
+      "contactOk": "Bir güvenlik sorumlusu bu raporla ilgili benimle iletişime geçebilir",
+      "submit": "Raporu gönder",
+      "encryptionMissing": "Yaralanma bilgileri şu anda saklanamıyor. Lütfen raporu bu bilgiler olmadan gönderin."
+    }
+  },
+  "events": {
+    "title": "Etkinlikler",
+    "lead": "Kulüp gezileri, kurslar, yarışmalar ve buluşmalar.",
+    "upcoming": "Yaklaşan",
+    "past": "Geçmiş",
+    "empty": "Yaklaşan etkinlik yok.",
+    "noPast": "Geçmiş etkinlik yok.",
+    "cancelled": "İptal edildi",
+    "membersOnly": "Yalnızca üyeler",
+    "kinds": {
+      "club_trip": "Kulüp gezisi",
+      "course": "Kurs",
+      "competition": "Yarışma",
+      "social": "Sosyal",
+      "meeting": "Toplantı",
+      "other": "Diğer"
+    },
+    "cancelledNotice": "Bu etkinlik iptal edildi.",
+    "sitePage": "Uçuş yeri sayfası",
+    "counts": "{going} katılıyor · {maybe} belki",
+    "capacity": "{capacity} kişilik kontenjan",
+    "deadline": "Son katılım: {date}",
+    "signInToJoin": "Katılmak için giriş yapın",
+    "closedNotice": "Katılım kapandı.",
+    "yourAnswerWas": "Yanıtınız: {answer}",
+    "addToCalendar": "Takvime ekle",
+    "manage": "Etkinliği yönet",
+    "rsvp": {
+      "going": "Katılıyorum",
+      "maybe": "Belki",
+      "not_going": "Katılmıyorum"
+    },
+    "yourAnswer": "Geliyor musunuz?",
+    "note": "Organizatörlere not (isteğe bağlı)",
+    "noteHelp": "Ör. \"2 kişiyi arabama alabilirim\".",
+    "send": "Yanıtı kaydet",
+    "saved": "Yanıtınız kaydedildi.",
+    "full": "Üzgünüz, kontenjan doldu.",
+    "closed": "Bu etkinliğe katılım kapandı."
+  },
+  "rides": {
+    "title": "Yolculuklar",
+    "intro": "Kalkış yerine araç paylaşın veya pilot toplayacak sürücü bulun. Bu panoyu yalnızca yetişkin üyeler görür; ilanlar yolculuktan 30 gün sonra silinir.",
+    "new": "Yolculuk ilanı ver",
+    "filter": "Yolculukları filtrele",
+    "all": "Tümü",
+    "kinds": {
+      "offer": "Yer var",
+      "request": "Yer arıyor"
+    },
+    "kindsPlural": {
+      "offer": "Yer verenler",
+      "request": "Yer arayanlar"
+    },
+    "purposes": {
+      "carpool": "Araç paylaşımı",
+      "retrieve": "Pilot toplama"
+    },
+    "kindLabel": "Ben",
+    "purposeLabel": "Amaç",
+    "date": "Tarih",
+    "time": "Saat (isteğe bağlı)",
+    "from": "Nereden",
+    "fromHelp": "Bir ilçe veya buluşma noktası; ev adresiniz değil.",
+    "site": "Uçuş yeri",
+    "to": "Nereye (isteğe bağlı)",
+    "seats": "Koltuk (isteğe bağlı)",
+    "note": "Not (isteğe bağlı)",
+    "privacyNote": "Diğer yetişkin üyeler bu ilanı adınızla görür. Ayrıntıları özel mesajla konuşun.",
+    "post": "Yayınla",
+    "posted": "İlanınız yayında.",
+    "empty": "Henüz ilan yok. İlkini siz verin!",
+    "closed": "Kapandı",
+    "yours": "Sizin ilanınız",
+    "close": "Kapandı olarak işaretle",
+    "reopen": "Yeniden aç",
+    "seatsCount": "{count, plural, other {# koltuk}}",
+    "adultsOnly": "Yolculuk panosu yalnızca yetişkin üyeler içindir."
+  },
+  "groups": {
+    "new": "Yeni grup sohbeti",
+    "newLead": "Birkaç pilotla aynı anda yazışın. Grup sohbetleri yetişkin üyeler içindir.",
+    "name": "Grup adı",
+    "members": "Üyeler",
+    "membersHelp": "Takip ettiğiniz kişileri ekleyebilirsiniz.",
+    "create": "Grup oluştur",
+    "followFirst": "Önce birkaç pilotu takip edin, sonra onları gruba ekleyebilirsiniz.",
+    "findPilots": "Pilot bul",
+    "adultsOnly": "Grup sohbetleri yalnızca yetişkin üyeler içindir.",
+    "pickMembers": "En az bir kişi seçin.",
+    "memberNotAllowed": "Seçtiğiniz kişilerden biri grup sohbetine katılamıyor (18 yaşından küçük, pasif veya engellenmiş olabilir).",
+    "full": "Grup dolu (50 kişi).",
+    "untitled": "Grup sohbeti",
+    "memberCount": "{count, plural, other {# üye}}",
+    "manage": "Üyeler ve ayarlar",
+    "creator": "grubu oluşturdu",
+    "remove": "Çıkar",
+    "leave": "Gruptan ayrıl",
+    "add": "Takip ettiğiniz birini ekleyin",
+    "addButton": "Ekle",
+    "added": "Eklendi."
+  },
+  "sos": {
+    "title": "Acil durum",
+    "lead": "Yardım çağırın ve tam olarak nerede olduğunuzu söyleyin.",
+    "call": "{number} ara",
+    "numbers": {
+      "emergency": "Acil çağrı",
+      "gendarmerie": "Jandarma",
+      "coastGuard": "Sahil güvenlik"
+    },
+    "positionTitle": "Konumum",
+    "positionHelp": "Tarayıcınız izin isteyecek. Konum telefonunuzda kalır.",
+    "locate": "Konumumu göster",
+    "locating": "Konumunuz bulunuyor…",
+    "decimal": "Koordinatlar",
+    "dms": "Derece, dakika, saniye",
+    "accuracy": "Doğruluk",
+    "altitude": "yükseklik {m} m",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı.",
+    "sms": "SMS ile gönder",
+    "openMap": "Haritada aç",
+    "refresh": "Güncelle",
+    "positionError": "Konumunuz bulunamadı. Konum servisinin açık ve bu site için izinli olduğunu kontrol edin.",
+    "message": "Yardıma ihtiyacım var. Konumum: {decimal} ({dms}) {link}",
+    "tellTitle": "Çağrı merkezine söyleyin",
+    "tell": {
+      "what": "Ne oldu (ör. yamaç paraşütü kazası, ağaca iniş).",
+      "where": "Nerede: yukarıdaki koordinatları okuyun.",
+      "who": "Kaç kişi var.",
+      "injuries": "Yaralanmalar; kişinin bilinci açık mı, nefes alıyor mu.",
+      "callback": "Telefon numaranız; hattı boş tutun."
+    },
+    "tipsTitle": "Beklerken",
+    "tips": {
+      "tree": "Ağaçtaysanız: bağlı kalın ve kurtarma ekibini bekleyin. Kendi başınıza inmeye çalışmayın.",
+      "water": "Sudaysanız: harnessten ve iplerden olabildiğince hızlı kurtulun.",
+      "wing": "Kanadı açık bir alana serin: havadan kolayca görülür.",
+      "battery": "Telefon pilinizi koruyun: diğer uygulamaları kapatın, ekran parlaklığını azaltın.",
+      "helicopter": "Helikopter gelecekse kanadı rüzgârla kalkmayacak şekilde sabitleyin."
+    },
+    "clubContact": "{club} iletişim:",
+    "privacy": "Bu sayfa hesap gerektirmez ve sunucumuza hiçbir şey göndermez."
   }
 }

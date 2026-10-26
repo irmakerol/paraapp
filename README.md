@@ -44,6 +44,8 @@ Open `apps/web/.env.local` in a text editor and fill in:
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | "Publishable key" (or "anon key") from `npx supabase status`    |
 | `SUPABASE_SERVICE_ROLE_KEY`     | "Secret key" (or "service_role key") from `npx supabase status` |
 | `LICENCE_ENCRYPTION_KEY`        | run `openssl rand -base64 32` and paste the result              |
+| `INCIDENT_ENCRYPTION_KEY`       | run `openssl rand -base64 32` again (a different key)           |
+| `NEXT_PUBLIC_OPENAIP_API_KEY`   | optional: free key from openaip.net for the airspace map layer  |
 
 ```bash
 # 3. Start the web app
@@ -56,6 +58,11 @@ Studio) is at http://127.0.0.1:54323.
 
 `pnpm db:reset` reloads a few example news articles and tips (marked "example"). Delete them from the
 admin area before launch.
+
+### Safety officers
+
+Incident reports are only visible to users with the `safety_officer` role (admins do not see them).
+Give the role to one or two trusted people in Admin → Users.
 
 ### Make yourself an admin
 
@@ -112,4 +119,5 @@ pnpm --filter @paraapp/web build && pnpm test:e2e   # browser tests
 
 Legal texts in `docs/legal` are **drafts** and must be reviewed by the club's lawyer before launch.
 
-Map data © OpenStreetMap contributors, tiles by OpenFreeMap.
+Map data © OpenStreetMap contributors, tiles by OpenFreeMap. Weather data by Open-Meteo.com.
+Airspace © OpenAIP.

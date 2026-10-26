@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { Map as MapLibreMap, Marker } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { varioSeries, type CompactTrack } from '@paraapp/core';
-import { MAP_STYLE } from '@/lib/map';
+import { addAirspaceControl, MAP_STYLE } from '@/lib/map';
 import { MapGate } from './map-gate';
 
 interface Point {
@@ -59,6 +59,8 @@ export function FlightViewer({ track, trimmed }: { track: CompactTrack; trimmed:
 }
 
 function TrackMap({ points, index, label }: { points: Point[]; index: number; label: string }) {
+  const maps = useTranslations('maps');
+  const airspaceLabels = { show: maps('airspace'), attribution: maps('airspaceCredit') };
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
   const marker = useRef<Marker | null>(null);
@@ -82,6 +84,7 @@ function TrackMap({ points, index, label }: { points: Point[]; index: number; la
       });
       instance.addControl(new maplibregl.NavigationControl({ showCompass: true }), 'top-right');
       instance.addControl(new maplibregl.ScaleControl({ unit: 'metric' }));
+      addAirspaceControl(instance, airspaceLabels);
       instance.on('load', () => {
         const features = points.slice(1).map((p, i) => ({
           type: 'Feature' as const,
@@ -125,6 +128,7 @@ function TrackMap({ points, index, label }: { points: Point[]; index: number; la
       map.current?.remove();
       map.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels only matter on creation
   }, [points]);
 
   useEffect(() => {

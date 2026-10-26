@@ -28,6 +28,8 @@ export function ChatRoom(props: {
   initialImageUrls: Record<string, string>;
   peerLastReadAt: string | null;
   blocked: boolean;
+  group?: boolean;
+  senderNames?: Record<string, string>;
 }) {
   const { chatId, userId, peerId } = props;
   const t = useTranslations('chat');
@@ -153,7 +155,7 @@ export function ChatRoom(props: {
   }
 
   const lastOwn = [...messages].reverse().find((m) => m.sender_id === userId);
-  const seen = lastOwn && ms(peerLastReadAt) >= ms(lastOwn.created_at);
+  const seen = !props.group && lastOwn && ms(peerLastReadAt) >= ms(lastOwn.created_at);
 
   return (
     <div className="flex flex-col gap-3">
@@ -165,6 +167,11 @@ export function ChatRoom(props: {
           const own = m.sender_id === userId;
           return (
             <li key={m.id} className={`flex flex-col ${own ? 'items-end' : 'items-start'}`}>
+              {props.group && !own ? (
+                <p className="px-1 text-xs font-semibold text-muted">
+                  {(m.sender_id && props.senderNames?.[m.sender_id]) || t('deletedUser')}
+                </p>
+              ) : null}
               <div
                 className={`max-w-[85%] rounded-2xl px-3 py-2 ${
                   own ? 'bg-primary text-primary-foreground' : 'bg-background'
@@ -225,7 +232,7 @@ export function ChatRoom(props: {
       </ol>
 
       {error ? <Alert tone="error">{t('error')}</Alert> : null}
-      {props.blocked || !peerId ? (
+      {props.blocked || (!peerId && !props.group) ? (
         <Alert>{t('blockedNotice')}</Alert>
       ) : (
         <form

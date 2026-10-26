@@ -22,7 +22,11 @@
     "themeDark": "Dark",
     "themeSystem": "System",
     "messages": "Messages",
-    "admin": "Admin"
+    "admin": "Admin",
+    "events": "Events",
+    "safety": "Safety",
+    "rides": "Rides",
+    "sosLabel": "SOS: emergency help and your position"
   },
   "footer": {
     "privacyNotice": "Privacy notice",
@@ -500,7 +504,8 @@
     "topicNews": "Club news (needs the “Club news and offers” consent)",
     "topicAds": "My ads (expiry reminders)",
     "consentLink": "Turn on the “Club news and offers” consent in Privacy to receive club news.",
-    "topicEquipment": "Equipment checks and reserve repacks"
+    "topicEquipment": "Equipment checks and reserve repacks",
+    "topicSafety": "New incident reports (safety officers)"
   },
   "admin": {
     "title": "Admin",
@@ -515,7 +520,8 @@
       "openReports": "Open reports",
       "pendingTips": "Tips to review",
       "openRequests": "Open data requests",
-      "users": "Users"
+      "users": "Users",
+      "openIncidents": "Open incident reports"
     },
     "newsForm": {
       "new": "New article",
@@ -572,13 +578,16 @@
         "chat": "Conversation",
         "message": "Message",
         "news_comment": "Comment",
-        "tip": "Tip"
+        "tip": "Tip",
+        "ride": "Ride post",
+        "event": "Event"
       },
       "statuses": {
         "open": "Open",
         "actioned": "Action taken",
         "dismissed": "Dismissed"
-      }
+      },
+      "removeRide": "Remove ride post"
     },
     "usersAdmin": {
       "search": "Search by name",
@@ -637,6 +646,79 @@
       "markdownHelp": "Markdown is supported.",
       "verified": "Verified by the club",
       "deleteConfirm": "Delete this site? Flights keep their stats but lose the link to the site."
+    },
+    "events": "Events",
+    "safety": "Safety",
+    "eventsAdmin": {
+      "new": "New event",
+      "edit": "Edit event",
+      "empty": "No events yet.",
+      "eventTitle": "Title",
+      "kind": "Type",
+      "status": "Status",
+      "statuses": {
+        "draft": "Draft",
+        "published": "Published",
+        "cancelled": "Cancelled"
+      },
+      "startsAt": "Starts",
+      "endsAt": "Ends",
+      "timeHelp": "Türkiye time.",
+      "site": "Site",
+      "location": "Place (optional)",
+      "capacity": "Places",
+      "capacityHelp": "Leave empty for no limit.",
+      "deadline": "Sign-up deadline (optional)",
+      "description": "Description",
+      "markdownHelp": "Markdown: **bold**, *italic*, lists and links.",
+      "membersOnly": "Members only (only club members see it)",
+      "attendees": "Going",
+      "noAttendees": "Nobody has answered yet.",
+      "deleteConfirm": "Delete this event and all its sign-ups? This cannot be undone."
+    },
+    "safetyAdmin": {
+      "back": "Incident reports",
+      "lessons": "Safety lessons",
+      "writeLesson": "Write a safety lesson",
+      "editLesson": "Edit safety lesson",
+      "auditNote": "Opening a report is logged. Only safety officers can see this area; admins cannot.",
+      "injured": "injured",
+      "occurred": "Happened on",
+      "site": "Site",
+      "category": "Type",
+      "severity": "Severity",
+      "anonymity": "Reported as",
+      "reporter": "Reporter",
+      "reporterUnknown": "Fully anonymous: not stored",
+      "reporterPurged": "Removed after the retention period",
+      "contact": "May we contact the reporter?",
+      "yes": "Yes",
+      "no": "No",
+      "received": "Received",
+      "assigned": "Handled by",
+      "description": "What happened",
+      "conditions": "Conditions",
+      "equipment": "Equipment",
+      "reporterLessons": "The reporter’s lessons",
+      "injury": "Injury details (health data)",
+      "noInjuryDetails": "No injury details were given.",
+      "injuryUnreadable": "The injury details cannot be decrypted. Check INCIDENT_ENCRYPTION_KEY.",
+      "injuryAudited": "Health data. Only open it if you need it: every view is logged.",
+      "showInjury": "Show injury details",
+      "notes": "Internal notes",
+      "addNote": "Add note",
+      "status": "Status",
+      "assignMe": "Assign to me",
+      "update": "Update",
+      "retentionNote": "One year after closing, the reporter, contact flag and injury details are removed automatically.",
+      "lessonPrivacy": "Write lessons so that nobody can be recognised: no names, dates, exact places or details only the people involved would know.",
+      "lessonTitle": "Title",
+      "language": "Language",
+      "draft": "Draft",
+      "published": "Published",
+      "summary": "Summary (optional)",
+      "body": "Lesson",
+      "markdownHelp": "Markdown: **bold**, *italic*, lists and links."
     }
   },
   "roles": {
@@ -656,12 +738,17 @@
     "adExpiring": "“{title}” expires in a few days. Renew it to keep it online.",
     "checkDueTitle": "Equipment check due soon",
     "repackDueTitle": "Reserve repack due soon",
-    "equipmentDue": "{model}: due {date}"
+    "equipmentDue": "{model}: due {date}",
+    "incidentTitle": "New incident report",
+    "incidentBody": "A new safety report is waiting in the safety area.",
+    "newGroupMessage": "{name} in {group}"
   },
   "maps": {
     "load": "Show map",
     "remember": "Always show maps on this device",
-    "notice": "The map is loaded from OpenFreeMap (OpenStreetMap data). Your IP address is sent to their servers when you open it."
+    "notice": "The map is loaded from OpenFreeMap (OpenStreetMap data). Your IP address is sent to their servers when you open it.",
+    "airspace": "Airspace",
+    "airspaceCredit": "Airspace © OpenAIP"
   },
   "logbook": {
     "title": "Logbook",
@@ -851,7 +938,8 @@
       "SW": "SW",
       "W": "W",
       "NW": "NW"
-    }
+    },
+    "weather": "Weather and flyability"
   },
   "pilots": {
     "pilot": "Pilot",
@@ -875,5 +963,261 @@
     "compareLead": "Your records next to theirs. The better number is in bold.",
     "stat": "Stat",
     "you": "You"
+  },
+  "weather": {
+    "today": "Today",
+    "ratings": {
+      "good": "Flyable",
+      "marginal": "Marginal",
+      "no": "Not flyable"
+    },
+    "reasons": {
+      "rain": "rain",
+      "tooWindy": "too windy",
+      "gusty": "gusty",
+      "crossWind": "wind not on the slope",
+      "strongish": "strong wind",
+      "overdevelopment": "risk of overdevelopment",
+      "noData": "no data"
+    },
+    "goodHours": "{hours, plural, =0 {no good hours} one {# good hour} other {# good hours}}",
+    "hourly": "Hour by hour",
+    "time": "Time",
+    "wind": "Wind (km/h)",
+    "gusts": "Gusts",
+    "rain": "Rain (mm)",
+    "rating": "Rating",
+    "unavailable": "The forecast is not available right now.",
+    "disclaimer": "A rough guide from a weather model, not a flying decision. Always check conditions on site and ask local pilots.",
+    "updated": "Updated {time}.",
+    "credit": "Weather data by Open-Meteo.com"
+  },
+  "safety": {
+    "title": "Safety",
+    "lead": "Report incidents and near misses, read the lessons, and find emergency help.",
+    "sent": "Thank you. Your report has reached the safety officers.",
+    "reportButton": "Report an incident",
+    "sosButton": "Emergency (SOS)",
+    "justCulture": "We follow a just culture: reports are for learning, never for blame. Near misses are just as valuable as accidents.",
+    "myReports": "My reports",
+    "anonymousNotListed": "Fully anonymous reports are not linked to you, so they are not listed here.",
+    "lessons": "Safety lessons",
+    "noLessons": "No lessons published yet.",
+    "stats": "Reports by year",
+    "year": "Year",
+    "noStats": "No reports yet.",
+    "statsNote": "Counts only. No sites, dates or people are shown.",
+    "lessonNote": "This lesson is written so that nobody can be recognised. It is not linked to any report.",
+    "anonymity": {
+      "named": "Named",
+      "community_anonymous": "Anonymous to the community",
+      "fully_anonymous": "Fully anonymous"
+    },
+    "statuses": {
+      "submitted": "Received",
+      "in_review": "In review",
+      "closed": "Closed"
+    },
+    "categories": {
+      "collapse": "Collapse",
+      "spiral_or_spin": "Spiral or spin",
+      "reserve_deployment": "Reserve deployment",
+      "takeoff": "Takeoff",
+      "landing": "Landing",
+      "tree_landing": "Tree landing",
+      "water_landing": "Water landing",
+      "collision": "Collision or near collision",
+      "power_line": "Power line",
+      "equipment_failure": "Equipment failure",
+      "weather": "Weather",
+      "medical": "Medical",
+      "other": "Other"
+    },
+    "severities": {
+      "near_miss": "Near miss",
+      "minor": "Minor",
+      "serious": "Serious",
+      "fatal": "Fatal"
+    },
+    "report": {
+      "title": "Report an incident",
+      "lead": "It takes a few minutes. Only the safety officers read reports.",
+      "emergency": "Is someone hurt right now? Call 112 first.",
+      "who": "How do you want to report?",
+      "anonymityHelp": {
+        "named": "Safety officers see your name. Lessons never name anyone.",
+        "community_anonymous": "Safety officers see who you are, so they can ask follow-up questions. Nobody else ever does.",
+        "fully_anonymous": "Your account is not stored with the report, not even for safety officers. Nobody can contact you about it."
+      },
+      "date": "Date",
+      "site": "Site",
+      "otherSite": "Other or unknown",
+      "siteName": "Place name",
+      "category": "What kind of incident?",
+      "severity": "How serious?",
+      "description": "What happened?",
+      "descriptionHelp": "At least 20 characters. Describe the sequence of events.",
+      "conditions": "Conditions (optional)",
+      "conditionsHelp": "Wind, thermals, turbulence, visibility…",
+      "equipment": "Equipment (optional)",
+      "equipmentHelp": "Wing, harness, reserve: model and class are enough.",
+      "lessons": "What would you do differently? (optional)",
+      "lessonsHelp": "Your own take helps other pilots most.",
+      "noNames": "Please do not name other people in the report.",
+      "injured": "Someone was injured",
+      "injuryIntro": "Injury details are health data. They are encrypted, only safety officers can read them, every view is logged, and they are deleted one year after the report is closed.",
+      "injuryConsent": "I agree that these health details are processed for flight safety analysis (explicit consent, KVKK Art. 6).",
+      "consentNeeded": "Without your consent we cannot store injury details. You can still send the report without them.",
+      "injuryDetails": "Injury details",
+      "injuryDetailsHelp": "Only what helps safety: e.g. \"sprained ankle on landing\".",
+      "contactOk": "A safety officer may contact me about this report",
+      "submit": "Send report",
+      "encryptionMissing": "Injury details cannot be stored right now. Please send the report without them."
+    }
+  },
+  "events": {
+    "title": "Events",
+    "lead": "Club trips, courses, competitions and get-togethers.",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "empty": "No upcoming events.",
+    "noPast": "No past events.",
+    "cancelled": "Cancelled",
+    "membersOnly": "Members only",
+    "kinds": {
+      "club_trip": "Club trip",
+      "course": "Course",
+      "competition": "Competition",
+      "social": "Social",
+      "meeting": "Meeting",
+      "other": "Other"
+    },
+    "cancelledNotice": "This event has been cancelled.",
+    "sitePage": "Site page",
+    "counts": "{going} going · {maybe} maybe",
+    "capacity": "{capacity} places",
+    "deadline": "Sign up by {date}",
+    "signInToJoin": "Sign in to join",
+    "closedNotice": "Sign-ups are closed.",
+    "yourAnswerWas": "Your answer: {answer}",
+    "addToCalendar": "Add to calendar",
+    "manage": "Manage event",
+    "rsvp": {
+      "going": "Going",
+      "maybe": "Maybe",
+      "not_going": "Not going"
+    },
+    "yourAnswer": "Are you coming?",
+    "note": "Note for the organisers (optional)",
+    "noteHelp": "E.g. \"I can bring 2 people\".",
+    "send": "Save answer",
+    "saved": "Your answer is saved.",
+    "full": "Sorry, the event is full.",
+    "closed": "Sign-ups for this event are closed."
+  },
+  "rides": {
+    "title": "Rides",
+    "intro": "Share a car to the launch or find a retrieve driver. Only adult members see this board, and posts are deleted 30 days after the ride.",
+    "new": "Post a ride",
+    "filter": "Filter rides",
+    "all": "All",
+    "kinds": {
+      "offer": "Offering",
+      "request": "Looking for"
+    },
+    "kindsPlural": {
+      "offer": "Offers",
+      "request": "Requests"
+    },
+    "purposes": {
+      "carpool": "Carpool",
+      "retrieve": "Retrieve"
+    },
+    "kindLabel": "I am",
+    "purposeLabel": "For",
+    "date": "Date",
+    "time": "Time (optional)",
+    "from": "From",
+    "fromHelp": "A district or meeting point, not your home address.",
+    "site": "Site",
+    "to": "To (optional)",
+    "seats": "Seats (optional)",
+    "note": "Note (optional)",
+    "privacyNote": "Other adult members will see this post with your name. Agree on details in a private message.",
+    "post": "Post",
+    "posted": "Your ride is posted.",
+    "empty": "No rides yet. Post the first one!",
+    "closed": "Closed",
+    "yours": "Your post",
+    "close": "Mark as closed",
+    "reopen": "Reopen",
+    "seatsCount": "{count, plural, one {# seat} other {# seats}}",
+    "adultsOnly": "The ride board is only for adult members."
+  },
+  "groups": {
+    "new": "New group chat",
+    "newLead": "Chat with several pilots at once. Group chats are for adult members.",
+    "name": "Group name",
+    "members": "Members",
+    "membersHelp": "You can add people you follow.",
+    "create": "Create group",
+    "followFirst": "Follow a few pilots first, then you can add them to a group.",
+    "findPilots": "Find pilots",
+    "adultsOnly": "Group chats are only for adult members.",
+    "pickMembers": "Pick at least one person.",
+    "memberNotAllowed": "Someone you picked cannot join group chats (they may be under 18, inactive or blocked).",
+    "full": "The group is full (50 people).",
+    "untitled": "Group chat",
+    "memberCount": "{count, plural, one {# member} other {# members}}",
+    "manage": "Members and settings",
+    "creator": "created the group",
+    "remove": "Remove",
+    "leave": "Leave group",
+    "add": "Add a person you follow",
+    "addButton": "Add",
+    "added": "Added."
+  },
+  "sos": {
+    "title": "Emergency",
+    "lead": "Call for help and tell them exactly where you are.",
+    "call": "Call {number}",
+    "numbers": {
+      "emergency": "Emergency",
+      "gendarmerie": "Gendarmerie",
+      "coastGuard": "Coast guard"
+    },
+    "positionTitle": "My position",
+    "positionHelp": "Your browser will ask for permission. The position stays on your phone.",
+    "locate": "Show my position",
+    "locating": "Finding your position…",
+    "decimal": "Coordinates",
+    "dms": "Degrees, minutes, seconds",
+    "accuracy": "Accuracy",
+    "altitude": "altitude {m} m",
+    "copy": "Copy",
+    "copied": "Copied.",
+    "sms": "Send by SMS",
+    "openMap": "Open map",
+    "refresh": "Update",
+    "positionError": "Your position could not be found. Check that location is on and allowed for this site.",
+    "message": "I need help. My position: {decimal} ({dms}) {link}",
+    "tellTitle": "Tell the dispatcher",
+    "tell": {
+      "what": "What happened (e.g. paraglider accident, tree landing).",
+      "where": "Where: read out the coordinates above.",
+      "who": "How many people are involved.",
+      "injuries": "Injuries and whether the person is conscious and breathing.",
+      "callback": "Your phone number, and keep the line free."
+    },
+    "tipsTitle": "While you wait",
+    "tips": {
+      "tree": "In a tree: stay clipped in and wait for rescuers. Do not climb down on your own.",
+      "water": "In water: get out of the harness and away from the lines as fast as you can.",
+      "wing": "Spread the wing out on open ground: it is easy to see from the air.",
+      "battery": "Save your phone battery: close other apps and lower the screen brightness.",
+      "helicopter": "For a helicopter, secure the wing so the downwash cannot lift it."
+    },
+    "clubContact": "{club} contact:",
+    "privacy": "This page works without an account and sends nothing to our server."
   }
 }

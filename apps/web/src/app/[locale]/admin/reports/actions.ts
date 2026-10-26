@@ -13,6 +13,7 @@ type Action =
   | 'hide_comment'
   | 'remove_ad'
   | 'unpublish_tip'
+  | 'remove_ride'
   | 'ban7'
   | 'ban30'
   | 'ban_forever'
@@ -53,6 +54,8 @@ export async function moderate(formData: FormData): Promise<void> {
       .from('tips')
       .update({ status: 'rejected', review_note: note, reviewed_by: viewer.user.id })
       .eq('id', targetId);
+  } else if (action === 'remove_ride' && uuid.safeParse(targetId).success) {
+    await supabase.from('rides').delete().eq('id', targetId);
   } else if (action in BAN_DAYS && uuid.safeParse(offender).success) {
     const until = new Date(Date.now() + BAN_DAYS[action]! * 86400_000).toISOString();
     const { error } = await supabase.rpc('ban_user', {

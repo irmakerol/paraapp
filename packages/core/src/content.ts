@@ -28,7 +28,16 @@ export const REPORT_REASONS = [
 ] as const;
 export type ReportReason = (typeof REPORT_REASONS)[number];
 
-export const REPORT_TARGETS = ['ad', 'user', 'chat', 'message', 'news_comment', 'tip'] as const;
+export const REPORT_TARGETS = [
+  'ad',
+  'user',
+  'chat',
+  'message',
+  'news_comment',
+  'tip',
+  'ride',
+  'event',
+] as const;
 export type ReportTarget = (typeof REPORT_TARGETS)[number];
 
 /** URL-safe slug; Turkish letters are transliterated. Mirrors `private.slugify()` in SQL. */

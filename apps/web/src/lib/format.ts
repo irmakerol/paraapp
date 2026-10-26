@@ -40,3 +40,18 @@ export function isoToIstanbulLocal(value: string | null | undefined): string {
 export function currentTime(): number {
   return Date.now();
 }
+
+/** Today's date in Istanbul, as YYYY-MM-DD. */
+export function istanbulToday(): string {
+  return isoToIstanbulLocal(new Date(currentTime()).toISOString()).slice(0, 10);
+}
+
+/** A date-only value (YYYY-MM-DD) as a long local date, e.g. "Sunday, 1 November". */
+export function formatDay(value: string, locale: string): string {
+  return new Intl.DateTimeFormat(locale, {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(`${value}T00:00:00Z`));
+}

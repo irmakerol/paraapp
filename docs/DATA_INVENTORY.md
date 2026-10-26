@@ -55,11 +55,29 @@ Maps: when a user presses "Show map", the browser loads tiles from **OpenFreeMap
 and the visible area reach that service). Nothing is loaded before the click; "always show maps" is
 stored only in that browser.
 
+## 1d. Personal data added in Phase 3
+
+| Data                                                               | Where                                                    | Purpose                             | Legal basis                                                                  | Who can access                                                          | Retention                                                                                                                | Leaves TR? |
+| ------------------------------------------------------------------ | -------------------------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| Incident report (what happened, site, date, equipment, conditions) | `incident_reports`                                       | Flight safety: learn from incidents | Legitimate interest (flight safety); named reports also record a consent row | Safety officers; the reporter (own named / community-anonymous reports) | Report kept; reporter link, contact flag and injury details removed 365 days after closing (`incident_personal_details`) | Yes, EU    |
+| Reporter identity                                                  | `incident_reports.reporter_id`                           | Follow-up questions                 | Same as above                                                                | Safety officers only; never stored for fully anonymous reports          | As above                                                                                                                 | Yes, EU    |
+| **Injury details (health data)**                                   | `incident_injuries.details_enc` (AES-256-GCM in the app) | Safety analysis                     | **Explicit consent** (KVKK Art. 6 / GDPR Art. 9), given in the form          | Safety officers (every read audited) and the reporter                   | Deleted 365 days after closing                                                                                           | Yes, EU    |
+| Safety officers' notes                                             | `incident_notes`                                         | Case handling                       | Legitimate interest                                                          | Safety officers                                                         | With the report                                                                                                          | Yes, EU    |
+| Event sign-ups (answer, note)                                      | `event_rsvps`                                            | Organise events                     | Contract                                                                     | The user; organisers (instructors, admins)                              | 365 days after the event                                                                                                 | Yes, EU    |
+| Ride posts (date, time, from/to, seats, note)                      | `rides`                                                  | Carpool and retrieve                | Contract                                                                     | Adult members; moderators                                               | 30 days after the ride date                                                                                              | Yes, EU    |
+| Group chat membership and messages                                 | `chats`, `chat_members`, `messages`                      | Group conversations                 | Contract                                                                     | Group members; moderators only on a report                              | Until deleted (as 1-to-1 chats)                                                                                          | Yes, EU    |
+| Position on the SOS page                                           | Browser only                                             | Tell rescuers where you are         | —                                                                            | Only the user; never sent to our server                                 | Not stored                                                                                                               | No         |
+
+Weather is fetched by our server from **Open-Meteo** with the site's coordinates only (no user data).
+The airspace layer loads tiles from **OpenAIP** only after the user presses "Show map" and only when the
+club has set an OpenAIP key.
+
 ### Special category data
 
-None in Phase 0. **Phase 3 incident reports** will contain health data (injuries): explicit consent
-(`incident_special_category`), safety officer access only, encrypted columns, audit of every read,
-shorter retention (`incident_personal_details`: anonymised 365 days after closure).
+**Incident reports** may contain health data (injuries): explicit consent in the form
+(`special_category_consent` on the report), safety officer access only (admins excluded), encrypted
+in the app, audit of every read and every report view, shorter retention (`incident_personal_details`:
+anonymised 365 days after closure). Reports are designed not to ask for other people's names.
 
 ### Location data (from Phase 2)
 
@@ -81,6 +99,8 @@ its own consent.
 | Browser push services (Google FCM, Mozilla, Apple)     | Deliver push messages to the user's browser  | Global                                              | Payload is short (sender name + preview); user turns push on per device; mention in privacy notice      |
 | YouTube / Vimeo (only when the reader presses play)    | Video embeds in tips                         | USA/global                                          | Click-to-load (no request before consent); youtube-nocookie.com and Vimeo `dnt=1`; privacy notice       |
 | OpenFreeMap (only when the user presses "Show map")    | Map tiles for flights and sites              | To confirm (OpenFreeMap project servers)            | Click-to-load; no account or cookies; mention in privacy notice                                         |
+| Open-Meteo (server to server)                          | Weather forecasts per site                   | EU (Switzerland/Germany)                            | Only site coordinates are sent, no personal data; free non-commercial use                               |
+| OpenAIP (only with a key and after "Show map")         | Airspace tiles                               | To confirm (Germany)                                | Click-to-load; the user's IP and map area reach OpenAIP; mention in privacy notice                      |
 
 **KVKK Art. 9 (since June 2024):** transfers abroad need an adequacy decision or appropriate safeguards.
 For each processor above, the club signs the Board's standard contract (or relies on another listed
@@ -91,14 +111,14 @@ required (thresholds and exemptions depend on employees, balance sheet and main 
 
 ## 3. Data-subject rights in the app
 
-| Right                     | How                                                                                                                                                                 |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports); each flight page offers the original IGC/GPX; Logbook → CSV |
-| Rectification             | Edit profile; or file a request                                                                                                                                     |
-| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                   |
-| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                               |
-| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                               |
-| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                    |
+| Right                     | How                                                                                                                                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports, own incident reports with injury details, event sign-ups, rides); each flight page offers the original IGC/GPX; Logbook → CSV |
+| Rectification             | Edit profile; or file a request                                                                                                                                                                                                      |
+| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                                                                                    |
+| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                                                                                                |
+| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                                                                                                |
+| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                                                                                     |
 
 ## 4. Open points for the lawyer (Phase 1)
 
@@ -109,3 +129,6 @@ required (thresholds and exemptions depend on employees, balance sheet and main 
   minor follows them).
 - Phase 2: public-by-default flights for adults (with 500 m trimming), and the OpenFreeMap tile requests
   in the privacy notice.
+- Phase 3: the incident consent wording and the 365-day retention for reporter and injury data; whether
+  "legitimate interest" covers non-health incident data; that admins are excluded from incident reports;
+  the adults-only rule for rides and group chats; OpenAIP in the privacy notice.

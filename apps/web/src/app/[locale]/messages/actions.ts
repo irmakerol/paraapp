@@ -44,17 +44,21 @@ export async function sendMessage(input: z.input<typeof messageSchema>): Promise
     .single();
   if (error || !message) return { ok: false };
 
-  const { data: others } = await supabase
-    .from('chat_members')
-    .select('user_id, muted')
-    .eq('chat_id', chatId)
-    .neq('user_id', viewer.user.id);
+  const [{ data: others }, { data: chat }] = await Promise.all([
+    supabase
+      .from('chat_members')
+      .select('user_id, muted')
+      .eq('chat_id', chatId)
+      .neq('user_id', viewer.user.id),
+    supabase.from('chats').select('kind, title').eq('id', chatId).maybeSingle(),
+  ]);
   const recipients = (others ?? []).filter((m) => !m.muted).map((m) => m.user_id);
   if (recipients.length) {
     const name = viewer.profile.display_name;
+    const group = chat?.kind === 'group' ? (chat.title ?? '') : null;
     // Only a short preview; location and photos are described, never included.
     await sendPush(recipients, 'messages', (t, locale) => ({
-      title: t('newMessage', { name }),
+      title: group !== null ? t('newGroupMessage', { name, group }) : t('newMessage', { name }),
       body: body ? body.slice(0, 120) : imagePath ? t('photo') : t('location'),
       url: `/${locale}/messages/${chatId}`,
       tag: `chat-${chatId}`,

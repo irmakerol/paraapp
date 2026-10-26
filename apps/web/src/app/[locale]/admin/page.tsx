@@ -21,6 +21,18 @@ export default async function AdminHome({ params }: { params: Promise<{ locale: 
       ),
     });
   }
+  if (canUse(viewer, 'safety')) {
+    tiles.push({
+      label: t('stats.openIncidents'),
+      href: '/admin/safety',
+      value: await count(
+        supabase
+          .from('incident_reports')
+          .select('id', { count: 'exact', head: true })
+          .neq('status', 'closed'),
+      ),
+    });
+  }
   if (canUse(viewer, 'tips')) {
     tiles.push({
       label: t('stats.pendingTips'),

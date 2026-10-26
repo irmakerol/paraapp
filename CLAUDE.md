@@ -72,6 +72,13 @@ docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, leg
   500 m removed); `flight_tracks` and the `flight-files` bucket are owner-only.
 - Storage files are not removed by DB cascades: anything new a user uploads must be added to
   `lib/account-files.ts` (account deletion) and `/api/account/export`.
+- Incident reports are for `safety_officer` only (admin area `safety`; admins are excluded on purpose).
+  Fully anonymous reports are inserted with the service role and no reporter; injury details are
+  encrypted with `INCIDENT_ENCRYPTION_KEY` and read only via `read_incident_injury()` (audited).
+- Rides and group chats are adults only (RLS + definer functions); keep minors out of new
+  person-to-person features unless the minor opted in (as with follows for 1-to-1 chats).
+- Weather is fetched only on the server (`lib/weather.ts`, cached in `weather_forecasts`); the
+  flyability rules live in `packages/core/src/weather.ts`.
 - `packages/core` lint is `typescript-eslint` strict (no `!`): use `at()` from `tracks/at.ts` for known-good indices.
 
 ## Decisions (2026-10-26)

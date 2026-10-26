@@ -3,7 +3,7 @@ import { Link } from '@/i18n/navigation';
 import { requireActiveViewer } from '@/lib/session';
 import { listChats } from '@/lib/chats';
 import { formatDateTime } from '@/lib/format';
-import { Card, PageTitle } from '@/components/ui';
+import { buttonClass, Card, PageTitle } from '@/components/ui';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,11 +12,17 @@ export default async function MessagesPage({ params }: { params: Promise<{ local
   setRequestLocale(locale);
   const viewer = await requireActiveViewer(locale);
   const t = await getTranslations('chat');
+  const g = await getTranslations('groups');
   const chats = await listChats(viewer.user.id);
 
   return (
     <div className="mx-auto max-w-2xl">
       <PageTitle>{t('title')}</PageTitle>
+      {viewer.profile.age_group === 'adult' ? (
+        <Link href="/messages/new-group" className={`${buttonClass('secondary')} mb-4`}>
+          {g('new')}
+        </Link>
+      ) : null}
       {chats.length === 0 ? (
         <Card>
           <p className="text-muted">{t('empty')}</p>
@@ -33,11 +39,11 @@ export default async function MessagesPage({ params }: { params: Promise<{ local
                   aria-hidden
                   className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-blue/20 font-bold"
                 >
-                  {(c.peerName ?? '?').slice(0, 1).toUpperCase()}
+                  {c.groupTitle !== null ? '👥' : (c.peerName ?? '?').slice(0, 1).toUpperCase()}
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className={`block truncate ${c.unread ? 'font-bold' : 'font-medium'}`}>
-                    {c.peerName ?? t('deletedUser')}
+                    {c.groupTitle ?? c.peerName ?? t('deletedUser')}
                     {c.muted ? (
                       <span className="ml-2 text-xs text-muted">· {t('muted')}</span>
                     ) : null}

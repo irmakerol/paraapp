@@ -14,6 +14,8 @@ import { Alert, buttonClass, Card } from '@/components/ui';
 import { Markdown } from '@/components/markdown';
 import { SitesMap } from '@/components/sites-map';
 import { WindRose } from '@/components/wind-rose';
+import { WeatherPanel } from '@/components/weather-panel';
+import { siteForecast } from '@/lib/weather';
 
 export async function generateMetadata({
   params,
@@ -50,6 +52,7 @@ export default async function SitePage({
     .eq('takeoff_site_id', site.id)
     .order('started_at', { ascending: false })
     .limit(20);
+  const forecast = await siteForecast(site);
   const names = await displayNames(
     supabase,
     (flights ?? []).map((f) => f.user_id),
@@ -77,6 +80,10 @@ export default async function SitePage({
       <div className="grid gap-8 lg:grid-cols-[1fr_18rem]">
         <div className="space-y-6">
           <SitesMap sites={[{ slug: site.slug, name: site.name, lat: site.lat, lng: site.lng }]} />
+          <section className="space-y-3">
+            <h2 className="text-xl font-bold">{t('weather')}</h2>
+            <WeatherPanel forecast={forecast} locale={locale} />
+          </section>
           {site.description ? <Markdown ugc>{site.description}</Markdown> : null}
           {site.rules ? (
             <section>

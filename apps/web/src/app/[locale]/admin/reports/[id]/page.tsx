@@ -14,7 +14,7 @@ interface Target {
   body?: string | null;
   href?: string;
   offenderId: string | null;
-  actions: ('hide_comment' | 'remove_ad' | 'unpublish_tip')[];
+  actions: ('hide_comment' | 'remove_ad' | 'unpublish_tip' | 'remove_ride')[];
 }
 
 export default async function ReportPage({
@@ -82,6 +82,38 @@ export default async function ReportPage({
           href: `/tips/${data.slug}`,
           offenderId: data.author_id,
           actions: data.status === 'published' ? ['unpublish_tip'] : [],
+        };
+      break;
+    }
+    case 'ride': {
+      const { data } = await supabase
+        .from('rides')
+        .select('id, from_text, to_text, note, user_id')
+        .eq('id', report.target_id)
+        .maybeSingle();
+      if (data)
+        target = {
+          title: [data.from_text, data.to_text].filter(Boolean).join(' → '),
+          body: data.note,
+          href: '/rides',
+          offenderId: data.user_id,
+          actions: ['remove_ride'],
+        };
+      break;
+    }
+    case 'event': {
+      const { data } = await supabase
+        .from('events')
+        .select('slug, title, description_md, created_by')
+        .eq('id', report.target_id)
+        .maybeSingle();
+      if (data)
+        target = {
+          title: data.title,
+          body: data.description_md,
+          href: `/events/${data.slug}`,
+          offenderId: data.created_by,
+          actions: [],
         };
       break;
     }
@@ -216,6 +248,9 @@ export default async function ReportPage({
                 : null}
               {target.actions.includes('remove_ad')
                 ? actionButton('remove_ad', t('removeAd'))
+                : null}
+              {target.actions.includes('remove_ride')
+                ? actionButton('remove_ride', t('removeRide'))
                 : null}
               {target.actions.includes('unpublish_tip')
                 ? actionButton('unpublish_tip', t('unpublishTip'))
