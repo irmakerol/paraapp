@@ -34,7 +34,8 @@ active user; weather is cached per site, not per user.
 
 ### Which limit we hit first
 
-1. **Supabase file storage (1 GB free)** – photos and raw IGC files. Mitigation: aggressive client-side
+1. **Supabase file storage (1 GB free)** – photos and raw IGC files (typically 0.2–3 MB each, max 8 MB;
+   a pilot with 200 flights ≈ 200 MB). Mitigation: aggressive client-side
    image resizing (done), keep only simplified tracks in the DB, and move raw files to Cloudflare R2
    (10 GB free, no egress fees) if needed.
 2. **Supabase free-tier pausing / no backups** – not acceptable for real users; budget Pro at launch.

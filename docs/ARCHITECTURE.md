@@ -47,12 +47,25 @@ later IGC/GPX parsing and flight stats) runs in the browser, on the server and i
 | Push         | Web Push with VAPID (`web-push` npm package), service worker `public/sw.js`         | Free, no third-party push service account needed                  |
 | Tests        | Vitest (unit), Playwright (E2E), pgTAP (database)                                   |                                                                   |
 
-Planned (later phases): MapLibre GL JS + OpenFreeMap + DEM hillshade, uPlot charts, TanStack Virtual for
-long lists, offline caching in the service worker for logbook/tips/sites.
+| Maps | MapLibre GL JS 5 + OpenFreeMap vector tiles (no key), loaded only after a click (`MapGate`) | Free; no third-party request until the user asks for the map |
+| Lists/charts | TanStack Virtual for the logbook; the altitude chart is a small SVG that is also the slider | Thousands of flights stay fast; no chart library needed |
+
+Planned (later phases): DEM hillshade, offline caching in the service worker for logbook/tips/sites.
+
+**Flights.** Track files are parsed and analysed **on the server** (`lib/flight-import.ts` with the
+pure functions in `packages/core/src/tracks`): clean fixes, detect takeoff/landing (ground speed ≥ 4 m/s
+for 30 s), compute stats, match the nearest site within 2 km (`nearest_site()`, PostGIS), downsample to
+≤ 2,000 points. The flight row is then written with the service role, so users cannot fake imported
+stats (they can only insert `source = 'manual'` flights themselves). Three copies exist:
+the original file in the private `flight-files` bucket (owner only), the full simplified track in
+`flight_tracks` (owner only, with exact takeoff/landing), and `flights.public_track` with everything
+within 500 m of the start and end removed, which is all anyone else (and the share image) ever gets.
+Minors' flights are forced to private by a trigger.
 
 **Scheduled work.** Database jobs (ad expiry, purges) run in pg_cron. Push notifications need the app's
 VAPID key, so they are sent by `POST /api/cron/notify` (header `Authorization: Bearer $CRON_SECRET`):
-scheduled club news and ad-expiry reminders. Call it every 5–15 minutes from any free scheduler
+scheduled club news, ad-expiry reminders and equipment check/repack reminders (created daily by
+`private.process_equipment_reminders()` 14 days before the due date). Call it every 5–15 minutes from any free scheduler
 (pg_cron + pg_net, Cloudflare Cron Triggers, or a GitHub Actions schedule). Publishing news "now" from
 the admin area sends its push immediately, so locally the cron call is only needed for scheduled news.
 
@@ -74,7 +87,8 @@ the admin area sends its push immediately, so locally the cron call is only need
   a one-time emailed link (token created only with the service role, stored hashed, 7-day expiry).
 - **Deletion:** `request_account_deletion()` anonymises the profile, removes roles and private data,
   blocks sign-in and ends all sessions immediately; a daily job purges the auth user after 30 days,
-  which cascades to all user data. Avatars are removed through the Storage API first.
+  which cascades to all user data. Files (avatar, ad photos, flight files, chat photos the user sent)
+  are removed through the Storage API when deletion is requested (`lib/account-files.ts`).
 - **Data-subject requests:** `data_requests` with a due date of min(30 days, one month); users file
   in-app, admins log email/post requests in the admin area.
 - **Audit log:** role changes, guardian confirmations, deletions; later every admin/safety-officer read
@@ -90,8 +104,12 @@ the admin area sends its push immediately, so locally the cron call is only need
   banned). Moderators cannot browse chats; `reported_chat_messages()` opens a chat only for a chat/message
   report and writes an audit entry. "Delete for everyone" strips the message content in a trigger; a copy
   is kept in `private.deleted_message_content` for 30 days for moderation, then purged.
-- **Minors in the community:** cannot post ads (RLS); adults cannot start chats with them
-  (`start_direct_chat()`); messages are rate-limited (30/minute) for everyone.
+- **Minors in the community:** cannot post ads (RLS); adults can start a chat with a minor only if the
+  minor follows them (`start_direct_chat()`); messages are rate-limited (30/minute) for everyone.
+- **Flying (Phase 2):** `sites` (everyone reads, moderators edit), `flights` (visibility public /
+  members / private via RLS), `flight_tracks` (owner only), `equipment` (owner only), `follows` (only the
+  two people involved can see a follow; counts via `follow_counts()`). `pilot_stats()` runs as the
+  caller, so other people's stats only count flights the viewer may see.
 - **Retention:** `retention_policies` table drives pg_cron jobs.
 
 ## 5. Auth flows

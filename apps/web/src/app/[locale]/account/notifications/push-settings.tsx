@@ -23,7 +23,7 @@ export function PushSettings({
   prefs,
   hasNewsConsent,
 }: {
-  prefs: { messages: boolean; news: boolean; ads: boolean };
+  prefs: { messages: boolean; news: boolean; ads: boolean; equipment: boolean };
   hasNewsConsent: boolean;
 }) {
   const t = useTranslations('notificationsSettings');
@@ -128,6 +128,15 @@ export function PushSettings({
           <label className="flex items-center gap-3">
             <input type="checkbox" name="ads" defaultChecked={prefs.ads} className="size-5" />
             {t('topicAds')}
+          </label>
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              name="equipment"
+              defaultChecked={prefs.equipment}
+              className="size-5"
+            />
+            {t('topicEquipment')}
           </label>
           <FormMessage state={state} success={common('saved')} />
           <SubmitButton>{common('save')}</SubmitButton>

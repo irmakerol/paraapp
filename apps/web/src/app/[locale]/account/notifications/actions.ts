@@ -53,6 +53,7 @@ export async function saveNotificationPrefs(
         messages: bool(formData, 'messages'),
         news: bool(formData, 'news'),
         ads: bool(formData, 'ads'),
+        equipment: bool(formData, 'equipment'),
       },
     })
     .eq('id', user.id);

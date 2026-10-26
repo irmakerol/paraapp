@@ -1,6 +1,7 @@
 import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { sendPush } from '@/lib/push';
+import { formatDate } from '@/lib/format';
 
 /** Pushes club news that is published, due, flagged for notification and not yet sent. */
 export async function notifyDueNews(): Promise<number> {
@@ -41,7 +42,7 @@ export async function notifyDueNews(): Promise<number> {
   return sent;
 }
 
-/** Pushes in-app notifications (ad expiry reminders) that have not been pushed yet. */
+/** Pushes in-app notifications (ad expiry, equipment checks) that have not been pushed yet. */
 export async function pushPendingNotifications(): Promise<number> {
   const admin = createAdminClient();
   const { data: pending } = await admin
@@ -60,14 +61,31 @@ export async function pushPendingNotifications(): Promise<number> {
     );
   let sent = 0;
   for (const n of pending) {
-    if (n.kind !== 'ad_expiring') continue;
-    const payload = (n.payload ?? {}) as { ad_id?: string; title?: string };
-    sent += await sendPush([n.user_id], 'ads', (t, locale) => ({
-      title: t('adExpiringTitle'),
-      body: t('adExpiring', { title: payload.title ?? '' }),
-      url: `/${locale}/market/mine`,
-      tag: `ad-${payload.ad_id}`,
-    }));
+    if (n.kind === 'ad_expiring') {
+      const payload = (n.payload ?? {}) as { ad_id?: string; title?: string };
+      sent += await sendPush([n.user_id], 'ads', (t, locale) => ({
+        title: t('adExpiringTitle'),
+        body: t('adExpiring', { title: payload.title ?? '' }),
+        url: `/${locale}/market/mine`,
+        tag: `ad-${payload.ad_id}`,
+      }));
+    } else if (n.kind === 'equipment_check_due' || n.kind === 'equipment_repack_due') {
+      const payload = (n.payload ?? {}) as {
+        equipment_id?: string;
+        model?: string;
+        due_on?: string;
+      };
+      const check = n.kind === 'equipment_check_due';
+      sent += await sendPush([n.user_id], 'equipment', (t, locale) => ({
+        title: t(check ? 'checkDueTitle' : 'repackDueTitle'),
+        body: t('equipmentDue', {
+          model: payload.model ?? '',
+          date: payload.due_on ? formatDate(payload.due_on, locale) : '',
+        }),
+        url: `/${locale}/logbook/equipment`,
+        tag: `${n.kind}-${payload.equipment_id}`,
+      }));
+    }
   }
   return sent;
 }

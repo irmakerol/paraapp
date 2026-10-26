@@ -5,7 +5,7 @@ import { publicEnv, serverEnv } from '@/lib/env';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { routing } from '@/i18n/routing';
 
-export type PushTopic = 'messages' | 'news' | 'ads';
+export type PushTopic = 'messages' | 'news' | 'ads' | 'equipment';
 
 export interface PushPayload {
   title: string;

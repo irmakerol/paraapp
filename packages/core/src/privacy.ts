@@ -45,7 +45,8 @@ export function canView(visibility: Visibility, viewer: Viewer): boolean {
   return false;
 }
 
-export const FLIGHT_VISIBILITIES = ['public', 'friends', 'private'] as const;
+/** Same values as the SQL `visibility` enum. Minors' flights are never public (DB trigger). */
+export const FLIGHT_VISIBILITIES = VISIBILITIES;
 export type FlightVisibility = (typeof FLIGHT_VISIBILITIES)[number];
 
 export function defaultFlightVisibility(group: Exclude<AgeGroup, 'too_young'>): FlightVisibility {

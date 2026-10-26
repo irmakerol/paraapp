@@ -40,6 +40,21 @@ Legal bases use KVKK Art. 5/6 and GDPR Art. 6/9. "Contract" = providing the serv
 | Push subscriptions (endpoint, keys, browser user agent)        | `push_subscriptions`                                     | Deliver notifications to the user's devices | Contract; club news: consent (`marketing_notifications`) | Only the user; system                                                        | Until turned off, the browser drops it (410), or account purge                 | Yes, EU; push endpoint is the browser vendor's service (Google/Mozilla/Apple) |
 | Notification settings, in-app notifications                    | `profiles.notification_prefs`, `notifications`           | Preferences and reminders                   | Contract                                                 | Only the user                                                                | Account lifetime                                                               | Yes, EU                                                                       |
 
+## 1c. Personal data added in Phase 2
+
+| Data                                                                   | Where                           | Purpose                                                           | Legal basis                              | Who can access                                                                     | Retention                                                                     | Leaves TR? |
+| ---------------------------------------------------------------------- | ------------------------------- | ----------------------------------------------------------------- | ---------------------------------------- | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- | ---------- |
+| Original IGC/GPX files                                                 | `flight-files` bucket (private) | Let the pilot download their file again                           | Contract                                 | Only the pilot                                                                     | Until the flight is deleted; account deletion request (files removed at once) | Yes, EU    |
+| Full flight track incl. exact takeoff/landing                          | `flight_tracks`                 | Logbook, map, stats                                               | Contract                                 | Only the pilot                                                                     | Until the flight is deleted or account purge                                  | Yes, EU    |
+| Flight summary, stats, notes, trimmed track (first/last 500 m removed) | `flights`                       | Logbook; sharing with the community                               | Contract; visibility chosen by the pilot | Per flight: everyone / club members / only the pilot; minors always only the pilot | Until deleted or account purge                                                | Yes, EU    |
+| Equipment (brand, model, dates)                                        | `equipment`                     | Check/repack reminders                                            | Contract                                 | Only the user                                                                      | Until deleted or account purge                                                | Yes, EU    |
+| Follows                                                                | `follows`                       | Social features; lets a minor allow chats from adults they follow | Contract                                 | The two people involved; counts are public                                         | Until removed or account purge                                                | Yes, EU    |
+| Sites (created by moderators)                                          | `sites`                         | Site guide                                                        | Legitimate interest                      | Everyone; `created_by` only moderators                                             | Until deleted                                                                 | Yes, EU    |
+
+Maps: when a user presses "Show map", the browser loads tiles from **OpenFreeMap** (their IP address
+and the visible area reach that service). Nothing is loaded before the click; "always show maps" is
+stored only in that browser.
+
 ### Special category data
 
 None in Phase 0. **Phase 3 incident reports** will contain health data (injuries): explicit consent
@@ -49,8 +64,10 @@ shorter retention (`incident_personal_details`: anonymised 365 days after closur
 ### Location data (from Phase 2)
 
 GPS tracks reveal home addresses and routines. Decision: adults' new flights default to **public** with
-the first/last 500 m hidden; minors' flights default to private. The lawyer should confirm this against
-GDPR Art. 25 (privacy by default). Live-location sharing will need its own consent.
+the first/last 500 m hidden; minors' flights are always private (database trigger). The full track
+never leaves the owner's account; share images are drawn from the trimmed track. The lawyer should
+confirm the public default against GDPR Art. 25 (privacy by default). Live-location sharing will need
+its own consent.
 
 ## 2. Processors and transfers
 
@@ -63,6 +80,7 @@ GDPR Art. 25 (privacy by default). Live-location sharing will need its own conse
 | Sentry (not used yet)                                  | Error tracking, only after analytics consent | EU region                                           | DPA + KVKK standard contract                                                                            |
 | Browser push services (Google FCM, Mozilla, Apple)     | Deliver push messages to the user's browser  | Global                                              | Payload is short (sender name + preview); user turns push on per device; mention in privacy notice      |
 | YouTube / Vimeo (only when the reader presses play)    | Video embeds in tips                         | USA/global                                          | Click-to-load (no request before consent); youtube-nocookie.com and Vimeo `dnt=1`; privacy notice       |
+| OpenFreeMap (only when the user presses "Show map")    | Map tiles for flights and sites              | To confirm (OpenFreeMap project servers)            | Click-to-load; no account or cookies; mention in privacy notice                                         |
 
 **KVKK Art. 9 (since June 2024):** transfers abroad need an adequacy decision or appropriate safeguards.
 For each processor above, the club signs the Board's standard contract (or relies on another listed
@@ -73,18 +91,21 @@ required (thresholds and exemptions depend on employees, balance sheet and main 
 
 ## 3. Data-subject rights in the app
 
-| Right                     | How                                                                               |
-| ------------------------- | --------------------------------------------------------------------------------- |
-| Access / portability      | Account → Privacy → Download my data (JSON; flight files added in Phase 2)        |
-| Rectification             | Edit profile; or file a request                                                   |
-| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days) |
-| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                             |
-| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                             |
-| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)  |
+| Right                     | How                                                                                                                                                                 |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports); each flight page offers the original IGC/GPX; Logbook → CSV |
+| Rectification             | Edit profile; or file a request                                                                                                                                     |
+| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                   |
+| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                               |
+| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                               |
+| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                    |
 
 ## 4. Open points for the lawyer (Phase 1)
 
 - Privacy notice must mention: chat (incl. moderator access only on reports), push notifications and the
   browser push services, YouTube/Vimeo when a video is played, public ad photos, report handling and bans.
 - Retention for `reports` and `account_deletions`.
-- Whether a minor may contact adult sellers (currently allowed; adults cannot contact minors).
+- Whether a minor may contact adult sellers (currently allowed; adults can contact a minor only if the
+  minor follows them).
+- Phase 2: public-by-default flights for adults (with 500 m trimming), and the OpenFreeMap tile requests
+  in the privacy notice.

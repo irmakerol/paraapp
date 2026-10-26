@@ -3,9 +3,10 @@
 The paragliding community app of **Fly Anatolia Havacılık Kulübü**: news, tips, a gear market,
 a flight logbook and safety reports for pilots in Türkiye. Web first, Turkish and English.
 
-> Status: **Phase 1 (content & community)**. Accounts and privacy (Phase 0) plus news, tips, the gear
-> market, 1-to-1 chat, push notifications and the admin area. Flights and sites come in Phase 2
-> (see `docs/PLAN.md`).
+> Status: **Phase 2 (flights & sites)**. Accounts and privacy (Phase 0), news, tips, the gear market,
+> chat, push and the admin area (Phase 1), plus the logbook (IGC/GPX import, map, altitude chart,
+> exports), equipment reminders, flying sites, pilot pages and follows. Safety reports, weather and
+> events come in Phase 3 (see `docs/PLAN.md`).
 
 ## Run it on your computer
 
@@ -111,4 +112,4 @@ pnpm --filter @paraapp/web build && pnpm test:e2e   # browser tests
 
 Legal texts in `docs/legal` are **drafts** and must be reviewed by the club's lawyer before launch.
 
-Map data © OpenStreetMap contributors (from Phase 2).
+Map data © OpenStreetMap contributors, tiles by OpenFreeMap.
