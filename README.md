@@ -114,7 +114,8 @@ pnpm --filter @paraapp/web build && pnpm test:e2e   # browser tests
 - `apps/web` – the website (Next.js)
 - `packages/core` – shared logic (age rules, privacy, units, validation)
 - `supabase` – database schema, security rules, tests, email templates
-- `docs` – architecture, plan, data inventory (KVKK/GDPR), costs, breach runbook, legal drafts
+- `deploy` – how to put the app online (Docker, HTTPS, backups)
+- `docs` – launch checklist, architecture, plan, data inventory (KVKK/GDPR), costs, breach runbook, legal drafts
 - `CLAUDE.md` – conventions for anyone (human or AI) working on the code
 
 Legal texts in `docs/legal` are **drafts** and must be reviewed by the club's lawyer before launch.

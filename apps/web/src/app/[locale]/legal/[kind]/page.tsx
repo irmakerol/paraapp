@@ -6,6 +6,12 @@ import { getLatestLegalDocument } from '@/lib/legal';
 import { Markdown } from '@/components/markdown';
 import { Card, PageTitle } from '@/components/ui';
 
+const KIND_LABEL: Record<LegalDocumentKind, 'privacyNotice' | 'terms' | 'explicitConsent'> = {
+  privacy_notice: 'privacyNotice',
+  terms: 'terms',
+  explicit_consent: 'explicitConsent',
+};
+
 function isKind(kind: string): kind is LegalDocumentKind {
   return (LEGAL_DOCUMENT_KINDS as readonly string[]).includes(kind);
 }
@@ -18,7 +24,8 @@ export async function generateMetadata({
   const { locale, kind } = await params;
   if (!isKind(kind)) return {};
   const doc = await getLatestLegalDocument(kind, locale);
-  return { title: doc?.title };
+  const t = await getTranslations({ locale, namespace: 'footer' });
+  return { title: doc?.title ?? t(KIND_LABEL[kind]) };
 }
 
 export default async function LegalPage({

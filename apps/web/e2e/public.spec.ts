@@ -123,3 +123,52 @@ test('rides, reporting and group chats require sign-in', async ({ page }) => {
     await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
   }
 });
+
+test('unknown pages show the localised not-found page', async ({ page }) => {
+  const res = await page.goto('/tr/bu-sayfa-yok');
+  expect(res?.status()).toBe(404);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Sayfa bulunamadı');
+  await expect(page.getByRole('link', { name: 'Ana sayfaya git' })).toBeVisible();
+});
+
+test('launch plumbing: health, robots, sitemap, security headers, service worker', async ({
+  request,
+}) => {
+  const health = await request.get('/api/health');
+  expect(await health.json()).toEqual({ ok: true });
+
+  const robots = await (await request.get('/robots.txt')).text();
+  expect(robots).toContain('Disallow: /*/messages');
+  expect(robots).toContain('Sitemap: ');
+
+  const sitemap = await request.get('/sitemap.xml');
+  expect(sitemap.ok()).toBe(true);
+  expect(await sitemap.text()).toContain('/en/sos</loc>');
+
+  const home = await request.get('/en');
+  const csp = home.headers()['content-security-policy'] ?? '';
+  expect(csp).toContain("frame-ancestors 'none'");
+  expect(csp).toContain('https://tiles.openfreemap.org');
+  expect(home.headers()['x-paraapp-session']).toBeUndefined();
+
+  const sw = await request.get('/sw.js');
+  expect(sw.headers()['cache-control']).toContain('no-cache');
+});
+
+test('the SOS page works offline once the service worker is installed', async ({
+  page,
+  context,
+}) => {
+  await page.goto('/en');
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+  });
+  // Wait until the install step has stored the SOS page.
+  await page.waitForFunction(async () => Boolean(await caches.match('/en/sos')));
+  await context.setOffline(true);
+  await page.goto('/en/sos');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Emergency');
+  await page.goto('/en/logbook');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('You are offline');
+  await context.setOffline(false);
+});

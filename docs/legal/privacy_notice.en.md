@@ -16,22 +16,41 @@ Fly Anatolia Havacılık Kulübü (association), Kordonboyu Mah. Ankara Cd. No:2
 - **Guardian details (ages 14–17):** guardian's name and email, date of consent.
 - **Account security:** session records, IP address and device information (processed by our authentication provider).
 - **Consent and preference records:** which consent you gave or withdrew, when, and for which version of the text.
+- **Community content:** news comments and likes, tips you write, gear ads and their photos, reports you file and people you block.
+- **Messages:** one-to-one and group chat messages, photos and locations you choose to share in a chat.
+- **Flights and location data:** the IGC/GPX files you import, GPS tracks, flight statistics, notes and the gear you used. Other people only ever see a track with the first and last 500 m removed, and only if the flight's visibility allows it; flights of users under 18 are always private.
+- **Equipment:** your wings, harnesses and reserves with check and repack dates.
+- **Follows:** who you follow and who follows you.
+- **Events and rides:** your answers to event invitations, and the carpool/retrieve posts you publish (adults only).
+- **Incident reports:** what happened, where and when, conditions and equipment. You choose whether the report is named, anonymous to the community or fully anonymous (then your account is not stored with it). **Injury details are health data** and are only stored with your explicit consent given in the report form.
+- **Notifications:** push subscription details of your browser and your notification settings.
 
-When flight logs (GPS tracks), ads, messages and incident reports are added in later versions, this notice will be updated and shown to you again.
+The SOS page shows your position only on your own device; it is not sent to us.
 
 ### 3. Purposes and legal bases
 
-| Purpose                                                     | Legal basis                                                                               |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Creating your account and providing the service             | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b                                               |
-| Applying the age limit and obtaining guardian consent       | KVKK Art. 5/2-ç (legal obligation) and 5/2-f (legitimate interest), GDPR Art. 6/1-c and f |
-| Security, abuse prevention, audit logs                      | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
-| Answering data-subject requests and keeping consent records | KVKK Art. 5/2-ç, GDPR Art. 6/1-c                                                          |
-| Marketing notifications, analytics, public profile          | Only with your explicit consent (KVKK Art. 5/1, GDPR Art. 6/1-a)                          |
+| Purpose                                                        | Legal basis                                                                               |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Creating your account and providing the service                | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b                                               |
+| Applying the age limit and obtaining guardian consent          | KVKK Art. 5/2-ç (legal obligation) and 5/2-f (legitimate interest), GDPR Art. 6/1-c and f |
+| Security, abuse prevention, audit logs                         | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
+| Answering data-subject requests and keeping consent records    | KVKK Art. 5/2-ç, GDPR Art. 6/1-c                                                          |
+| Community features: chat, ads, flights, events, rides, follows | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b                                               |
+| Flight safety: incident reports, safety lessons and statistics | KVKK Art. 5/2-f (legitimate interest), GDPR Art. 6/1-f                                    |
+| Injury details in incident reports (health data)               | Only with your explicit consent (KVKK Art. 6/2, GDPR Art. 9/2-a)                          |
+| Moderation of reported content, bans                           | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
+| Marketing notifications, analytics, public profile             | Only with your explicit consent (KVKK Art. 5/1, GDPR Art. 6/1-a)                          |
 
 ### 4. Recipients and transfers abroad
 
-Data is stored on our service providers' servers in the European Union (Frankfurt, Germany). Transfers abroad rely on standard contractual clauses or other appropriate safeguards under KVKK Art. 9. The current list of processors is available in the app's data inventory and on request. We do not sell your data.
+Data is stored on our service providers' servers in the European Union (Frankfurt, Germany). Transfers abroad rely on standard contractual clauses or other appropriate safeguards under KVKK Art. 9. We do not sell your data.
+
+- **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
+- **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
+- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map"; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
+- **Sign in with Google**, if you choose it.
+
+The current list of processors is available on request.
 
 ### 5. How we collect data
 
@@ -39,7 +58,7 @@ Electronically, through the forms in the app and when you sign in (email or Goog
 
 ### 6. Retention
 
-When you delete your account your profile is anonymised immediately and the account is permanently deleted after 30 days. Other retention periods are listed in the data inventory.
+When you delete your account your profile is anonymised immediately and the account is permanently deleted after 30 days; your files are deleted at once. Chats are kept until deleted. Carpool posts are deleted 30 days after the ride, event answers one year after the event. In incident reports, the link to the reporter and any injury details are deleted one year after the report is closed; the anonymous report is kept for safety statistics. Other retention periods are available on request.
 
 ### 7. Your rights (KVKK Art. 11, GDPR Arts. 15–22)
 

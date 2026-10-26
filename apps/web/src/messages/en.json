@@ -41,7 +41,7 @@
     "ctaJoin": "Join for free",
     "ctaSignIn": "I already have an account",
     "welcomeBack": "Welcome back, {name}",
-    "featuresTitle": "What's coming",
+    "featuresTitle": "What you'll find",
     "features": {
       "news": {
         "title": "Club news",
@@ -1219,5 +1219,21 @@
     },
     "clubContact": "{club} contact:",
     "privacy": "This page works without an account and sends nothing to our server."
+  },
+  "errors": {
+    "notFound": "Page not found",
+    "notFoundLead": "The page may have moved, or the link is wrong.",
+    "home": "Go to the home page",
+    "sos": "Emergency (SOS)",
+    "error": "Something went wrong",
+    "errorLead": "Please try again. If it keeps happening, tell us at the club.",
+    "retry": "Try again",
+    "reference": "Reference: {digest}"
+  },
+  "offline": {
+    "title": "You are offline",
+    "lead": "This page has not been saved on this device. Check your connection and try again.",
+    "sos": "Open the SOS page (works offline)",
+    "saved": "Pages you visited recently (news, tips, sites, events, safety) are saved for offline reading when you are signed out."
   }
 }

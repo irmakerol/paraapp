@@ -3,9 +3,17 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { APP_CONFIG } from '@paraapp/core';
 import { Link } from '@/i18n/navigation';
 import { getViewer } from '@/lib/session';
-import { buttonClass, Card } from '@/components/ui';
+import { buttonClass } from '@/components/ui';
 
 const features = ['news', 'tips', 'market', 'logbook', 'sites', 'safety'] as const;
+const featureHref: Record<(typeof features)[number], string> = {
+  news: '/news',
+  tips: '/tips',
+  market: '/market',
+  logbook: '/logbook',
+  sites: '/sites',
+  safety: '/safety',
+};
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -53,10 +61,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f) => (
             <li key={f}>
-              <Card className="h-full">
+              <Link
+                href={featureHref[f]}
+                className="block h-full rounded-2xl border border-border bg-card p-5 transition hover:shadow-md sm:p-6"
+              >
                 <h3 className="text-lg font-semibold">{t(`features.${f}.title`)}</h3>
                 <p className="mt-1 text-muted">{t(`features.${f}.text`)}</p>
-              </Card>
+              </Link>
             </li>
           ))}
         </ul>

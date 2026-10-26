@@ -25,7 +25,7 @@ export default async function SosPage({ params }: { params: Promise<{ locale: st
       <PageTitle lead={t('lead')}>{t('title')}</PageTitle>
       <a
         href={`tel:${first.number}`}
-        className="flex min-h-20 items-center justify-center gap-3 rounded-2xl bg-brand-red px-6 text-2xl font-bold text-white shadow-lg focus-visible:outline-4 focus-visible:outline-offset-2"
+        className="flex min-h-20 items-center justify-center gap-3 rounded-2xl bg-sos px-6 text-2xl font-bold text-white shadow-lg focus-visible:outline-4 focus-visible:outline-offset-2"
       >
         📞 {t('call', { number: first.number })}
       </a>
@@ -34,7 +34,7 @@ export default async function SosPage({ params }: { params: Promise<{ locale: st
           <a
             key={n.key}
             href={`tel:${n.number}`}
-            className="flex min-h-14 items-center justify-between rounded-xl border-2 border-brand-red px-4 font-semibold"
+            className="flex min-h-14 items-center justify-between rounded-xl border-2 border-sos px-4 font-semibold"
           >
             <span>{t(`numbers.${n.key}`)}</span>
             <span className="text-xl">{n.number}</span>

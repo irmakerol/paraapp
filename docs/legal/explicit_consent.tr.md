@@ -7,3 +7,4 @@ Aşağıdaki onayların hiçbiri uygulamayı kullanmak için zorunlu değildir. 
 - **Pazarlama bildirimleri:** Kulüp etkinlikleri, kampanyalar ve duyurular hakkında e-posta ve bildirim almak.
 - **Analiz:** Uygulamanın nasıl kullanıldığına dair anonimleştirilmiş kullanım istatistiklerinin toplanması (hata takibi dahil).
 - **Herkese açık profil:** Profilinizdeki "herkese açık" alanların giriş yapmamış ziyaretçilere ve arama motorlarına gösterilmesi.
+- **Olay bildirimlerinde sağlık verisi:** bir olay bildiriminde yazdığınız yaralanma bilgilerinin, kulübün güvenlik sorumlularının kazaları analiz edebilmesi için saklanması. Bu rızayı yalnızca yaralanma bilgisi eklediğinizde bildirim formunda verirsiniz; vermeden de bildirimi gönderebilirsiniz.
