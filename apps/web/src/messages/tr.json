@@ -1,0 +1,267 @@
+{
+  "meta": {
+    "title": "{app} – yamaç paraşütü topluluğu",
+    "description": "Türkiye'deki yamaç paraşütü pilotları için haberler, ipuçları, ekipman pazarı ve uçuş defteri. {club} tarafından."
+  },
+  "nav": {
+    "home": "Ana sayfa",
+    "news": "Haberler",
+    "tips": "İpuçları",
+    "market": "Ekipman pazarı",
+    "sites": "Uçuş alanları",
+    "logbook": "Uçuş defteri",
+    "account": "Hesabım",
+    "signIn": "Giriş yap",
+    "signUp": "Katıl",
+    "signOut": "Çıkış yap",
+    "menu": "Menü",
+    "skipToContent": "İçeriğe geç",
+    "language": "Dil",
+    "theme": "Tema",
+    "themeLight": "Açık",
+    "themeDark": "Koyu",
+    "themeSystem": "Sistem"
+  },
+  "footer": {
+    "privacyNotice": "Aydınlatma metni",
+    "terms": "Kullanım koşulları",
+    "explicitConsent": "Açık rıza metni",
+    "contact": "İletişim",
+    "rights": "© {year} {club}"
+  },
+  "home": {
+    "heroTitle": "Türkiye'nin yamaç paraşütü topluluğu",
+    "heroText": "Haberler, eğitmenlerden ipuçları, ikinci el ekipman pazarı ve uçuş defterin tek bir yerde. Ücretsiz, {club} tarafından.",
+    "ctaJoin": "Ücretsiz katıl",
+    "ctaSignIn": "Zaten hesabım var",
+    "welcomeBack": "Tekrar hoş geldin, {name}",
+    "featuresTitle": "Yakında",
+    "features": {
+      "news": { "title": "Kulüp haberleri", "text": "Duyurular, geziler ve güvenlik uyarıları." },
+      "tips": {
+        "title": "İpuçları",
+        "text": "Kalkış, termik, XC, meteoroloji ve SIV; başlangıçtan ileri seviyeye."
+      },
+      "market": {
+        "title": "Ekipman pazarı",
+        "text": "Yeni ve ikinci el kanat, harness, yedek paraşüt ve aletler."
+      },
+      "logbook": {
+        "title": "Uçuş defteri",
+        "text": "Varyondan veya uygulamandan IGC/GPX dosyalarını yükle, istatistiklerini gör."
+      },
+      "sites": {
+        "title": "Uçuş alanları",
+        "text": "Rüzgâr yönleri ve uçulabilirlik bilgisiyle kalkış ve iniş alanları."
+      },
+      "safety": {
+        "title": "Güvenlik",
+        "text": "Toplulukla paylaşılan olay bildirimleri ve dersler."
+      }
+    }
+  },
+  "comingSoon": {
+    "title": "Yakında",
+    "text": "Uygulamanın bu bölümü hazırlanıyor. Yakında tekrar göz at."
+  },
+  "auth": {
+    "email": "E-posta",
+    "password": "Şifre",
+    "displayName": "Görünen ad",
+    "displayNameHelp": "Diğer pilotlara gösterilir. Sonra değiştirebilirsin.",
+    "birthDate": "Doğum tarihi",
+    "birthDateHelp": "En az 14 yaşında olmalısın. 18 yaş altı pilotlar için veli onayı gerekir.",
+    "passwordHelp": "En az 10 karakter; harf ve rakam içermeli.",
+    "signInTitle": "Giriş yap",
+    "signInSubmit": "Giriş yap",
+    "forgotLink": "Şifreni mi unuttun?",
+    "noAccount": "Yeni misin?",
+    "haveAccount": "Zaten hesabın var mı?",
+    "or": "veya",
+    "magicTitle": "E-posta bağlantısıyla giriş",
+    "magicText": "Sana tek kullanımlık bir giriş bağlantısı gönderelim. Şifre gerekmez.",
+    "magicSubmit": "Bağlantı gönder",
+    "magicSent": "Bu adrese ait bir hesap varsa giriş bağlantısı yolda.",
+    "google": "Google ile devam et",
+    "signUpTitle": "{app}'e katıl",
+    "signUpSubmit": "Hesap oluştur",
+    "signUpLegal": "Hesabını oluşturduktan sonra devam etmeden önce aydınlatma metnini ve kullanım koşullarını göreceksin.",
+    "checkEmailTitle": "E-postanı kontrol et",
+    "checkEmailText": "{email} adresine bir onay bağlantısı gönderdik. Kaydı tamamlamak için bağlantıyı bu cihazda aç.",
+    "forgotTitle": "Şifreni sıfırla",
+    "forgotText": "E-posta adresini yaz, sana bir sıfırlama bağlantısı gönderelim.",
+    "forgotSubmit": "Sıfırlama bağlantısı gönder",
+    "forgotSent": "Bu adrese ait bir hesap varsa sıfırlama bağlantısı yolda.",
+    "resetTitle": "Yeni şifre belirle",
+    "resetSubmit": "Şifreyi kaydet",
+    "resetDone": "Şifren değiştirildi.",
+    "signOutAll": "Tüm cihazlardan çıkış yap",
+    "signOutAllHelp": "Diğer telefon ve bilgisayarlar dahil tüm oturumları kapatır.",
+    "errors": {
+      "invalidCredentials": "E-posta veya şifre hatalı.",
+      "emailNotConfirmed": "Lütfen önce e-posta adresini onayla. Gelen kutunu kontrol et.",
+      "tooYoung": "{app}'i kullanmak için en az 14 yaşında olmalısın.",
+      "invalidDate": "Lütfen geçerli bir tarih gir.",
+      "rateLimited": "Çok fazla deneme yapıldı. Birkaç dakika bekleyip tekrar dene.",
+      "weakPassword": "Şifre çok zayıf. Harf ve rakam içeren en az 10 karakter kullan.",
+      "userExists": "Bu e-posta ile zaten bir hesap var. Giriş yapmayı dene.",
+      "linkInvalid": "Bu bağlantı geçersiz veya süresi dolmuş. Lütfen yenisini iste.",
+      "validation": "Lütfen işaretli alanları kontrol et.",
+      "generic": "Bir şeyler ters gitti. Lütfen tekrar dene."
+    }
+  },
+  "onboarding": {
+    "stepOf": "Adım {current} / {total}",
+    "age": {
+      "title": "Yaşını doğrula",
+      "text": "Asgari yaş sınırını (14) uygulamak ve 18 yaşından küçüksen velinden onay istemek için doğum tarihine ihtiyacımız var. Gizli tutulur.",
+      "submit": "Devam et"
+    },
+    "legal": {
+      "title": "Aydınlatma metni ve kullanım koşulları",
+      "intro": "Lütfen verilerini nasıl işlediğimizi ve topluluk kurallarını oku.",
+      "privacyHeading": "Aydınlatma Metni",
+      "privacyAck": "Aydınlatma metnini okudum.",
+      "termsHeading": "Kullanım Koşulları",
+      "termsAccept": "Kullanım koşullarını kabul ediyorum.",
+      "updated": "Bu metinler son onayından bu yana değişti.",
+      "submit": "Devam et",
+      "readFull": "Yeni sayfada aç"
+    },
+    "consents": {
+      "title": "Tercihlerin",
+      "intro": "Bunlar isteğe bağlıdır. Hiçbiri önceden seçili değildir ve fikrini istediğin zaman Gizlilik sayfasından değiştirebilirsin.",
+      "readText": "Açık rıza metninin tamamını oku",
+      "submit": "Kaydet ve devam et"
+    },
+    "guardian": {
+      "title": "Veli onayı",
+      "text": "18 yaşından küçük olduğun için hesabını bir velinin veya yasal temsilcinin onaylaması gerekiyor. Ona bir bağlantı gönderelim. Onayladığında hesabın etkinleşir.",
+      "name": "Velinin adı soyadı",
+      "email": "Velinin e-posta adresi",
+      "submit": "Onay e-postası gönder",
+      "sent": "{email} adresine e-posta gönderildi. Bağlantı 7 gün geçerlidir.",
+      "history": "Gönderilen talepler",
+      "pending": "Bekliyor",
+      "confirmed": "Onaylandı",
+      "expired": "Süresi doldu"
+    }
+  },
+  "consentTypes": {
+    "marketing_notifications": {
+      "title": "Kulüp haberleri ve kampanyalar",
+      "text": "Kulüp etkinlikleri, kampanyalar ve duyurular hakkında e-posta ve bildirimler."
+    },
+    "analytics": {
+      "title": "Kullanım istatistikleri",
+      "text": "Uygulamayı geliştirmemize yardımcı olan takma adlı istatistikler ve hata raporları."
+    },
+    "public_profile": {
+      "title": "Herkese açık profil",
+      "text": "Profilinin herkese açık kısımlarını giriş yapmamış ziyaretçilere ve arama motorlarına göster."
+    },
+    "live_location": {
+      "title": "Canlı konum paylaşımı",
+      "text": "Uçarken canlı konumunu geçici bir bağlantı ile paylaş."
+    },
+    "incident_special_category": {
+      "title": "Olay bildirimlerinde sağlık verisi",
+      "text": "Olay bildirimine eklediğin yaralanma bilgilerinin işlenmesi."
+    }
+  },
+  "guardianConfirm": {
+    "title": "Çocuğunuzun hesabını onaylayın",
+    "intro": "Sayın {guardian}, {name}, {club}'nün yamaç paraşütü topluluk uygulaması {app}'teki hesabını onaylamanızı istedi.",
+    "what": "Onaylarsanız hesap etkinleşir. Profili varsayılan olarak gizli kalır, ekipman pazarında ilan veremez ve takip etmediği yetişkinler ona mesaj gönderemez. Dilediğiniz zaman {email} adresine yazarak hesabın silinmesini isteyebilirsiniz.",
+    "privacyLink": "Aydınlatma metnini okuyun",
+    "confirm": "Velisi veya yasal temsilcisiyim ve onay veriyorum",
+    "confirmed": "Teşekkür ederiz. Hesap artık etkin.",
+    "invalid": "Bu bağlantı geçersiz, süresi dolmuş veya daha önce kullanılmış."
+  },
+  "account": {
+    "title": "Hesabım",
+    "tabs": { "profile": "Profil", "privacy": "Gizlilik" },
+    "profile": {
+      "photo": "Profil fotoğrafı",
+      "uploadPhoto": "Fotoğraf yükle",
+      "removePhoto": "Fotoğrafı kaldır",
+      "photoHelp": "JPEG, PNG veya WebP. Yüklemeden önce küçültür ve konum bilgisini sileriz.",
+      "displayName": "Görünen ad",
+      "fullName": "Ad soyad",
+      "country": "Ülke kodu",
+      "countryHelp": "İki harf, ör. TR",
+      "city": "Şehir",
+      "homeSite": "Ana uçuş alanı",
+      "pilotLevel": "Pilot seviyesi",
+      "levelNone": "Belirtilmedi",
+      "levels": {
+        "student": "Öğrenci",
+        "p1": "P1",
+        "p2": "P2",
+        "p3": "P3",
+        "p4": "P4",
+        "p5": "P5",
+        "tandem": "Tandem pilotu",
+        "instructor": "Eğitmen"
+      },
+      "yearsFlying": "Uçuş yılı",
+      "wings": "Kanat(lar)",
+      "bio": "Hakkımda",
+      "licence": "Lisans numarası",
+      "licenceHelp": "İsteğe bağlı. Yalnızca sen görebilirsin; şifrelenerek saklanır.",
+      "visibility": "Kimler görebilir",
+      "visibilityOptions": {
+        "public": "Herkes",
+        "members": "Kulüp üyeleri",
+        "private": "Yalnızca ben"
+      },
+      "preferences": "Tercihler",
+      "language": "Dil",
+      "units": "Birimler",
+      "unitsMetric": "Metrik (m, km)",
+      "unitsImperial": "İmparatorluk (ft, mil)",
+      "speed": "Hız",
+      "save": "Kaydet",
+      "saved": "Kaydedildi.",
+      "memberBadge": "Kulüp üyesi",
+      "minorNote": "18 yaşından küçük olduğun için profilin varsayılan olarak gizlidir."
+    },
+    "privacy": {
+      "consentsTitle": "Onaylar",
+      "consentsText": "Dilediğini açıp kapatabilirsin. Değişiklikler hemen geçerli olur.",
+      "on": "Açık",
+      "off": "Kapalı",
+      "exportTitle": "Verilerimi indir",
+      "exportText": "Hakkında sakladığımız her şeyi içeren bir JSON dosyası. Uçuş dosyaları, uçuş defteri yayına girince eklenecek.",
+      "exportButton": "İndir",
+      "requestTitle": "Diğer talepler",
+      "requestText": "İşlemeye itiraz, düzeltme veya başka bir talep. En geç 30 gün içinde yanıtlarız.",
+      "requestType": "Talep türü",
+      "requestTypes": {
+        "objection": "İşlemeye itiraz",
+        "rectification": "Verilerimi düzelt",
+        "restriction": "İşlemeyi kısıtla",
+        "access": "Verilerim hakkında bilgi",
+        "other": "Diğer"
+      },
+      "requestDetails": "Açıklama",
+      "requestSubmit": "Talebi gönder",
+      "requestSent": "Talebin alındı. En geç {date} tarihine kadar yanıtlayacağız.",
+      "requestsList": "Taleplerin",
+      "requestStatus": {
+        "received": "Alındı",
+        "in_progress": "İşlemde",
+        "completed": "Tamamlandı",
+        "rejected": "Reddedildi"
+      },
+      "deleteTitle": "Hesabımı sil",
+      "deleteText": "Profilin hemen anonimleştirilir ve tüm cihazlardan çıkış yapılır. 30 gün sonra hesabın ve tüm verilerin kalıcı olarak silinir. Bu işlem geri alınamaz.",
+      "deleteConfirm": "Anladım. Hesabımı sil.",
+      "deleteButton": "Hesabı sil",
+      "deleted": "Hesabın silindi. 30 gün sonra kalıcı olarak kaldırılacak."
+    }
+  },
+  "legal": {
+    "notFound": "Bu belge henüz yayınlanmadı."
+  }
+}

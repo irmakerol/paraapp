@@ -1,0 +1,116 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Fly Anatolia palette, sampled from the club logo. */
+:root {
+  --brand-navy: #0f4049;
+  --brand-red: #de4750;
+  --brand-orange: #ee8a35;
+  --brand-yellow: #f6c850;
+  --brand-blue: #3f86c4;
+
+  --background: #f8f6f2;
+  --foreground: #13262b;
+  --card: #ffffff;
+  --muted: #5b6b70;
+  --border: #d9dedf;
+  --primary: var(--brand-navy);
+  --primary-foreground: #ffffff;
+  --accent: #c2410c;
+  --danger: #b4232c;
+  --success: #166534;
+  --ring: var(--brand-blue);
+}
+
+.dark {
+  --background: #0b1a1e;
+  --foreground: #eef3f4;
+  --card: #12262b;
+  --muted: #9fb0b4;
+  --border: #284147;
+  --primary: var(--brand-orange);
+  --primary-foreground: #13262b;
+  --accent: var(--brand-yellow);
+  --danger: #f87171;
+  --success: #4ade80;
+  --ring: var(--brand-yellow);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
+  --color-ring: var(--ring);
+  --color-brand-navy: var(--brand-navy);
+  --color-brand-red: var(--brand-red);
+  --color-brand-orange: var(--brand-orange);
+  --color-brand-yellow: var(--brand-yellow);
+  --color-brand-blue: var(--brand-blue);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+:focus-visible {
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.prose-legal h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 1.5rem 0 0.75rem;
+}
+.prose-legal h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.5rem;
+}
+.prose-legal p,
+.prose-legal ul,
+.prose-legal ol,
+.prose-legal table,
+.prose-legal blockquote {
+  margin: 0.6rem 0;
+  line-height: 1.6;
+}
+.prose-legal ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.prose-legal ol {
+  list-style: decimal;
+  padding-left: 1.25rem;
+}
+.prose-legal blockquote {
+  border-left: 4px solid var(--brand-orange);
+  padding: 0.5rem 0.75rem;
+  background: color-mix(in srgb, var(--brand-orange) 12%, transparent);
+}
+.prose-legal table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.prose-legal th,
+.prose-legal td {
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.5rem;
+  text-align: left;
+  vertical-align: top;
+}
