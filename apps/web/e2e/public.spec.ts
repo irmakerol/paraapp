@@ -82,3 +82,27 @@ test('messages, posting ads and admin require sign-in', async ({ page }) => {
     await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
   }
 });
+
+test('sites page renders in both languages', async ({ page }) => {
+  await page.goto('/tr/sites');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Uçuş alanları');
+  await page.goto('/en/sites');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Flying sites');
+});
+
+test('logbook pages require sign-in', async ({ page }) => {
+  for (const path of [
+    '/en/logbook',
+    '/en/logbook/import',
+    '/en/logbook/new',
+    '/en/logbook/equipment',
+  ]) {
+    await page.goto(path);
+    await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
+  }
+});
+
+test('logbook export needs a session', async ({ request }) => {
+  const res = await request.get('/api/logbook/export');
+  expect(res.status()).toBe(401);
+});

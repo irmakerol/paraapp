@@ -25,6 +25,7 @@ export default async function NotificationsPage({
         messages: prefs.messages !== false,
         news: prefs.news !== false,
         ads: prefs.ads !== false,
+        equipment: prefs.equipment !== false,
       }}
       hasNewsConsent={Boolean(consent?.granted)}
     />

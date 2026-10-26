@@ -13,6 +13,10 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   transpilePackages: ['@paraapp/core'],
   poweredByHeader: false,
+  experimental: {
+    // Flight files (IGC/GPX) are posted to a server action and analysed on the server.
+    serverActions: { bodySizeLimit: '9mb' },
+  },
   async headers() {
     return [
       { source: '/:path*', headers: securityHeaders },

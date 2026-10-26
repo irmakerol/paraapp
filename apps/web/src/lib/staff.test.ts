@@ -12,10 +12,10 @@ describe('staff areas', () => {
     expect(staffAreas(viewer(['pilot', 'instructor']))).toEqual(['tips']);
   });
   it('gives moderators tips and reports', () => {
-    expect(staffAreas(viewer(['moderator']))).toEqual(['tips', 'reports']);
+    expect(staffAreas(viewer(['moderator']))).toEqual(['tips', 'reports', 'sites']);
   });
   it('gives admins everything', () => {
-    expect(staffAreas(viewer(['admin']))).toHaveLength(5);
+    expect(staffAreas(viewer(['admin']))).toHaveLength(6);
   });
   it('gives members nothing', () => {
     expect(canUse(viewer(['member']), 'news')).toBe(false);

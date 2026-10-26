@@ -66,6 +66,13 @@ docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, leg
 - Push goes through `sendPush()` (`lib/push.ts`): it checks topic settings and, for club news, marketing consent.
 - Third-party embeds are click-to-load (`components/video-embed.tsx`). No third-party request before the user acts.
 - In render, use `currentTime()` from `lib/format.ts` instead of `Date.now()` (the React purity lint rule).
+- Maps are third-party requests too: wrap them in `MapGate` (`components/map-gate.tsx`), style URL in `lib/map.ts`.
+- Imported flights are analysed on the server and written with the service role (`lib/flight-import.ts`);
+  users can only insert manual flights. Other people only ever get `flights.public_track` (first/last
+  500 m removed); `flight_tracks` and the `flight-files` bucket are owner-only.
+- Storage files are not removed by DB cascades: anything new a user uploads must be added to
+  `lib/account-files.ts` (account deletion) and `/api/account/export`.
+- `packages/core` lint is `typescript-eslint` strict (no `!`): use `at()` from `tracks/at.ts` for known-good indices.
 
 ## Decisions (2026-10-26)
 
@@ -73,7 +80,7 @@ docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, leg
   dedicated recorder app), decided in Phase 5.
 - Live flight recording waits for native; the web logbook imports IGC/GPX.
 - Minimum age 14. Ages 14–17 need guardian consent by email link; minors default to private
-  everything, no marketplace posting, adults cannot start chats with minors (Phase 2: allow adults the minor follows).
+  everything, no marketplace posting, adults can start chats with a minor only if the minor follows them.
 - New flights default to **public** for adults with the first/last 500 m hidden; minors default to private.
 - Retention: deleted accounts purged 30 days after the request; chats kept until deleted; the rest
   in `retention_policies`.

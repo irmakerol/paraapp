@@ -3,13 +3,14 @@ import { notFound } from 'next/navigation';
 import type { Role } from '@paraapp/core';
 import { requireActiveViewer, type Viewer } from '@/lib/session';
 
-export type StaffArea = 'news' | 'tips' | 'reports' | 'users' | 'requests';
+export type StaffArea = 'news' | 'tips' | 'reports' | 'sites' | 'users' | 'requests';
 
 /** Which roles may use each admin area. RLS enforces the same rules in the database. */
 export const AREA_ROLES: Record<StaffArea, readonly Role[]> = {
   news: ['admin'],
   tips: ['instructor', 'moderator', 'admin'],
   reports: ['moderator', 'admin'],
+  sites: ['moderator', 'admin'],
   users: ['admin'],
   requests: ['admin'],
 };

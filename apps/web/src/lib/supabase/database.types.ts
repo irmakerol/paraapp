@@ -508,6 +508,200 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      sites: {
+        Row: {
+          id: string;
+          slug: string;
+          name: string;
+          kind: Database['public']['Enums']['site_kind'];
+          lat: number;
+          lng: number;
+          location: unknown;
+          elevation_m: number | null;
+          wind_directions: string[];
+          region: string | null;
+          country: string;
+          description: string;
+          rules: string;
+          verified: boolean;
+          created_by: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          slug: string;
+          name: string;
+          kind?: Database['public']['Enums']['site_kind'];
+          lat: number;
+          lng: number;
+          elevation_m?: number | null;
+          wind_directions?: string[];
+          region?: string | null;
+          country?: string;
+          description?: string;
+          rules?: string;
+          verified?: boolean;
+          created_by?: string | null;
+        };
+        Update: Partial<Database['public']['Tables']['sites']['Insert']>;
+        Relationships: [];
+      };
+      equipment: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: Database['public']['Enums']['equipment_kind'];
+          brand: string | null;
+          model: string;
+          size: string | null;
+          certification: string | null;
+          purchased_on: string | null;
+          last_check_on: string | null;
+          check_interval_months: number | null;
+          last_repack_on: string | null;
+          repack_interval_months: number | null;
+          check_reminded_on: string | null;
+          repack_reminded_on: string | null;
+          retired: boolean;
+          notes: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          user_id: string;
+          kind: Database['public']['Enums']['equipment_kind'];
+          brand?: string | null;
+          model: string;
+          size?: string | null;
+          certification?: string | null;
+          purchased_on?: string | null;
+          last_check_on?: string | null;
+          check_interval_months?: number | null;
+          last_repack_on?: string | null;
+          repack_interval_months?: number | null;
+          retired?: boolean;
+          notes?: string | null;
+        };
+        Update: Partial<Omit<Database['public']['Tables']['equipment']['Insert'], 'user_id'>>;
+        Relationships: [];
+      };
+      flights: {
+        Row: {
+          id: string;
+          user_id: string;
+          started_at: Timestamp;
+          duration_s: number;
+          takeoff_site_id: string | null;
+          landing_site_id: string | null;
+          site_name: string | null;
+          glider: string | null;
+          wing_id: string | null;
+          distance_m: number | null;
+          straight_m: number | null;
+          max_from_takeoff_m: number | null;
+          takeoff_alt_m: number | null;
+          landing_alt_m: number | null;
+          max_alt_m: number | null;
+          min_alt_m: number | null;
+          max_climb_ms: number | null;
+          max_sink_ms: number | null;
+          visibility: Database['public']['Enums']['visibility'];
+          notes: string | null;
+          source: Database['public']['Enums']['flight_source'];
+          file_path: string | null;
+          file_sha256: string | null;
+          public_track: Json | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        // Users may only insert manual flights; imports are written with the service role.
+        Insert: {
+          id?: string;
+          user_id: string;
+          started_at: Timestamp;
+          duration_s: number;
+          takeoff_site_id?: string | null;
+          landing_site_id?: string | null;
+          site_name?: string | null;
+          glider?: string | null;
+          wing_id?: string | null;
+          distance_m?: number | null;
+          straight_m?: number | null;
+          max_from_takeoff_m?: number | null;
+          takeoff_alt_m?: number | null;
+          landing_alt_m?: number | null;
+          max_alt_m?: number | null;
+          min_alt_m?: number | null;
+          max_climb_ms?: number | null;
+          max_sink_ms?: number | null;
+          visibility?: Database['public']['Enums']['visibility'];
+          notes?: string | null;
+          source: Database['public']['Enums']['flight_source'];
+          file_path?: string | null;
+          file_sha256?: string | null;
+          public_track?: Json | null;
+        };
+        Update: {
+          takeoff_site_id?: string | null;
+          landing_site_id?: string | null;
+          site_name?: string | null;
+          glider?: string | null;
+          wing_id?: string | null;
+          visibility?: Database['public']['Enums']['visibility'];
+          notes?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'flights_takeoff_site_id_fkey';
+            columns: ['takeoff_site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'flights_landing_site_id_fkey';
+            columns: ['landing_site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'flights_wing_id_fkey';
+            columns: ['wing_id'];
+            isOneToOne: false;
+            referencedRelation: 'equipment';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      flight_tracks: {
+        Row: {
+          flight_id: string;
+          user_id: string;
+          track: Json;
+          takeoff_lat: number | null;
+          takeoff_lng: number | null;
+          landing_lat: number | null;
+          landing_lng: number | null;
+        };
+        Insert: {
+          flight_id: string;
+          user_id: string;
+          track: Json;
+          takeoff_lat?: number | null;
+          takeoff_lng?: number | null;
+          landing_lat?: number | null;
+          landing_lng?: number | null;
+        };
+        Update: never;
+        Relationships: [];
+      };
+      follows: {
+        Row: { follower_id: string; followee_id: string; created_at: Timestamp };
+        Insert: { follower_id: string; followee_id: string };
+        Update: never;
+        Relationships: [];
+      };
     };
     Views: {
       current_consents: {
@@ -566,6 +760,29 @@ export type Database = {
       request_account_deletion: { Args: Record<string, never>; Returns: Timestamp };
       renew_ad: { Args: { p_ad: string }; Returns: Timestamp };
       start_direct_chat: { Args: { p_other: string; p_ad?: string | null }; Returns: string };
+      nearest_site: {
+        Args: { p_lat: number; p_lng: number; p_max_m?: number };
+        Returns: string | null;
+      };
+      pilot_stats: {
+        Args: { p_user: string };
+        Returns: {
+          flights: number;
+          total_s: number;
+          longest_s: number | null;
+          max_distance_m: number | null;
+          max_straight_m: number | null;
+          max_alt_m: number | null;
+          max_climb_ms: number | null;
+          first_flight: Timestamp | null;
+          last_flight: Timestamp | null;
+          sites: number;
+        }[];
+      };
+      follow_counts: {
+        Args: { p_user: string };
+        Returns: { followers: number; following: number }[];
+      };
       reported_chat_messages: {
         Args: { p_report: string };
         Returns: Database['public']['Tables']['messages']['Row'][];
@@ -625,6 +842,9 @@ export type Database = {
       report_reason: 'spam' | 'scam' | 'harassment' | 'hate' | 'sexual' | 'dangerous' | 'illegal' | 'other';
       report_status: 'open' | 'actioned' | 'dismissed';
       chat_kind: 'direct' | 'group';
+      site_kind: 'launch' | 'landing' | 'both';
+      equipment_kind: 'wing' | 'harness' | 'reserve' | 'instrument' | 'helmet' | 'radio' | 'other';
+      flight_source: 'igc' | 'gpx' | 'manual';
     };
     CompositeTypes: Record<string, never>;
   };

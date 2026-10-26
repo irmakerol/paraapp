@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { CONSENT_TYPES, licenceNumberSchema, profileSchema, type ConsentType } from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
+import { removeUserFiles } from '@/lib/account-files';
 import { getUser } from '@/lib/session';
 import { encryptField } from '@/lib/crypto';
 import { serverEnv } from '@/lib/env';
@@ -162,11 +163,8 @@ export async function deleteAccount(_prev: ActionState, formData: FormData): Pro
   if (formData.get('confirm') !== 'on') return { error: 'validation' };
   const supabase = await createClient();
 
-  // Storage objects must be removed through the Storage API, before the session ends.
-  const { data: files } = await supabase.storage.from('avatars').list(user.id);
-  if (files?.length) {
-    await supabase.storage.from('avatars').remove(files.map((f) => `${user.id}/${f.name}`));
-  }
+  // Storage objects are not removed by database cascades: delete them through the Storage API.
+  await removeUserFiles(user.id);
 
   const { error } = await supabase.rpc('request_account_deletion');
   if (error && !error.message.includes('deletion_already_requested')) return { error: 'generic' };
