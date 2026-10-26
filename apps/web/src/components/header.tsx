@@ -31,7 +31,10 @@ export async function Header({ locale }: { locale: string }) {
 
   const links = items.map((item) => (
     <li key={item.href}>
-      <Link href={item.href} className="block rounded-lg px-3 py-2 font-medium hover:bg-background">
+      <Link
+        href={item.href}
+        className="block whitespace-nowrap rounded-lg px-3 py-2 font-medium hover:bg-background"
+      >
         {t(item.key)}
       </Link>
     </li>
@@ -45,25 +48,25 @@ export async function Header({ locale }: { locale: string }) {
       >
         {t('skipToContent')}
       </a>
-      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2">
-        <Link href="/" className="flex shrink-0 items-center gap-2" aria-label={t('home')}>
+      <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 2xl:max-w-[96rem]">
+        <Link href="/" className="flex shrink-0 items-center gap-2">
           <Image src="/brand/logo-96.png" alt="" width={44} height={44} priority />
           <span className="text-lg font-bold">{APP_CONFIG.name}</span>
         </Link>
 
-        <nav aria-label={t('menu')} className="ml-4 hidden xl:block">
+        <nav aria-label={t('menu')} className="ml-4 hidden 2xl:block">
           <ul className="flex gap-1">{links}</ul>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
           <Link
             href="/sos"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-brand-red px-3 font-extrabold text-white"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-sos px-3 font-extrabold text-white"
             aria-label={t('sosLabel')}
           >
             SOS
           </Link>
-          <div className="hidden items-center gap-2 sm:flex">
+          <div className="hidden items-center gap-2 sm:flex 2xl:hidden">
             <LocaleSwitcher />
             <ThemeToggle />
           </div>
@@ -92,7 +95,7 @@ export async function Header({ locale }: { locale: string }) {
             </>
           )}
 
-          <details className="relative xl:hidden">
+          <details className="relative 2xl:hidden">
             <summary className={buttonClass('secondary', 'list-none cursor-pointer')}>
               {t('menu')}
             </summary>

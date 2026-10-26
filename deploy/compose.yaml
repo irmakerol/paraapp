@@ -1,0 +1,64 @@
+# Production stack on one small Linux server: the web app, Caddy for HTTPS, a scheduler for
+# push notifications and nightly encrypted database backups. The database itself is Supabase.
+# Usage: see deploy/README.md.
+
+services:
+  web:
+    build:
+      context: ..
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL}
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+        NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
+        NEXT_PUBLIC_OPENAIP_API_KEY: ${NEXT_PUBLIC_OPENAIP_API_KEY:-}
+        NEXT_PUBLIC_AUTH_GOOGLE_ENABLED: ${NEXT_PUBLIC_AUTH_GOOGLE_ENABLED:-false}
+    env_file: .env
+    restart: unless-stopped
+    mem_limit: 768m
+
+  caddy:
+    image: caddy:2-alpine
+    ports: ['80:80', '443:443', '443:443/udp']
+    environment:
+      DOMAIN: ${DOMAIN}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on: [web]
+    restart: unless-stopped
+
+  # Sends due push notifications (scheduled news, ad expiry, equipment reminders) every 10 minutes.
+  cron:
+    image: alpine:3.22
+    environment:
+      CRON_SECRET: ${CRON_SECRET}
+    command: >
+      sh -c 'while true; do
+        wget -qO- --header="Authorization: Bearer $$CRON_SECRET" --post-data="" http://web:3000/api/cron/notify >/dev/null 2>&1;
+        sleep 600; done'
+    depends_on: [web]
+    restart: unless-stopped
+
+  # Nightly pg_dump of the Supabase database, encrypted with BACKUP_PASSPHRASE, kept 14 days on
+  # this server (in the EU). Copy them elsewhere from time to time; see README.
+  backup:
+    image: postgres:17-alpine
+    environment:
+      SUPABASE_DB_URL: ${SUPABASE_DB_URL}
+      BACKUP_PASSPHRASE: ${BACKUP_PASSPHRASE}
+    volumes:
+      - ./backups:/backups
+      - ./backup.sh:/backup.sh:ro
+    entrypoint:
+      [
+        'sh',
+        '-c',
+        'apk add --no-cache gnupg >/dev/null && while true; do sh /backup.sh; sleep 86400; done',
+      ]
+    restart: unless-stopped
+
+volumes:
+  caddy-data:
+  caddy-config:

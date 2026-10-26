@@ -23,7 +23,8 @@ apps/web          Next.js 16 (App Router) + next-intl + Tailwind v4 + Supabase S
 packages/core     Pure TS shared logic: APP_CONFIG, age gate, privacy, units, roles, zod schemas
 supabase/         config.toml, migrations, seed.sql (generated), email templates, pgTAP tests
 scripts/          db-test.sh (+ shim for plain Postgres), gen-legal-seed.mjs
-docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, legal/ drafts
+docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, LAUNCH, BREACH_RUNBOOK, legal/ drafts
+deploy/           compose stack (web, Caddy, scheduler, backups) and the deployment guide
 ```
 
 ## Commands
@@ -79,6 +80,12 @@ docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, leg
   person-to-person features unless the minor opted in (as with follows for 1-to-1 chats).
 - Weather is fetched only on the server (`lib/weather.ts`, cached in `weather_forecasts`); the
   flyability rules live in `packages/core/src/weather.ts`.
+- A new third-party host (map tiles, embeds, APIs called from the browser) must be added to the CSP in
+  `next.config.ts`. `NEXT_PUBLIC_*` values and the CSP are fixed at build time.
+- The service worker (`public/sw.js`) only caches public pages from signed-out requests; personal
+  pages must stay out (the proxy marks signed-in responses with `x-paraapp-session`). Bump `VERSION`
+  in `sw.js` when its caching rules change.
+- Deployment: `Dockerfile` (standalone output) + `deploy/compose.yaml`; steps in `deploy/README.md`.
 - `packages/core` lint is `typescript-eslint` strict (no `!`): use `at()` from `tracks/at.ts` for known-good indices.
 
 ## Decisions (2026-10-26)

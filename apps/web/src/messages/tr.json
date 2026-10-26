@@ -41,7 +41,7 @@
     "ctaJoin": "Ücretsiz katıl",
     "ctaSignIn": "Zaten hesabım var",
     "welcomeBack": "Tekrar hoş geldin, {name}",
-    "featuresTitle": "Yakında",
+    "featuresTitle": "Neler var",
     "features": {
       "news": {
         "title": "Kulüp haberleri",
@@ -1219,5 +1219,21 @@
     },
     "clubContact": "{club} iletişim:",
     "privacy": "Bu sayfa hesap gerektirmez ve sunucumuza hiçbir şey göndermez."
+  },
+  "errors": {
+    "notFound": "Sayfa bulunamadı",
+    "notFoundLead": "Sayfa taşınmış veya bağlantı hatalı olabilir.",
+    "home": "Ana sayfaya git",
+    "sos": "Acil durum (SOS)",
+    "error": "Bir şeyler ters gitti",
+    "errorLead": "Lütfen tekrar deneyin. Sorun devam ederse kulübe bildirin.",
+    "retry": "Tekrar dene",
+    "reference": "Referans: {digest}"
+  },
+  "offline": {
+    "title": "Çevrimdışısınız",
+    "lead": "Bu sayfa bu cihaza kaydedilmemiş. Bağlantınızı kontrol edip tekrar deneyin.",
+    "sos": "SOS sayfasını aç (çevrimdışı çalışır)",
+    "saved": "Son ziyaret ettiğiniz sayfalar (haberler, ipuçları, uçuş yerleri, etkinlikler, güvenlik) oturum kapalıyken çevrimdışı okumak için kaydedilir."
   }
 }

@@ -11,6 +11,26 @@ in 2025–2026 and must be re-checked before signing up. Today the app runs on l
 | Apple Developer Program       | $99 / year                                                    | Phase 5 (native) |
 | Google Play developer account | $25 once                                                      | Phase 5 (native) |
 
+## Beta launch setup (Phase 4)
+
+| Part                           | Choice                                                  | Cost            | Free-tier limits that matter                                                                                   |
+| ------------------------------ | ------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------- |
+| Database, auth, storage        | Supabase free, Frankfurt                                | €0              | 500 MB database, 1 GB files, 5 GB egress/month, 50k monthly active users; pauses after 7 idle days; no backups |
+| Web server                     | Owner's choice (see below)                              | €0 to ~€5/month |                                                                                                                |
+| HTTPS certificate              | Let's Encrypt via Caddy                                 | €0              | Renewed automatically                                                                                          |
+| Email (sign-up, guardian mail) | Brevo free                                              | €0              | 300 emails/day                                                                                                 |
+| Backups                        | Nightly encrypted `pg_dump` on the web server (14 days) | €0              | Files in Storage need a separate copy (see `deploy/README.md`)                                                 |
+| Uptime monitoring              | UptimeRobot free                                        | €0              | 50 monitors, 5-minute checks                                                                                   |
+
+Web server options (all run the same Docker image):
+
+| Option                               | Cost        | Notes                                                                                                                 |
+| ------------------------------------ | ----------- | --------------------------------------------------------------------------------------------------------------------- |
+| Oracle Cloud Always Free (Frankfurt) | €0          | Ampere VM, up to 4 cores / 24 GB free. A card is needed to sign up. Oracle may reclaim VMs that stay idle for 7 days. |
+| Small EU VPS (e.g. Hetzner, Germany) | ~€4–5/month | Simplest and most predictable.                                                                                        |
+| Cloudflare Workers                   | $5/month    | The app is 3.9 MB compressed (measured); the free plan allows 3 MB, the paid plan 10 MB. No server to maintain.       |
+| Vercel Hobby                         | —           | Not allowed: Hobby is for personal, non-commercial use, and a club app is neither.                                    |
+
 ## Monthly estimate by number of registered users
 
 Assumptions: 20% monthly active; per user ≈ 1 MB of database rows (profile, messages, ads, flights

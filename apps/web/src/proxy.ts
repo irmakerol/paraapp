@@ -6,8 +6,14 @@ import { refreshSession } from '@/lib/supabase/proxy';
 const intl = createIntlMiddleware(routing);
 
 export default async function proxy(request: NextRequest) {
-  const response = intl(request);
-  return refreshSession(request, response);
+  const response = await refreshSession(request, intl(request));
+  // Tells the service worker not to keep this page for offline use (it may contain personal data).
+  if (
+    request.cookies.getAll().some((c) => c.name.startsWith('sb-') && c.name.includes('auth-token'))
+  ) {
+    response.headers.set('x-paraapp-session', '1');
+  }
+  return response;
 }
 
 export const config = {

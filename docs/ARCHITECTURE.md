@@ -131,12 +131,23 @@ Email + password (confirmation required), magic link (existing users only), Goog
 flag), password reset, sign out here / everywhere. Email links go to `/auth/confirm` (token hash),
 OAuth to `/auth/callback` (PKCE). Redirect targets are restricted to our own origin.
 
-## 6. Deployment (decided later)
+## 6. Deployment
 
-Localhost for now. Options at launch, all keeping data in the EU:
-hosted Supabase (Frankfurt) + Next.js on Cloudflare Workers (OpenNext) or a small EU VPS running both
-the app and self-hosted Supabase. See `docs/COSTS.md`. The club already owns `flyanatolia.com`, so a
-subdomain (e.g. `app.flyanatolia.com`) costs nothing.
+- **Database, auth, storage:** hosted Supabase in Frankfurt (free tier for the beta).
+- **Web app:** Next.js `output: 'standalone'` in a Docker image (`Dockerfile`), run with
+  `deploy/compose.yaml` next to Caddy (automatic HTTPS), a 10-minute scheduler for
+  `/api/cron/notify` and a nightly encrypted `pg_dump`. Any Linux server works; the hosting choice
+  and its cost are in `docs/COSTS.md`, the steps in `deploy/README.md`.
+- Cloudflare Workers (OpenNext) was measured: the worker is 3.9 MB compressed, over the free plan's
+  3 MB limit, so it would need the $5/month plan.
+- `NEXT_PUBLIC_*` values and the Content Security Policy are fixed at build time, so the image is
+  built per environment.
+- **Security headers:** CSP listing every third party (Supabase, OpenFreeMap, OpenAIP, YouTube
+  nocookie, Vimeo), HSTS, `frame-ancestors 'none'`, no referrer across origins. Inline scripts are
+  allowed because Next.js and next-themes need them; a nonce-based CSP would make every page dynamic.
+- **Offline:** `public/sw.js` keeps the SOS and offline pages, build files, and public pages that were
+  visited while signed out. Responses for signed-in visitors carry `x-paraapp-session` (set in
+  `src/proxy.ts`) and are never cached, so no personal page is stored on the device.
 
 ## 7. Path to native
 

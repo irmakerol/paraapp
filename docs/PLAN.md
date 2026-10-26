@@ -36,7 +36,7 @@ owner-only. Adults may now start a chat with a minor who follows them.
 Not done here (later): hillshade/terrain on the map (needs a DEM tile source), flight comments/likes,
 a pilots directory and search, offline logbook.
 
-## Phase 3 – Safety & extras ✅ (this PR)
+## Phase 3 – Safety & extras ✅
 
 Incident reports (named / community-anonymous / fully anonymous, encrypted injury data, safety-officer
 workflow, safety lessons, stats), weather + flyability per site (Open-Meteo, cached), airspace overlay
@@ -66,10 +66,29 @@ As built:
 Not done here (later): weather alerts by push, airspace as vector data (NOTAMs, altitude limits),
 incident attachments (photos), event reminders by push, recurring events.
 
-## Phase 4 – Web polish & launch
+## Phase 4 – Web polish & launch ✅ (this PR; the launch itself needs the owner's steps)
 
 Performance, accessibility audit, offline (service worker), lawyer-reviewed legal texts, hosting
 decision, `app.flyanatolia.com`, production SMTP, public beta.
+
+As built:
+
+- **Accessibility:** automated axe (WCAG 2.1 A/AA) checks on 12 public pages in light and dark mode
+  run in CI (`e2e/a11y.spec.ts`). Fixed contrast of SOS and delete buttons, the logo link's name,
+  footer touch targets, and the header that overflowed on laptops (full menu only from 1536 px).
+- **Performance:** Lighthouse mobile (local): performance 87, accessibility, best practices and SEO 100. Maps stay lazy-loaded (the largest chunk); AVIF/WebP images; week-long caching for brand files.
+- **Offline:** SOS page always available; public pages visited while signed out are readable offline;
+  a localized offline page; nothing personal is cached.
+- **Error pages:** localized 404 (also for unknown paths) and error page with retry; a bilingual
+  last-resort page if the layout itself fails.
+- **SEO:** `robots.txt` (personal areas disallowed) and `sitemap.xml` (public content only; flights and
+  pilots left out on purpose).
+- **Security:** CSP, HSTS; `/api/health` for uptime checks.
+- **Deployment:** Docker image + compose stack (Caddy HTTPS, push scheduler, encrypted nightly
+  backups) and a step-by-step guide in `deploy/README.md`; Brevo free SMTP for app and auth emails.
+- **Legal drafts** updated for everything built in Phases 1–3 (chat, ads, flights and GPS, incidents
+  and health data, events, rides, third-party map/video requests, SOS); ready for the lawyer.
+- **Launch checklist:** `docs/LAUNCH.md`.
 
 ## Phase 5 – Native apps
 

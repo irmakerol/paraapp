@@ -54,6 +54,8 @@
   --color-brand-orange: var(--brand-orange);
   --color-brand-yellow: var(--brand-yellow);
   --color-brand-blue: var(--brand-blue);
+  /* Darker than the brand red so white text on it passes WCAG AA (6:1) in both themes. */
+  --color-sos: #b4232c;
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 

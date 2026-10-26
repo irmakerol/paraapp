@@ -20,8 +20,16 @@ Fly Anatolia Havacılık Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:1
 - **Veli bilgileri (14–17 yaş):** velinin adı ve e-posta adresi, onay tarihi.
 - **Hesap güvenliği:** oturum kayıtları, IP adresi ve cihaz bilgisi (kimlik doğrulama sağlayıcısı tarafından).
 - **Onay ve tercih kayıtları:** hangi onayı ne zaman, hangi metin sürümüyle verdiğiniz veya geri aldığınız.
+- **Topluluk içerikleri:** haber yorumları ve beğeniler, yazdığınız ipuçları, ekipman ilanları ve fotoğrafları, yaptığınız şikâyetler ve engellediğiniz kişiler.
+- **Mesajlar:** bire bir ve grup sohbeti mesajları, sohbette paylaşmayı seçtiğiniz fotoğraf ve konumlar.
+- **Uçuşlar ve konum verisi:** içe aktardığınız IGC/GPX dosyaları, GPS izleri, uçuş istatistikleri, notlar ve kullandığınız ekipman. Başkaları yalnızca ilk ve son 500 metresi çıkarılmış izi, uçuşun görünürlük ayarı izin veriyorsa görebilir; 18 yaş altı kullanıcıların uçuşları her zaman gizlidir.
+- **Ekipman:** kanat, harness ve yedek paraşütleriniz ile kontrol ve katlama tarihleri.
+- **Takip:** takip ettiğiniz ve sizi takip eden kişiler.
+- **Etkinlikler ve yolculuklar:** etkinlik davetlerine verdiğiniz yanıtlar ve yayımladığınız araç paylaşımı/pilot toplama ilanları (yalnızca yetişkinler).
+- **Olay bildirimleri:** ne olduğu, nerede ve ne zaman olduğu, koşullar ve ekipman. Bildirimin isimli, topluluğa anonim veya tamamen anonim (bu durumda hesabınız bildirimle birlikte saklanmaz) olacağını siz seçersiniz. **Yaralanma bilgileri sağlık verisidir** ve yalnızca bildirim formunda vereceğiniz açık rızayla saklanır.
+- **Bildirimler:** tarayıcınızın anlık bildirim abonelik bilgileri ve bildirim ayarlarınız.
 
-İleriki sürümlerde uçuş kayıtları (GPS izleri), ilanlar, mesajlar ve olay bildirimleri eklendiğinde bu metin güncellenecek ve size yeniden gösterilecektir.
+SOS sayfası konumunuzu yalnızca kendi cihazınızda gösterir; bize gönderilmez.
 
 ### 3. İşleme amaçları ve hukuki sebepler
 
@@ -31,11 +39,22 @@ Fly Anatolia Havacılık Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:1
 | Yaş sınırını uygulamak, veli onayı almak                    | KVKK m.5/2-ç (hukuki yükümlülük) ve m.5/2-f (meşru menfaat), GDPR m.6/1-c ve f |
 | Güvenlik, kötüye kullanımın önlenmesi, denetim kayıtları    | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
 | Veri sahibi taleplerini yanıtlamak, onay kayıtlarını tutmak | KVKK m.5/2-ç, GDPR m.6/1-c                                                     |
+| Topluluk özellikleri: sohbet, ilanlar, uçuşlar, etkinlikler, yolculuklar, takip | KVKK m.5/2-c, GDPR m.6/1-b |
+| Uçuş güvenliği: olay bildirimleri, güvenlik dersleri ve istatistikler | KVKK m.5/2-f (meşru menfaat), GDPR m.6/1-f |
+| Olay bildirimlerindeki yaralanma bilgileri (sağlık verisi)  | Yalnızca açık rızanızla (KVKK m.6/2, GDPR m.9/2-a) |
+| Şikâyet edilen içeriklerin denetimi, hesap kısıtlamaları    | KVKK m.5/2-f, GDPR m.6/1-f |
 | Pazarlama bildirimleri, analiz, herkese açık profil         | Yalnızca açık rızanızla (KVKK m.5/1, GDPR m.6/1-a)                             |
 
 ### 4. Aktarım ve yurt dışına aktarım
 
-Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (Frankfurt, Almanya) sunucularında saklanır. Yurt dışına aktarım KVKK m.9 kapsamında standart sözleşme ve benzeri uygun güvencelerle yapılır. Güncel hizmet sağlayıcı listesi uygulamadaki "Veri envanteri" bölümünde ve talep üzerine sunulur. Verileriniz satılmaz.
+Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (Frankfurt, Almanya) sunucularında saklanır. Yurt dışına aktarım KVKK m.9 kapsamında standart sözleşme ve benzeri uygun güvencelerle yapılır. Verileriniz satılmaz.
+
+- **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
+- **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.
+- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
+- **Google ile oturum açma**, bunu seçerseniz.
+
+Güncel hizmet sağlayıcı listesi talep üzerine sunulur.
 
 ### 5. Toplama yöntemi
 
@@ -43,7 +62,7 @@ Veriler, uygulamadaki formlar aracılığıyla ve oturum açma sırasında (e-po
 
 ### 6. Saklama süreleri
 
-Hesabınızı sildiğinizde profiliniz hemen anonimleştirilir ve hesabınız 30 gün sonra tamamen silinir. Diğer saklama süreleri veri envanterinde belirtilmiştir.
+Hesabınızı sildiğinizde profiliniz hemen anonimleştirilir, dosyalarınız hemen silinir ve hesabınız 30 gün sonra tamamen silinir. Sohbetler siz silene kadar saklanır. Yolculuk ilanları yolculuktan 30 gün sonra, etkinlik yanıtları etkinlikten bir yıl sonra silinir. Olay bildirimlerinde bildirenle bağlantı ve yaralanma bilgileri, bildirim kapatıldıktan bir yıl sonra silinir; anonim bildirim güvenlik istatistikleri için saklanır. Diğer saklama süreleri talep üzerine bildirilir.
 
 ### 7. Haklarınız (KVKK m.11, GDPR m.15–22)
 
@@ -67,8 +86,16 @@ Fly Anatolia Havacılık Kulübü (association), Kordonboyu Mah. Ankara Cd. No:2
 - **Guardian details (ages 14–17):** guardian's name and email, date of consent.
 - **Account security:** session records, IP address and device information (processed by our authentication provider).
 - **Consent and preference records:** which consent you gave or withdrew, when, and for which version of the text.
+- **Community content:** news comments and likes, tips you write, gear ads and their photos, reports you file and people you block.
+- **Messages:** one-to-one and group chat messages, photos and locations you choose to share in a chat.
+- **Flights and location data:** the IGC/GPX files you import, GPS tracks, flight statistics, notes and the gear you used. Other people only ever see a track with the first and last 500 m removed, and only if the flight's visibility allows it; flights of users under 18 are always private.
+- **Equipment:** your wings, harnesses and reserves with check and repack dates.
+- **Follows:** who you follow and who follows you.
+- **Events and rides:** your answers to event invitations, and the carpool/retrieve posts you publish (adults only).
+- **Incident reports:** what happened, where and when, conditions and equipment. You choose whether the report is named, anonymous to the community or fully anonymous (then your account is not stored with it). **Injury details are health data** and are only stored with your explicit consent given in the report form.
+- **Notifications:** push subscription details of your browser and your notification settings.
 
-When flight logs (GPS tracks), ads, messages and incident reports are added in later versions, this notice will be updated and shown to you again.
+The SOS page shows your position only on your own device; it is not sent to us.
 
 ### 3. Purposes and legal bases
 
@@ -78,11 +105,22 @@ When flight logs (GPS tracks), ads, messages and incident reports are added in l
 | Applying the age limit and obtaining guardian consent       | KVKK Art. 5/2-ç (legal obligation) and 5/2-f (legitimate interest), GDPR Art. 6/1-c and f |
 | Security, abuse prevention, audit logs                      | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
 | Answering data-subject requests and keeping consent records | KVKK Art. 5/2-ç, GDPR Art. 6/1-c                                                          |
+| Community features: chat, ads, flights, events, rides, follows | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b |
+| Flight safety: incident reports, safety lessons and statistics | KVKK Art. 5/2-f (legitimate interest), GDPR Art. 6/1-f |
+| Injury details in incident reports (health data)            | Only with your explicit consent (KVKK Art. 6/2, GDPR Art. 9/2-a) |
+| Moderation of reported content, bans                        | KVKK Art. 5/2-f, GDPR Art. 6/1-f |
 | Marketing notifications, analytics, public profile          | Only with your explicit consent (KVKK Art. 5/1, GDPR Art. 6/1-a)                          |
 
 ### 4. Recipients and transfers abroad
 
-Data is stored on our service providers' servers in the European Union (Frankfurt, Germany). Transfers abroad rely on standard contractual clauses or other appropriate safeguards under KVKK Art. 9. The current list of processors is available in the app's data inventory and on request. We do not sell your data.
+Data is stored on our service providers' servers in the European Union (Frankfurt, Germany). Transfers abroad rely on standard contractual clauses or other appropriate safeguards under KVKK Art. 9. We do not sell your data.
+
+- **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
+- **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
+- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map"; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
+- **Sign in with Google**, if you choose it.
+
+The current list of processors is available on request.
 
 ### 5. How we collect data
 
@@ -90,7 +128,7 @@ Electronically, through the forms in the app and when you sign in (email or Goog
 
 ### 6. Retention
 
-When you delete your account your profile is anonymised immediately and the account is permanently deleted after 30 days. Other retention periods are listed in the data inventory.
+When you delete your account your profile is anonymised immediately and the account is permanently deleted after 30 days; your files are deleted at once. Chats are kept until deleted. Carpool posts are deleted 30 days after the ride, event answers one year after the event. In incident reports, the link to the reporter and any injury details are deleted one year after the report is closed; the anonymous report is kept for safety statistics. Other retention periods are available on request.
 
 ### 7. Your rights (KVKK Art. 11, GDPR Arts. 15–22)
 
@@ -106,8 +144,10 @@ $legal$, now()),
 4. **İçerik kuralları.** Hakaret, taciz, nefret söylemi, müstehcenlik, yasa dışı içerik, spam ve başkalarının kişisel verilerini izinsiz paylaşmak yasaktır. Bu kurallara uymayan içerikler kaldırılabilir ve hesaplar askıya alınabilir veya kapatılabilir. İçerikleri ve kullanıcıları uygulama içinden şikâyet edebilir ve engelleyebilirsiniz.
 5. **Uçuş güvenliği.** Uygulamadaki bilgiler (hava durumu, kalkış yerleri, ipuçları dahil) yalnızca bilgilendirme amaçlıdır; eğitim, eğitmen değerlendirmesi ve kendi kararınızın yerini tutmaz. Uçuş kararı ve sorumluluğu pilota aittir.
 6. **İlanlar.** Kulüp, üyeler arasındaki alım satımlarda taraf değildir. İkinci el ekipmanı yetkili bir atölyede kontrol ettiriniz.
-7. **Değişiklikler.** Önemli değişikliklerde koşullar size yeniden gösterilir ve onayınız istenir.
-8. **Uygulanacak hukuk.** Türkiye Cumhuriyeti hukuku uygulanır; İstanbul (Anadolu) mahkemeleri yetkilidir.
+7. **Yolculuklar ve etkinlikler.** Araç paylaşımı ve pilot toplama düzenlemeleri üyeler arasında yapılır; kulüp bunlarda taraf değildir, sürücüleri ve araçları kontrol etmez. Etkinlik kontenjanları sınırlıdır; organizatörler etkinlikleri değiştirebilir veya iptal edebilir.
+8. **Acil durumlar.** SOS sayfası acil servisleri aramanıza ve konumunuzu okumanıza yardımcı olur. Kendisi bir acil durum hizmeti değildir; telefonunuzun çekmesine, konum ayarlarına ve şarjına bağlıdır. Acil durumda her zaman 112'yi arayın.
+9. **Değişiklikler.** Önemli değişikliklerde koşullar size yeniden gösterilir ve onayınız istenir.
+10. **Uygulanacak hukuk.** Türkiye Cumhuriyeti hukuku uygulanır; İstanbul (Anadolu) mahkemeleri yetkilidir.
 $legal$, now()),
   ('terms', 'en', 1, $legal$Terms of Use$legal$, $legal$> **DRAFT — must not be published before review by a lawyer.**
 
@@ -119,8 +159,10 @@ $legal$, now()),
 4. **Content rules.** Insults, harassment, hate speech, obscene or illegal content, spam and sharing other people's personal data without permission are prohibited. Content that breaks these rules may be removed and accounts may be suspended or closed. You can report and block content and users in the app.
 5. **Flight safety.** Information in the app (including weather, sites and tips) is for information only and does not replace training, an instructor's judgement or your own decisions. The pilot is responsible for every decision to fly.
 6. **Ads.** The club is not a party to sales between members. Have used equipment checked by a certified workshop.
-7. **Changes.** Material changes are shown to you again and need your acceptance.
-8. **Governing law.** The laws of the Republic of Türkiye apply; the courts of Istanbul (Anatolian side) have jurisdiction.
+7. **Rides and events.** Carpool and retrieve arrangements are made between members; the club is not a party to them and does not check drivers or vehicles. Event places are limited and organisers may change or cancel events.
+8. **Emergencies.** The SOS page helps you call emergency services and read out your position. It is not an emergency service itself and depends on your phone's signal, location settings and battery. Always call 112 in an emergency.
+9. **Changes.** Material changes are shown to you again and need your acceptance.
+10. **Governing law.** The laws of the Republic of Türkiye apply; the courts of Istanbul (Anatolian side) have jurisdiction.
 $legal$, now()),
   ('explicit_consent', 'tr', 1, $legal$Açık Rıza Metni$legal$, $legal$> **TASLAKTIR — avukat incelemesinden önce yayınlanmamalıdır.**
 
@@ -131,6 +173,7 @@ Aşağıdaki onayların hiçbiri uygulamayı kullanmak için zorunlu değildir. 
 - **Pazarlama bildirimleri:** Kulüp etkinlikleri, kampanyalar ve duyurular hakkında e-posta ve bildirim almak.
 - **Analiz:** Uygulamanın nasıl kullanıldığına dair anonimleştirilmiş kullanım istatistiklerinin toplanması (hata takibi dahil).
 - **Herkese açık profil:** Profilinizdeki "herkese açık" alanların giriş yapmamış ziyaretçilere ve arama motorlarına gösterilmesi.
+- **Olay bildirimlerinde sağlık verisi:** bir olay bildiriminde yazdığınız yaralanma bilgilerinin, kulübün güvenlik sorumlularının kazaları analiz edebilmesi için saklanması. Bu rızayı yalnızca yaralanma bilgisi eklediğinizde bildirim formunda verirsiniz; vermeden de bildirimi gönderebilirsiniz.
 $legal$, now()),
   ('explicit_consent', 'en', 1, $legal$Explicit Consent$legal$, $legal$> **DRAFT — must not be published before review by a lawyer.**
 
@@ -141,6 +184,7 @@ None of the consents below is required to use the app. You can give each one sep
 - **Marketing notifications:** receiving emails and notifications about club events, offers and announcements.
 - **Analytics:** collecting pseudonymised usage statistics about how the app is used (including error tracking).
 - **Public profile:** showing the "public" fields of your profile to visitors who are not signed in and to search engines.
+- **Health data in incident reports:** storing injury details you write in an incident report, so the club's safety officers can analyse accidents. You give this consent in the report form, only when you add injury details; without it you can still send the report.
 $legal$, now())
 on conflict (kind, locale, version) do update
   set title = excluded.title, body_md = excluded.body_md;
