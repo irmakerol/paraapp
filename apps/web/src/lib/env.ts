@@ -8,6 +8,8 @@ const publicSchema = z.object({
     .enum(['true', 'false'])
     .default('false')
     .transform((v) => v === 'true'),
+  // Web push. Empty = push turned off. Generate with `npx web-push generate-vapid-keys`.
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().default(''),
 });
 
 // Next.js only inlines NEXT_PUBLIC_* values that are referenced literally.
@@ -16,6 +18,7 @@ export const publicEnv = publicSchema.parse({
   NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   NEXT_PUBLIC_AUTH_GOOGLE_ENABLED: process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED || undefined,
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || undefined,
 });
 
 const serverSchema = z.object({
@@ -26,6 +29,10 @@ const serverSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_FROM: z.string().default('ParaApp <no-reply@flyanatolia.com>'),
+  VAPID_PRIVATE_KEY: z.string().optional(),
+  VAPID_SUBJECT: z.string().default('mailto:info@flyanatolia.com'),
+  // Shared secret for /api/cron/* (sent as "Authorization: Bearer <secret>").
+  CRON_SECRET: z.string().optional(),
 });
 
 /** Server-only settings. Read lazily so pages that do not need them still render. */

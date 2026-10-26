@@ -38,6 +38,10 @@ done
 if [ "${SKIP_SEED:-0}" != "1" ] && [ -f "$ROOT/supabase/seed.sql" ]; then
   echo "seed: seed.sql"
   "${PSQL[@]}" -f "$ROOT/supabase/seed.sql"
+  for f in "$ROOT"/supabase/seeds/*.sql; do
+    echo "seed: seeds/$(basename "$f")"
+    "${PSQL[@]}" -f "$f"
+  done
 fi
 
 pg_prove -d postgres --ext .sql -r "$ROOT/supabase/tests"

@@ -3,9 +3,9 @@
 The paragliding community app of **Fly Anatolia Havacılık Kulübü**: news, tips, a gear market,
 a flight logbook and safety reports for pilots in Türkiye. Web first, Turkish and English.
 
-> Status: **Phase 0 (foundation)**. Sign-up, sign-in, onboarding (age, guardian consent, privacy
-> notice, consents), profile with per-field privacy, data export and account deletion work.
-> Content features arrive in Phase 1 (see `docs/PLAN.md`).
+> Status: **Phase 1 (content & community)**. Accounts and privacy (Phase 0) plus news, tips, the gear
+> market, 1-to-1 chat, push notifications and the admin area. Flights and sites come in Phase 2
+> (see `docs/PLAN.md`).
 
 ## Run it on your computer
 
@@ -53,6 +53,9 @@ Open http://localhost:3000. Emails (sign-up confirmation, magic links, guardian 
 really sent locally: read them at **http://127.0.0.1:54324**. The database admin UI (Supabase
 Studio) is at http://127.0.0.1:54323.
 
+`pnpm db:reset` reloads a few example news articles and tips (marked "example"). Delete them from the
+admin area before launch.
+
 ### Make yourself an admin
 
 Sign up in the app first. Then open Studio (http://127.0.0.1:54323), go to **SQL Editor**, and run
@@ -61,6 +64,24 @@ Sign up in the app first. Then open Studio (http://127.0.0.1:54323), go to **SQL
 ```sql
 insert into public.user_roles (user_id, role)
 select id, 'admin' from auth.users where email = 'you@example.com';
+```
+
+Then open http://localhost:3000/tr/admin. From there you can give other people roles: **Member**
+(verified club member), **Instructor** (writes and reviews tips), **Moderator** (handles reports and
+bans) and **Admin**.
+
+### Push notifications (optional)
+
+1. Run `npx web-push generate-vapid-keys` once.
+2. Put the public key in `NEXT_PUBLIC_VAPID_PUBLIC_KEY` and the private key in `VAPID_PRIVATE_KEY` in
+   `apps/web/.env.local`, then restart `pnpm dev`.
+3. In the app: **My account → Notifications → Turn on for this device**.
+
+Scheduled news and ad-expiry reminders are pushed when something calls the app's notify endpoint. To
+try it locally, set `CRON_SECRET` in `.env.local` and run:
+
+```bash
+curl -X POST -H "Authorization: Bearer <your CRON_SECRET>" http://localhost:3000/api/cron/notify
 ```
 
 ### Google sign-in (optional)

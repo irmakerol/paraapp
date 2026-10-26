@@ -3,7 +3,7 @@
 Each phase ends with lint, type-check, unit, database and E2E tests green, a summary, the list of
 manual steps for the club, and a stop for approval.
 
-## Phase 0 – Foundation ✅ (this PR)
+## Phase 0 – Foundation ✅
 
 Monorepo, Next.js app (TR/EN, layout, dark mode, branding), Supabase schema + RLS + pgTAP tests,
 auth (email/password, magic link, Google behind a flag, reset, sign out everywhere), age gate 14+
@@ -11,13 +11,18 @@ with guardian consent, privacy notice + terms + granular consents, profile with 
 encrypted licence number, data export, account deletion, data-subject requests, retention settings,
 audit log, docs, CI.
 
-## Phase 1 – Content & community
+## Phase 1 – Content & community ✅ (this PR)
 
 News (draft/scheduled/published, members-only, pinned, comments, likes), tips knowledge base
-(categories, difficulty, suggestions → moderation, YouTube/Vimeo embeds, bookmarks), marketplace
-(all fields, up to 8 photos, filters, lifecycle + 60-day expiry, safety notice, reports; minors cannot
-post), 1-to-1 chat with images/location/read receipts (minors only with people they follow), reports and
-blocks, web push, admin area (CMS, moderation queues, users/roles, data-subject request queue), seed data.
+(categories, difficulty, suggestions → review, click-to-load YouTube/Vimeo embeds, bookmarks), gear
+market (all fields, up to 8 photos, filters + full-text search, lifecycle + 60-day expiry with reminder,
+safety notice, reports; minors cannot post), 1-to-1 chat with images/location/read receipts/mute and
+real "delete for everyone", reports and blocks, bans, web push (per-topic, news needs marketing consent),
+admin area (news CMS, tips review, reports queue with audited chat view, users/roles/member
+verification/bans, data-subject request queue), demo seed data.
+
+Minors: adults cannot start a chat with a minor at all for now; a minor may contact an adult (e.g. a
+seller). When follows arrive in Phase 2, adults a minor follows will be allowed.
 
 ## Phase 2 – Flights & sites
 

@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server';
 import { APP_CONFIG } from '@paraapp/core';
 import { Link } from '@/i18n/navigation';
 import { getViewer } from '@/lib/session';
+import { staffAreas } from '@/lib/staff';
 import { signOut } from '@/app/[locale]/auth/actions';
 import { LocaleSwitcher } from './locale-switcher';
 import { ThemeToggle } from './theme-toggle';
@@ -20,7 +21,11 @@ export async function Header({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'nav' });
   const viewer = await getViewer();
 
-  const links = navItems.map((item) => (
+  const items: { href: string; key: string }[] = [...navItems];
+  if (viewer) items.push({ href: '/messages', key: 'messages' });
+  if (viewer && staffAreas(viewer).length) items.push({ href: '/admin', key: 'admin' });
+
+  const links = items.map((item) => (
     <li key={item.href}>
       <Link href={item.href} className="block rounded-lg px-3 py-2 font-medium hover:bg-background">
         {t(item.key)}
