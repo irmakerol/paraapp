@@ -10,6 +10,8 @@ const publicSchema = z.object({
     .transform((v) => v === 'true'),
   // Web push. Empty = push turned off. Generate with `npx web-push generate-vapid-keys`.
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string().default(''),
+  // Airspace overlay (optional). Free key from https://www.openaip.net (account → API clients).
+  NEXT_PUBLIC_OPENAIP_API_KEY: z.string().default(''),
 });
 
 // Next.js only inlines NEXT_PUBLIC_* values that are referenced literally.
@@ -19,11 +21,17 @@ export const publicEnv = publicSchema.parse({
   NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   NEXT_PUBLIC_AUTH_GOOGLE_ENABLED: process.env.NEXT_PUBLIC_AUTH_GOOGLE_ENABLED || undefined,
   NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || undefined,
+  NEXT_PUBLIC_OPENAIP_API_KEY: process.env.NEXT_PUBLIC_OPENAIP_API_KEY || undefined,
 });
 
 const serverSchema = z.object({
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
   LICENCE_ENCRYPTION_KEY: z.string().min(1),
+  // Injury details in incident reports (health data). Separate from the licence key so it can be
+  // rotated and held by fewer people. Without it, injury details cannot be submitted.
+  INCIDENT_ENCRYPTION_KEY: z.string().optional(),
+  // Open-Meteo is free without a key for non-commercial use; set to use a paid/self-hosted endpoint.
+  OPEN_METEO_URL: z.string().url().default('https://api.open-meteo.com/v1/forecast'),
   SMTP_HOST: z.string().optional(),
   SMTP_PORT: z.coerce.number().int().default(54325),
   SMTP_USER: z.string().optional(),

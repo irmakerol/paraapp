@@ -50,6 +50,9 @@ later IGC/GPX parsing and flight stats) runs in the browser, on the server and i
 | Maps | MapLibre GL JS 5 + OpenFreeMap vector tiles (no key), loaded only after a click (`MapGate`) | Free; no third-party request until the user asks for the map |
 | Lists/charts | TanStack Virtual for the logbook; the altitude chart is a small SVG that is also the slider | Thousands of flights stay fast; no chart library needed |
 
+| Weather | Open-Meteo, fetched on the server, cached per site for 1 hour in `weather_forecasts` | Free, no key; users' browsers never call it |
+| Airspace | OpenAIP raster tiles as an optional layer on the click-to-load maps (`NEXT_PUBLIC_OPENAIP_API_KEY`) | Free key; off when no key is set |
+
 Planned (later phases): DEM hillshade, offline caching in the service worker for logbook/tips/sites.
 
 **Flights.** Track files are parsed and analysed **on the server** (`lib/flight-import.ts` with the
@@ -110,6 +113,16 @@ the admin area sends its push immediately, so locally the cron call is only need
   members / private via RLS), `flight_tracks` (owner only), `equipment` (owner only), `follows` (only the
   two people involved can see a follow; counts via `follow_counts()`). `pilot_stats()` runs as the
   caller, so other people's stats only count flights the viewer may see.
+- **Safety (Phase 3):** `incident_reports` are visible only to `safety_officer` (not admins) and to the
+  reporter for named / community-anonymous reports. Fully anonymous reports are inserted by the server
+  with the service role, so no user id reaches the database. Injury details live encrypted
+  (`INCIDENT_ENCRYPTION_KEY`) in `incident_injuries`, a table with no policies, readable only through
+  `read_incident_injury()` (audited); `log_incident_view()` audits every report view and a trigger audits
+  status changes. `incident_stats()` returns counts only. `safety_lessons` are not linked to reports.
+- **Events, rides, groups (Phase 3):** `events` (organisers = instructors and admins) and `event_rsvps`
+  (capacity and deadline checked by a trigger; public counts via `event_counts()`). `rides` and group chats
+  (`create_group_chat()`, `add_group_member()`, `remove_group_member()`, `rename_group_chat()`) are adults
+  only. `weather_forecasts` is a per-site cache written only by the server.
 - **Retention:** `retention_policies` table drives pg_cron jobs.
 
 ## 5. Auth flows

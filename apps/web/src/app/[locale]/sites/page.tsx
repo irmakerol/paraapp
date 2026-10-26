@@ -4,6 +4,8 @@ import { Link } from '@/i18n/navigation';
 import { listSites } from '@/lib/sites';
 import { Card, PageTitle } from '@/components/ui';
 import { SitesMap } from '@/components/sites-map';
+import { ratingTone } from '@/components/weather-panel';
+import { cachedTodayRatings } from '@/lib/weather';
 
 export async function generateMetadata({
   params,
@@ -20,6 +22,8 @@ export default async function SitesPage({ params }: { params: Promise<{ locale: 
   setRequestLocale(locale);
   const t = await getTranslations('sites');
   const sites = await listSites();
+  const ratings = await cachedTodayRatings(sites);
+  const w = await getTranslations('weather');
   const regions = new Map<string, typeof sites>();
   for (const s of sites) {
     const key = s.region ?? t('otherRegion');
@@ -56,6 +60,15 @@ export default async function SitesPage({ params }: { params: Promise<{ locale: 
                         ? ` · ${s.wind_directions.map((d) => t(`wind.${d}`)).join(', ')}`
                         : ''}
                     </p>
+                    {ratings.get(s.id) ? (
+                      <p className="mt-2">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-bold ${ratingTone[ratings.get(s.id)!]}`}
+                        >
+                          {w('today')}: {w(`ratings.${ratings.get(s.id)}`)}
+                        </span>
+                      </p>
+                    ) : null}
                     {s.verified ? null : (
                       <p className="mt-1 text-xs font-semibold text-brand-red">{t('unverified')}</p>
                     )}

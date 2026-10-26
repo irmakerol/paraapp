@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
-import { MAP_STYLE } from '@/lib/map';
+import { addAirspaceControl, MAP_STYLE } from '@/lib/map';
 import { MapGate } from './map-gate';
 
 export interface SiteMarker {
@@ -24,6 +24,7 @@ export function SitesMap({ sites, zoom }: { sites: SiteMarker[]; zoom?: number }
 
 function SitesMapInner({ sites, zoom }: { sites: SiteMarker[]; zoom?: number }) {
   const t = useTranslations('sites');
+  const maps = useTranslations('maps');
   const locale = useLocale();
   const container = useRef<HTMLDivElement>(null);
   const map = useRef<MapLibreMap | null>(null);
@@ -51,6 +52,7 @@ function SitesMapInner({ sites, zoom }: { sites: SiteMarker[]; zoom?: number }) 
         cooperativeGestures: true,
       });
       instance.addControl(new maplibregl.NavigationControl(), 'top-right');
+      addAirspaceControl(instance, { show: maps('airspace'), attribution: maps('airspaceCredit') });
       for (const site of sites) {
         const link = document.createElement('a');
         link.href = `/${locale}/sites/${site.slug}`;
@@ -68,6 +70,7 @@ function SitesMapInner({ sites, zoom }: { sites: SiteMarker[]; zoom?: number }) 
       map.current?.remove();
       map.current = null;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- labels only matter on creation
   }, [sites, zoom, locale]);
 
   return (

@@ -14,7 +14,9 @@ const navItems = [
   { href: '/tips', key: 'tips' },
   { href: '/market', key: 'market' },
   { href: '/sites', key: 'sites' },
+  { href: '/events', key: 'events' },
   { href: '/logbook', key: 'logbook' },
+  { href: '/safety', key: 'safety' },
 ] as const;
 
 export async function Header({ locale }: { locale: string }) {
@@ -22,6 +24,8 @@ export async function Header({ locale }: { locale: string }) {
   const viewer = await getViewer();
 
   const items: { href: string; key: string }[] = [...navItems];
+  // The ride board is for adults only (no ride arrangements with minors).
+  if (viewer?.profile.age_group === 'adult') items.push({ href: '/rides', key: 'rides' });
   if (viewer) items.push({ href: '/messages', key: 'messages' });
   if (viewer && staffAreas(viewer).length) items.push({ href: '/admin', key: 'admin' });
 
@@ -47,11 +51,18 @@ export async function Header({ locale }: { locale: string }) {
           <span className="text-lg font-bold">{APP_CONFIG.name}</span>
         </Link>
 
-        <nav aria-label={t('menu')} className="ml-4 hidden lg:block">
+        <nav aria-label={t('menu')} className="ml-4 hidden xl:block">
           <ul className="flex gap-1">{links}</ul>
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
+          <Link
+            href="/sos"
+            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-brand-red px-3 font-extrabold text-white"
+            aria-label={t('sosLabel')}
+          >
+            SOS
+          </Link>
           <div className="hidden items-center gap-2 sm:flex">
             <LocaleSwitcher />
             <ThemeToggle />
@@ -81,7 +92,7 @@ export async function Header({ locale }: { locale: string }) {
             </>
           )}
 
-          <details className="relative lg:hidden">
+          <details className="relative xl:hidden">
             <summary className={buttonClass('secondary', 'list-none cursor-pointer')}>
               {t('menu')}
             </summary>

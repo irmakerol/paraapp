@@ -106,3 +106,20 @@ test('logbook export needs a session', async ({ request }) => {
   const res = await request.get('/api/logbook/export');
   expect(res.status()).toBe(401);
 });
+
+test('safety, events and SOS pages render without an account', async ({ page }) => {
+  await page.goto('/en/safety');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Safety');
+  await page.goto('/tr/events');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Etkinlikler');
+  await page.goto('/en/sos');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Emergency');
+  await expect(page.getByRole('link', { name: 'Call 112' })).toHaveAttribute('href', 'tel:112');
+});
+
+test('rides, reporting and group chats require sign-in', async ({ page }) => {
+  for (const path of ['/en/rides', '/en/safety/report', '/en/messages/new-group']) {
+    await page.goto(path);
+    await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
+  }
+});

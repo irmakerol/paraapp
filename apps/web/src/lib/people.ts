@@ -15,3 +15,18 @@ export async function displayNames(
   const { data } = await supabase.from('profile_cards').select('id, display_name').in('id', unique);
   return new Map((data ?? []).map((p) => [p.id!, p.display_name!]));
 }
+
+/** People the user follows, by name: the pick list for group chats. */
+export async function followedPeople(
+  supabase: SupabaseClient<Database>,
+  userId: string,
+): Promise<{ id: string; name: string }[]> {
+  const { data } = await supabase.from('follows').select('followee_id').eq('follower_id', userId);
+  const names = await displayNames(
+    supabase,
+    (data ?? []).map((f) => f.followee_id),
+  );
+  return [...names]
+    .map(([id, name]) => ({ id, name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+}

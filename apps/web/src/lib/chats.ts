@@ -4,6 +4,8 @@ import { displayNames } from '@/lib/people';
 
 export interface ChatSummary {
   id: string;
+  /** Group chats have a title and no single peer. */
+  groupTitle: string | null;
   peerId: string | null;
   peerName: string | null;
   adId: string | null;
@@ -23,7 +25,7 @@ export async function listChats(userId: string): Promise<ChatSummary[]> {
   if (!mine?.length) return [];
   const ids = mine.map((m) => m.chat_id);
   const [{ data: chats }, { data: members }] = await Promise.all([
-    supabase.from('chats').select('id, ad_id, last_message_at').in('id', ids),
+    supabase.from('chats').select('id, kind, title, ad_id, last_message_at').in('id', ids),
     supabase
       .from('chat_members')
       .select('chat_id, user_id')
@@ -47,9 +49,11 @@ export async function listChats(userId: string): Promise<ChatSummary[]> {
   return (chats ?? [])
     .map((c) => {
       const me = memberOf.get(c.id)!;
-      const peerId = peerOf.get(c.id) ?? null;
+      const group = c.kind === 'group';
+      const peerId = group ? null : (peerOf.get(c.id) ?? null);
       return {
         id: c.id,
+        groupTitle: group ? (c.title ?? '') : null,
         peerId,
         peerName: peerId ? (names.get(peerId) ?? null) : null,
         adId: c.ad_id,

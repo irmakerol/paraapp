@@ -22,9 +22,11 @@ function urlBase64ToUint8Array(base64: string): Uint8Array<ArrayBuffer> {
 export function PushSettings({
   prefs,
   hasNewsConsent,
+  isSafetyOfficer,
 }: {
-  prefs: { messages: boolean; news: boolean; ads: boolean; equipment: boolean };
+  prefs: { messages: boolean; news: boolean; ads: boolean; equipment: boolean; safety: boolean };
   hasNewsConsent: boolean;
+  isSafetyOfficer: boolean;
 }) {
   const t = useTranslations('notificationsSettings');
   const common = useTranslations('common');
@@ -138,6 +140,19 @@ export function PushSettings({
             />
             {t('topicEquipment')}
           </label>
+          {isSafetyOfficer ? (
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                name="safety"
+                defaultChecked={prefs.safety}
+                className="size-5"
+              />
+              {t('topicSafety')}
+            </label>
+          ) : (
+            <input type="hidden" name="safety" value={prefs.safety ? 'on' : ''} />
+          )}
           <FormMessage state={state} success={common('saved')} />
           <SubmitButton>{common('save')}</SubmitButton>
         </form>

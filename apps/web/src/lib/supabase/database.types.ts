@@ -702,6 +702,251 @@ export type Database = {
         Update: never;
         Relationships: [];
       };
+      incident_reports: {
+        Row: {
+          id: string;
+          reporter_id: string | null;
+          anonymity: Database['public']['Enums']['incident_anonymity'];
+          occurred_on: string;
+          site_id: string | null;
+          site_name: string | null;
+          category: Database['public']['Enums']['incident_category'];
+          severity: Database['public']['Enums']['incident_severity'];
+          injured: boolean;
+          description: string;
+          conditions: string | null;
+          equipment: string | null;
+          lessons: string | null;
+          contact_ok: boolean;
+          special_category_consent: boolean;
+          status: Database['public']['Enums']['incident_status'];
+          assigned_to: string | null;
+          closed_at: Timestamp | null;
+          personal_data_purged_at: Timestamp | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        // Fully anonymous reports are inserted by the server with the service role.
+        Insert: {
+          reporter_id: string | null;
+          anonymity: Database['public']['Enums']['incident_anonymity'];
+          occurred_on: string;
+          site_id?: string | null;
+          site_name?: string | null;
+          category: Database['public']['Enums']['incident_category'];
+          severity: Database['public']['Enums']['incident_severity'];
+          injured?: boolean;
+          description: string;
+          conditions?: string | null;
+          equipment?: string | null;
+          lessons?: string | null;
+          contact_ok?: boolean;
+          special_category_consent?: boolean;
+        };
+        Update: {
+          status?: Database['public']['Enums']['incident_status'];
+          assigned_to?: string | null;
+          closed_at?: Timestamp | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'incident_reports_site_id_fkey';
+            columns: ['site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      incident_notes: {
+        Row: { id: string; incident_id: string; author_id: string | null; body: string; created_at: Timestamp };
+        Insert: { incident_id: string; author_id: string; body: string };
+        Update: never;
+        Relationships: [];
+      };
+      /** No policies: only the service role and the audited functions touch it. */
+      incident_injuries: {
+        Row: { incident_id: string; details_enc: string };
+        Insert: { incident_id: string; details_enc: string };
+        Update: never;
+        Relationships: [];
+      };
+      safety_lessons: {
+        Row: {
+          id: string;
+          slug: string;
+          locale: string;
+          title: string;
+          summary: string | null;
+          body_md: string;
+          category: Database['public']['Enums']['incident_category'];
+          severity: Database['public']['Enums']['incident_severity'];
+          status: Database['public']['Enums']['lesson_status'];
+          author_id: string | null;
+          published_at: Timestamp | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          slug: string;
+          locale?: string;
+          title: string;
+          summary?: string | null;
+          body_md: string;
+          category: Database['public']['Enums']['incident_category'];
+          severity: Database['public']['Enums']['incident_severity'];
+          status?: Database['public']['Enums']['lesson_status'];
+          author_id?: string | null;
+          published_at?: Timestamp | null;
+        };
+        Update: {
+          slug?: string;
+          locale?: string;
+          title?: string;
+          summary?: string | null;
+          body_md?: string;
+          category?: Database['public']['Enums']['incident_category'];
+          severity?: Database['public']['Enums']['incident_severity'];
+          status?: Database['public']['Enums']['lesson_status'];
+          published_at?: Timestamp | null;
+        };
+        Relationships: [];
+      };
+      events: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          description_md: string;
+          kind: Database['public']['Enums']['event_kind'];
+          starts_at: Timestamp;
+          ends_at: Timestamp;
+          site_id: string | null;
+          location_text: string | null;
+          members_only: boolean;
+          capacity: number | null;
+          rsvp_deadline: Timestamp | null;
+          status: Database['public']['Enums']['event_status'];
+          created_by: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: {
+          slug: string;
+          title: string;
+          description_md?: string;
+          kind?: Database['public']['Enums']['event_kind'];
+          starts_at: Timestamp;
+          ends_at: Timestamp;
+          site_id?: string | null;
+          location_text?: string | null;
+          members_only?: boolean;
+          capacity?: number | null;
+          rsvp_deadline?: Timestamp | null;
+          status?: Database['public']['Enums']['event_status'];
+          created_by?: string | null;
+        };
+        Update: {
+          slug?: string;
+          title?: string;
+          description_md?: string;
+          kind?: Database['public']['Enums']['event_kind'];
+          starts_at?: Timestamp;
+          ends_at?: Timestamp;
+          site_id?: string | null;
+          location_text?: string | null;
+          members_only?: boolean;
+          capacity?: number | null;
+          rsvp_deadline?: Timestamp | null;
+          status?: Database['public']['Enums']['event_status'];
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'events_site_id_fkey';
+            columns: ['site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      event_rsvps: {
+        Row: {
+          event_id: string;
+          user_id: string;
+          status: Database['public']['Enums']['rsvp_status'];
+          note: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: { event_id: string; user_id: string; status: Database['public']['Enums']['rsvp_status']; note?: string | null };
+        Update: { status?: Database['public']['Enums']['rsvp_status']; note?: string | null };
+        Relationships: [
+          {
+            foreignKeyName: 'event_rsvps_event_id_fkey';
+            columns: ['event_id'];
+            isOneToOne: false;
+            referencedRelation: 'events';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      rides: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: Database['public']['Enums']['ride_kind'];
+          purpose: Database['public']['Enums']['ride_purpose'];
+          ride_date: string;
+          depart_time: string | null;
+          from_text: string;
+          site_id: string | null;
+          to_text: string | null;
+          seats: number | null;
+          note: string | null;
+          closed: boolean;
+          created_at: Timestamp;
+        };
+        Insert: {
+          user_id: string;
+          kind: Database['public']['Enums']['ride_kind'];
+          purpose?: Database['public']['Enums']['ride_purpose'];
+          ride_date: string;
+          depart_time?: string | null;
+          from_text: string;
+          site_id?: string | null;
+          to_text?: string | null;
+          seats?: number | null;
+          note?: string | null;
+        };
+        Update: {
+          kind?: Database['public']['Enums']['ride_kind'];
+          purpose?: Database['public']['Enums']['ride_purpose'];
+          ride_date?: string;
+          depart_time?: string | null;
+          from_text?: string;
+          site_id?: string | null;
+          to_text?: string | null;
+          seats?: number | null;
+          note?: string | null;
+          closed?: boolean;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'rides_site_id_fkey';
+            columns: ['site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      weather_forecasts: {
+        Row: { site_id: string; fetched_at: Timestamp; data: Json };
+        Insert: { site_id: string; fetched_at?: Timestamp; data: Json };
+        Update: { fetched_at?: Timestamp; data?: Json };
+        Relationships: [];
+      };
     };
     Views: {
       current_consents: {
@@ -735,6 +980,23 @@ export type Database = {
       };
     };
     Functions: {
+      add_incident_injury: { Args: { p_incident: string; p_details_enc: string }; Returns: undefined };
+      read_incident_injury: { Args: { p_incident: string }; Returns: string | null };
+      log_incident_view: { Args: { p_incident: string }; Returns: undefined };
+      incident_stats: {
+        Args: Record<string, never>;
+        Returns: {
+          year: number;
+          category: Database['public']['Enums']['incident_category'];
+          severity: Database['public']['Enums']['incident_severity'];
+          reports: number;
+        }[];
+      };
+      event_counts: { Args: { p_event: string }; Returns: { going: number; maybe: number }[] };
+      create_group_chat: { Args: { p_title: string; p_members: string[] }; Returns: string };
+      add_group_member: { Args: { p_chat: string; p_user: string }; Returns: undefined };
+      remove_group_member: { Args: { p_chat: string; p_user: string }; Returns: undefined };
+      rename_group_chat: { Args: { p_chat: string; p_title: string }; Returns: undefined };
       pending_legal_kinds: {
         Args: Record<string, never>;
         Returns: Database['public']['Enums']['legal_document_kind'][];
@@ -838,13 +1100,36 @@ export type Database = {
       ad_condition: 'new' | 'like_new' | 'good' | 'fair' | 'for_parts';
       ad_status: 'active' | 'reserved' | 'sold' | 'archived';
       currency: 'TRY' | 'EUR' | 'USD';
-      report_target: 'ad' | 'user' | 'chat' | 'message' | 'news_comment' | 'tip';
+      report_target: 'ad' | 'user' | 'chat' | 'message' | 'news_comment' | 'tip' | 'ride' | 'event';
       report_reason: 'spam' | 'scam' | 'harassment' | 'hate' | 'sexual' | 'dangerous' | 'illegal' | 'other';
       report_status: 'open' | 'actioned' | 'dismissed';
       chat_kind: 'direct' | 'group';
       site_kind: 'launch' | 'landing' | 'both';
       equipment_kind: 'wing' | 'harness' | 'reserve' | 'instrument' | 'helmet' | 'radio' | 'other';
       flight_source: 'igc' | 'gpx' | 'manual';
+      incident_anonymity: 'named' | 'community_anonymous' | 'fully_anonymous';
+      incident_category:
+        | 'collapse'
+        | 'spiral_or_spin'
+        | 'reserve_deployment'
+        | 'takeoff'
+        | 'landing'
+        | 'tree_landing'
+        | 'water_landing'
+        | 'collision'
+        | 'power_line'
+        | 'equipment_failure'
+        | 'weather'
+        | 'medical'
+        | 'other';
+      incident_severity: 'near_miss' | 'minor' | 'serious' | 'fatal';
+      incident_status: 'submitted' | 'in_review' | 'closed';
+      lesson_status: 'draft' | 'published';
+      event_kind: 'club_trip' | 'course' | 'competition' | 'social' | 'meeting' | 'other';
+      event_status: 'draft' | 'published' | 'cancelled';
+      rsvp_status: 'going' | 'maybe' | 'not_going';
+      ride_kind: 'offer' | 'request';
+      ride_purpose: 'carpool' | 'retrieve';
     };
     CompositeTypes: Record<string, never>;
   };

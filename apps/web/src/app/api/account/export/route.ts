@@ -57,6 +57,9 @@ export async function GET() {
     equipment,
     following,
     followers,
+    incidents,
+    rsvps,
+    rides,
   ] = await Promise.all([
     admin.from('news_comments').select('news_id, body, hidden_at, created_at').eq('author_id', uid),
     admin.from('news_likes').select('news_id, created_at').eq('user_id', uid),
@@ -83,7 +86,36 @@ export async function GET() {
     admin.from('equipment').select('*').eq('user_id', uid),
     admin.from('follows').select('followee_id, created_at').eq('follower_id', uid),
     admin.from('follows').select('follower_id, created_at').eq('followee_id', uid),
+    // Fully anonymous reports are not linked to anyone, so they cannot be included.
+    admin
+      .from('incident_reports')
+      .select(
+        'id, anonymity, occurred_on, site_id, site_name, category, severity, injured, description, conditions, equipment, lessons, contact_ok, special_category_consent, status, created_at, closed_at',
+      )
+      .eq('reporter_id', uid),
+    admin.from('event_rsvps').select('event_id, status, note, created_at').eq('user_id', uid),
+    admin.from('rides').select('*').eq('user_id', uid),
   ]);
+
+  const incidentKey = serverEnv().INCIDENT_ENCRYPTION_KEY;
+  const injuryIds = (incidents.data ?? []).filter((r) => r.injured).map((r) => r.id);
+  const { data: injuries } = injuryIds.length
+    ? await admin
+        .from('incident_injuries')
+        .select('incident_id, details_enc')
+        .in('incident_id', injuryIds)
+    : { data: [] as { incident_id: string; details_enc: string }[] };
+  const injuryText = new Map(
+    (injuries ?? []).map((i) => {
+      let text: string | null = null;
+      try {
+        text = incidentKey ? decryptField(i.details_enc, incidentKey) : null;
+      } catch {
+        text = null;
+      }
+      return [i.incident_id, text];
+    }),
+  );
 
   let licence: string | null = null;
   if (priv.data?.licence_number_enc) {
@@ -129,6 +161,12 @@ export async function GET() {
     equipment: equipment.data ?? [],
     following: following.data ?? [],
     followers: followers.data ?? [],
+    incident_reports: (incidents.data ?? []).map((r) => ({
+      ...r,
+      injury_details: injuryText.get(r.id) ?? null,
+    })),
+    event_rsvps: rsvps.data ?? [],
+    rides: rides.data ?? [],
   };
 
   const date = new Date().toISOString().slice(0, 10);
