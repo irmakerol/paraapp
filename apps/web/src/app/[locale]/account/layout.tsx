@@ -1,7 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { requireActiveViewer } from '@/lib/session';
 import { PageTitle } from '@/components/ui';
-import { AccountTabs } from './tabs';
+import { Tabs } from '@/components/tabs';
 
 export default async function AccountLayout({
   children,
@@ -13,10 +13,17 @@ export default async function AccountLayout({
   const { locale } = await params;
   await requireActiveViewer(locale);
   const t = await getTranslations({ locale, namespace: 'account' });
+  const notifications = await getTranslations({ locale, namespace: 'notificationsSettings' });
   return (
     <div className="mx-auto max-w-3xl">
       <PageTitle>{t('title')}</PageTitle>
-      <AccountTabs profileLabel={t('tabs.profile')} privacyLabel={t('tabs.privacy')} />
+      <Tabs
+        tabs={[
+          { href: '/account', label: t('tabs.profile') },
+          { href: '/account/notifications', label: notifications('tab') },
+          { href: '/account/privacy', label: t('tabs.privacy') },
+        ]}
+      />
       <div className="mt-6">{children}</div>
     </div>
   );

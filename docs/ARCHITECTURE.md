@@ -35,18 +35,26 @@ later IGC/GPX parsing and flight stats) runs in the browser, on the server and i
 
 ## 3. Web app
 
-| Concern      | Choice                                                                             | Why                                                               |
-| ------------ | ---------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
-| Framework    | Next.js 16 App Router, React 19, TypeScript strict                                 | Server rendering for SEO; server actions keep secrets server-side |
-| i18n         | next-intl, `/tr` and `/en` prefixes, TR default, EN fallback per key               | Indexable per language, hreflang alternates                       |
-| Auth/session | @supabase/ssr cookies, refreshed in `src/proxy.ts`                                 | Works with server components and actions                          |
-| Styling      | Tailwind v4 with CSS-variable tokens from the club logo; dark mode via next-themes |                                                                   |
-| Forms        | Server actions + `useActionState`, zod schemas from `packages/core`                | Same validation everywhere, works without JS for most forms       |
-| Markdown     | react-markdown + remark-gfm (no raw HTML)                                          | Legal texts, later news/tips                                      |
-| Tests        | Vitest (unit), Playwright (E2E), pgTAP (database)                                  |                                                                   |
+| Concern      | Choice                                                                              | Why                                                               |
+| ------------ | ----------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| Framework    | Next.js 16 App Router, React 19, TypeScript strict                                  | Server rendering for SEO; server actions keep secrets server-side |
+| i18n         | next-intl, `/tr` and `/en` prefixes, TR default, EN fallback per key                | Indexable per language, hreflang alternates                       |
+| Auth/session | @supabase/ssr cookies, refreshed in `src/proxy.ts`                                  | Works with server components and actions                          |
+| Styling      | Tailwind v4 with CSS-variable tokens from the club logo; dark mode via next-themes  |                                                                   |
+| Forms        | Server actions + `useActionState`, zod schemas from `packages/core`                 | Same validation everywhere, works without JS for most forms       |
+| Markdown     | react-markdown + remark-gfm (no raw HTML; no remote images in user content)         | Legal texts, news, tips                                           |
+| Realtime     | Supabase Realtime `postgres_changes` on `messages` and `chat_members` (RLS applies) | Live chat and read receipts without our own socket server         |
+| Push         | Web Push with VAPID (`web-push` npm package), service worker `public/sw.js`         | Free, no third-party push service account needed                  |
+| Tests        | Vitest (unit), Playwright (E2E), pgTAP (database)                                   |                                                                   |
 
 Planned (later phases): MapLibre GL JS + OpenFreeMap + DEM hillshade, uPlot charts, TanStack Virtual for
-long lists, a service worker for offline logbook/tips/sites, Web Push.
+long lists, offline caching in the service worker for logbook/tips/sites.
+
+**Scheduled work.** Database jobs (ad expiry, purges) run in pg_cron. Push notifications need the app's
+VAPID key, so they are sent by `POST /api/cron/notify` (header `Authorization: Bearer $CRON_SECRET`):
+scheduled club news and ad-expiry reminders. Call it every 5–15 minutes from any free scheduler
+(pg_cron + pg_net, Cloudflare Cron Triggers, or a GitHub Actions schedule). Publishing news "now" from
+the admin area sends its push immediately, so locally the cron call is only needed for scheduled news.
 
 ## 4. Data and security model
 
@@ -68,12 +76,22 @@ long lists, a service worker for offline logbook/tips/sites, Web Push.
   blocks sign-in and ends all sessions immediately; a daily job purges the auth user after 30 days,
   which cascades to all user data. Avatars are removed through the Storage API first.
 - **Data-subject requests:** `data_requests` with a due date of min(30 days, one month); users file
-  in-app, admins log email/post requests (admin UI in Phase 1).
+  in-app, admins log email/post requests in the admin area.
 - **Audit log:** role changes, guardian confirmations, deletions; later every admin/safety-officer read
   of sensitive data. Readable by admins only, writable only through definer functions.
 - **Encryption:** sensitive columns are encrypted in the app with AES-256-GCM (Supabase's pgsodium column
   encryption is deprecated). The key is an environment secret, never in the database.
-- **Storage:** private buckets + signed URLs, so per-field photo privacy also applies to the file.
+- **Storage:** private buckets + signed URLs for avatars and chat photos, so privacy also applies to the
+  file. Public buckets only for content that is public anyway (news covers, ad photos). Uploads go to a
+  folder named after the user (or chat), enforced by storage policies.
+- **Community (Phase 1):** `news`/`news_comments`/`news_likes`, `tips`/`tip_bookmarks`, `ads`/`ad_photos`,
+  `chats`/`chat_members`/`messages`, `reports`, `blocks`, `push_subscriptions`, `notifications`.
+  Moderators (`moderator` or `admin`) hide/remove content and ban (`ban_user()`, audited, admins cannot be
+  banned). Moderators cannot browse chats; `reported_chat_messages()` opens a chat only for a chat/message
+  report and writes an audit entry. "Delete for everyone" strips the message content in a trigger; a copy
+  is kept in `private.deleted_message_content` for 30 days for moderation, then purged.
+- **Minors in the community:** cannot post ads (RLS); adults cannot start chats with them
+  (`start_direct_chat()`); messages are rate-limited (30/minute) for everyone.
 - **Retention:** `retention_policies` table drives pg_cron jobs.
 
 ## 5. Auth flows

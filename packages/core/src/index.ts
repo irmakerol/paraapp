@@ -5,3 +5,5 @@ export * from './privacy';
 export * from './consents';
 export * from './roles';
 export * from './schemas';
+export * from './content';
+export * from './market';

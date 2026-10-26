@@ -50,9 +50,35 @@ test('account pages require sign-in', async ({ page }) => {
   await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
 });
 
-test('coming-soon sections render in both languages', async ({ page }) => {
+test('community sections render in both languages', async ({ page }) => {
   await page.goto('/tr/market');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ekipman pazarı');
+  await expect(page.getByRole('search')).toBeVisible();
   await page.goto('/en/market');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Gear market');
+  await page.goto('/en/news');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('News');
+  await page.goto('/en/tips');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tips & tricks');
+  await expect(page.getByRole('link', { name: 'Cross-country' })).toBeVisible();
+});
+
+test('tips can be filtered by category', async ({ page }) => {
+  await page.goto('/en/tips');
+  await expect(page.getByRole('link', { name: 'Weather & meteorology' })).toHaveAttribute(
+    'href',
+    '/en/tips?category=weather',
+  );
+  await page.goto('/en/tips?category=weather');
+  await expect(page.getByRole('link', { name: 'Weather & meteorology' })).toHaveAttribute(
+    'aria-current',
+    'true',
+  );
+});
+
+test('messages, posting ads and admin require sign-in', async ({ page }) => {
+  for (const path of ['/en/messages', '/en/market/new', '/en/admin', '/en/tips/suggest']) {
+    await page.goto(path);
+    await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
+  }
 });

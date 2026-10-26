@@ -59,6 +59,13 @@ docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, leg
 - Images are resized and re-encoded in the browser before upload, which strips EXIF/GPS.
 - Accessibility: a label on every input, 44px minimum touch targets, visible focus, dark mode via `next-themes`.
 - Next.js 16: request interception is `src/proxy.ts` (formerly middleware); `params`/`searchParams`/`cookies()` are async.
+- `'use server'` files may only export async functions; put shared sync helpers in `src/lib` (e.g. `lib/tips.ts`, `lib/ads.ts`).
+- Error keys in `ActionState` live under `auth.errors` unless they contain a dot (then they are full keys, e.g. `market.adultsOnly`).
+- Names of other people always come from the `profile_cards` view (`lib/people.ts`), never from `profiles`.
+- Admin pages call `requireStaff(locale, area)` (`lib/staff.ts`); RLS enforces the same roles.
+- Push goes through `sendPush()` (`lib/push.ts`): it checks topic settings and, for club news, marketing consent.
+- Third-party embeds are click-to-load (`components/video-embed.tsx`). No third-party request before the user acts.
+- In render, use `currentTime()` from `lib/format.ts` instead of `Date.now()` (the React purity lint rule).
 
 ## Decisions (2026-10-26)
 
@@ -66,7 +73,7 @@ docs/             ARCHITECTURE, PLAN, DATA_INVENTORY, COSTS, BREACH_RUNBOOK, leg
   dedicated recorder app), decided in Phase 5.
 - Live flight recording waits for native; the web logbook imports IGC/GPX.
 - Minimum age 14. Ages 14–17 need guardian consent by email link; minors default to private
-  everything, no marketplace posting, no messages from adults they don't follow (enforce in Phase 1).
+  everything, no marketplace posting, adults cannot start chats with minors (Phase 2: allow adults the minor follows).
 - New flights default to **public** for adults with the first/last 500 m hidden; minors default to private.
 - Retention: deleted accounts purged 30 days after the request; chats kept until deleted; the rest
   in `retention_policies`.
