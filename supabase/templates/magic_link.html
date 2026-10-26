@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <body
+    style="
+      font-family: system-ui, sans-serif;
+      color: #13262b;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px;
+    "
+  >
+    <h2>Giriş bağlantın</h2>
+    <p>Giriş yapmak için aşağıdaki düğmeye tıkla. Bağlantı bir saat geçerlidir.</p>
+    <p>
+      <a
+        href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;next={{ .RedirectTo }}"
+        style="
+          display: inline-block;
+          background: #0f4049;
+          color: #fff;
+          padding: 12px 20px;
+          border-radius: 8px;
+          text-decoration: none;
+        "
+        >Giriş yap</a
+      >
+    </p>
+    <hr style="border: none; border-top: 1px solid #d9dedf; margin: 24px 0" />
+    <h2>Your sign-in link</h2>
+    <p>Click the link below to sign in. It is valid for one hour.</p>
+    <p>
+      <a
+        href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;next={{ .RedirectTo }}"
+        >Sign in</a
+      >
+    </p>
+    <p style="color: #5b6b70; font-size: 13px">
+      Fly Anatolia Havacılık Kulübü · info@flyanatolia.com
+    </p>
+  </body>
+</html>

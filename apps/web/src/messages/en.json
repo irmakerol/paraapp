@@ -1,0 +1,267 @@
+{
+  "meta": {
+    "title": "{app} – paragliding community",
+    "description": "News, tips, gear market and flight logbook for paragliding pilots in Türkiye, by {club}."
+  },
+  "nav": {
+    "home": "Home",
+    "news": "News",
+    "tips": "Tips",
+    "market": "Gear market",
+    "sites": "Sites",
+    "logbook": "Logbook",
+    "account": "My account",
+    "signIn": "Sign in",
+    "signUp": "Join",
+    "signOut": "Sign out",
+    "menu": "Menu",
+    "skipToContent": "Skip to content",
+    "language": "Language",
+    "theme": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "footer": {
+    "privacyNotice": "Privacy notice",
+    "terms": "Terms of use",
+    "explicitConsent": "Consent text",
+    "contact": "Contact",
+    "rights": "© {year} {club}"
+  },
+  "home": {
+    "heroTitle": "The paragliding community of Türkiye",
+    "heroText": "News, tips from instructors, a second-hand gear market and your flight logbook, in one place. Free, by {club}.",
+    "ctaJoin": "Join for free",
+    "ctaSignIn": "I already have an account",
+    "welcomeBack": "Welcome back, {name}",
+    "featuresTitle": "What's coming",
+    "features": {
+      "news": { "title": "Club news", "text": "Announcements, trips and safety notices." },
+      "tips": {
+        "title": "Tips & tricks",
+        "text": "Launching, thermalling, XC, weather and SIV, from beginner to advanced."
+      },
+      "market": {
+        "title": "Gear market",
+        "text": "New and used wings, harnesses, reserves and instruments."
+      },
+      "logbook": {
+        "title": "Flight logbook",
+        "text": "Import IGC/GPX files from your vario or app and see your stats."
+      },
+      "sites": {
+        "title": "Sites",
+        "text": "Takeoffs and landings with wind directions and flyability."
+      },
+      "safety": {
+        "title": "Safety",
+        "text": "Incident reports and lessons shared with the community."
+      }
+    }
+  },
+  "comingSoon": {
+    "title": "Coming soon",
+    "text": "This part of the app is being built. Check back soon."
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display name",
+    "displayNameHelp": "Shown to other pilots. You can change it later.",
+    "birthDate": "Date of birth",
+    "birthDateHelp": "You must be 14 or older. Pilots under 18 need a parent's or guardian's consent.",
+    "passwordHelp": "At least 10 characters, with letters and numbers.",
+    "signInTitle": "Sign in",
+    "signInSubmit": "Sign in",
+    "forgotLink": "Forgot your password?",
+    "noAccount": "New here?",
+    "haveAccount": "Already have an account?",
+    "or": "or",
+    "magicTitle": "Sign in with an email link",
+    "magicText": "We'll email you a one-time sign-in link. No password needed.",
+    "magicSubmit": "Email me a link",
+    "magicSent": "If an account exists for that address, a sign-in link is on its way.",
+    "google": "Continue with Google",
+    "signUpTitle": "Join {app}",
+    "signUpSubmit": "Create account",
+    "signUpLegal": "After creating your account you will see our privacy notice and terms before you can continue.",
+    "checkEmailTitle": "Check your email",
+    "checkEmailText": "We sent a confirmation link to {email}. Open it on this device to finish signing up.",
+    "forgotTitle": "Reset your password",
+    "forgotText": "Enter your email and we'll send you a reset link.",
+    "forgotSubmit": "Send reset link",
+    "forgotSent": "If an account exists for that address, a reset link is on its way.",
+    "resetTitle": "Choose a new password",
+    "resetSubmit": "Save password",
+    "resetDone": "Your password has been changed.",
+    "signOutAll": "Sign out on all devices",
+    "signOutAllHelp": "Ends every session, including on other phones and computers.",
+    "errors": {
+      "invalidCredentials": "Wrong email or password.",
+      "emailNotConfirmed": "Please confirm your email first. Check your inbox.",
+      "tooYoung": "You must be at least 14 years old to use {app}.",
+      "invalidDate": "Please enter a valid date.",
+      "rateLimited": "Too many attempts. Please wait a few minutes and try again.",
+      "weakPassword": "Password is too weak. Use at least 10 characters with letters and numbers.",
+      "userExists": "An account with this email already exists. Try signing in.",
+      "linkInvalid": "This link is invalid or has expired. Please request a new one.",
+      "validation": "Please check the highlighted fields.",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "onboarding": {
+    "stepOf": "Step {current} of {total}",
+    "age": {
+      "title": "Confirm your age",
+      "text": "We need your date of birth to apply our minimum age (14) and to ask a parent or guardian for consent if you are under 18. It is kept private.",
+      "submit": "Continue"
+    },
+    "legal": {
+      "title": "Privacy notice and terms",
+      "intro": "Please read how we handle your data and the rules of the community.",
+      "privacyHeading": "Privacy notice (Aydınlatma Metni)",
+      "privacyAck": "I have read the privacy notice.",
+      "termsHeading": "Terms of use",
+      "termsAccept": "I accept the terms of use.",
+      "updated": "These texts have changed since you last accepted them.",
+      "submit": "Continue",
+      "readFull": "Open in a new page"
+    },
+    "consents": {
+      "title": "Your choices",
+      "intro": "These are optional. Nothing is pre-selected, and you can change your mind at any time on the Privacy page.",
+      "readText": "Read the full consent text",
+      "submit": "Save and continue"
+    },
+    "guardian": {
+      "title": "Parent or guardian consent",
+      "text": "Because you are under 18, a parent or legal guardian has to confirm your account. We'll email them a link. Your account becomes active once they confirm.",
+      "name": "Parent or guardian's name",
+      "email": "Parent or guardian's email",
+      "submit": "Send confirmation email",
+      "sent": "Email sent to {email}. The link is valid for 7 days.",
+      "history": "Requests sent",
+      "pending": "Waiting",
+      "confirmed": "Confirmed",
+      "expired": "Expired"
+    }
+  },
+  "consentTypes": {
+    "marketing_notifications": {
+      "title": "Club news and offers",
+      "text": "Emails and notifications about club events, offers and announcements."
+    },
+    "analytics": {
+      "title": "Usage statistics",
+      "text": "Pseudonymised statistics and error reports that help us improve the app."
+    },
+    "public_profile": {
+      "title": "Public profile",
+      "text": "Show the public parts of your profile to visitors who are not signed in and to search engines."
+    },
+    "live_location": {
+      "title": "Live location sharing",
+      "text": "Share your live position through a temporary link while you fly."
+    },
+    "incident_special_category": {
+      "title": "Health data in incident reports",
+      "text": "Process injury details you include in an incident report."
+    }
+  },
+  "guardianConfirm": {
+    "title": "Confirm your child's account",
+    "intro": "{guardian}, {name} has asked you to confirm their account on {app}, the paragliding community app of {club}.",
+    "what": "If you confirm, their account becomes active. Their profile stays private by default, they cannot post in the gear market, and adults they do not follow cannot message them. You can ask us to delete the account at any time by writing to {email}.",
+    "privacyLink": "Read the privacy notice",
+    "confirm": "I am the parent or legal guardian and I give my consent",
+    "confirmed": "Thank you. The account is now active.",
+    "invalid": "This link is invalid, has expired or was already used."
+  },
+  "account": {
+    "title": "My account",
+    "tabs": { "profile": "Profile", "privacy": "Privacy" },
+    "profile": {
+      "photo": "Profile photo",
+      "uploadPhoto": "Upload photo",
+      "removePhoto": "Remove photo",
+      "photoHelp": "JPEG, PNG or WebP. We shrink it and remove location data before upload.",
+      "displayName": "Display name",
+      "fullName": "Full name",
+      "country": "Country code",
+      "countryHelp": "Two letters, e.g. TR",
+      "city": "City",
+      "homeSite": "Home site",
+      "pilotLevel": "Pilot level",
+      "levelNone": "Not set",
+      "levels": {
+        "student": "Student",
+        "p1": "P1",
+        "p2": "P2",
+        "p3": "P3",
+        "p4": "P4",
+        "p5": "P5",
+        "tandem": "Tandem pilot",
+        "instructor": "Instructor"
+      },
+      "yearsFlying": "Years flying",
+      "wings": "Wing(s)",
+      "bio": "About me",
+      "licence": "Licence number",
+      "licenceHelp": "Optional. Only you can see it; it is stored encrypted.",
+      "visibility": "Who can see this",
+      "visibilityOptions": {
+        "public": "Everyone",
+        "members": "Club members",
+        "private": "Only me"
+      },
+      "preferences": "Preferences",
+      "language": "Language",
+      "units": "Units",
+      "unitsMetric": "Metric (m, km)",
+      "unitsImperial": "Imperial (ft, mi)",
+      "speed": "Speed",
+      "save": "Save",
+      "saved": "Saved.",
+      "memberBadge": "Club member",
+      "minorNote": "Because you are under 18, your profile is private by default."
+    },
+    "privacy": {
+      "consentsTitle": "Consents",
+      "consentsText": "Turn any of these on or off. Changes take effect immediately.",
+      "on": "On",
+      "off": "Off",
+      "exportTitle": "Download my data",
+      "exportText": "A JSON file with everything we store about you. Flight files will be added when the logbook launches.",
+      "exportButton": "Download",
+      "requestTitle": "Other requests",
+      "requestText": "Object to processing, ask for a correction or anything else. We answer within 30 days.",
+      "requestType": "Request type",
+      "requestTypes": {
+        "objection": "Object to processing",
+        "rectification": "Correct my data",
+        "restriction": "Restrict processing",
+        "access": "Information about my data",
+        "other": "Other"
+      },
+      "requestDetails": "Details",
+      "requestSubmit": "Send request",
+      "requestSent": "Request received. We'll reply by {date}.",
+      "requestsList": "Your requests",
+      "requestStatus": {
+        "received": "Received",
+        "in_progress": "In progress",
+        "completed": "Completed",
+        "rejected": "Rejected"
+      },
+      "deleteTitle": "Delete my account",
+      "deleteText": "Your profile is anonymised immediately and you are signed out everywhere. After 30 days your account and all its data are permanently deleted. This cannot be undone.",
+      "deleteConfirm": "I understand. Delete my account.",
+      "deleteButton": "Delete account",
+      "deleted": "Your account has been deleted. It will be permanently removed after 30 days."
+    }
+  },
+  "legal": {
+    "notFound": "This document is not available yet."
+  }
+}
