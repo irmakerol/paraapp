@@ -4,13 +4,14 @@ import type { Role } from '@paraapp/core';
 import { requireActiveViewer, type Viewer } from '@/lib/session';
 
 export type StaffArea =
-  'news' | 'tips' | 'events' | 'reports' | 'safety' | 'sites' | 'users' | 'requests';
+  'news' | 'tips' | 'events' | 'trips' | 'reports' | 'safety' | 'sites' | 'users' | 'requests';
 
 /** Which roles may use each admin area. RLS enforces the same rules in the database. */
 export const AREA_ROLES: Record<StaffArea, readonly Role[]> = {
   news: ['admin'],
   tips: ['instructor', 'moderator', 'admin'],
   events: ['instructor', 'admin'],
+  trips: ['instructor', 'trip_organiser', 'admin'],
   reports: ['moderator', 'admin'],
   // Health data: safety officers only, not admins.
   safety: ['safety_officer'],

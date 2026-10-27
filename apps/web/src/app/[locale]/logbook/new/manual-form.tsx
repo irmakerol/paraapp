@@ -76,6 +76,10 @@ export function ManualFlightForm(props: {
             notes: '',
           }}
         />
+        <label className="flex min-h-11 items-center gap-3">
+          <input type="checkbox" name="add_to_totals" defaultChecked className="size-5" />
+          {t('addToTotals')}
+        </label>
       </Card>
       <FormMessage state={state} />
       <SubmitButton>{common('save')}</SubmitButton>

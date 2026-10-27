@@ -2,7 +2,7 @@
 import { useActionState, useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import {
-  PILOT_LEVELS,
+  PILOT_LEVEL_CHOICES,
   VISIBILITIES,
   type FieldPrivacy,
   type PrivacyField,
@@ -24,7 +24,10 @@ interface ProfileValues {
   city: string;
   home_site: string;
   pilot_level: string;
-  years_flying: string;
+  flying_since: string;
+  weight_kg: string;
+  total_flight_hours: string;
+  total_flights: string;
   wings: string;
   bio: string;
   locale: string;
@@ -139,9 +142,16 @@ export function ProfileForm(props: {
             <Field id="pilot_level" label={t('pilotLevel')}>
               <Select id="pilot_level" name="pilot_level" defaultValue={profile.pilot_level}>
                 <option value="">{t('levelNone')}</option>
-                {PILOT_LEVELS.map((l) => (
+                {/* An older level (student, P1, tandem) stays selectable until changed. */}
+                {[
+                  ...(profile.pilot_level &&
+                  !(PILOT_LEVEL_CHOICES as readonly string[]).includes(profile.pilot_level)
+                    ? [profile.pilot_level]
+                    : []),
+                  ...PILOT_LEVEL_CHOICES,
+                ].map((l) => (
                   <option key={l} value={l}>
-                    {t(`levels.${l}`)}
+                    {t(`levels.${l}` as 'levels.p2')}
                   </option>
                 ))}
               </Select>
@@ -149,23 +159,68 @@ export function ProfileForm(props: {
           )}
           {row(
             'years_flying',
-            <Field id="years_flying" label={t('yearsFlying')}>
+            <Field id="flying_since" label={t('flyingSince')} help={t('flyingSinceHelp')}>
               <Input
-                id="years_flying"
-                name="years_flying"
+                id="flying_since"
+                name="flying_since"
                 type="number"
-                min={0}
-                max={80}
+                min={1950}
+                max={2100}
                 inputMode="numeric"
-                defaultValue={profile.years_flying}
+                defaultValue={profile.flying_since}
               />
             </Field>,
           )}
           {row(
             'wings',
-            <Field id="wings" label={t('wings')}>
+            <Field id="wings" label={t('wings')} help={t('wingsHelp')}>
               <Input id="wings" name="wings" defaultValue={profile.wings} maxLength={200} />
             </Field>,
+          )}
+          {row(
+            'weight',
+            <Field id="weight_kg" label={t('weight')} help={t('weightHelp')}>
+              <Input
+                id="weight_kg"
+                name="weight_kg"
+                type="number"
+                min={30}
+                max={250}
+                inputMode="numeric"
+                defaultValue={profile.weight_kg}
+              />
+            </Field>,
+          )}
+          {row(
+            'flight_totals',
+            <div className="space-y-1.5">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <Field id="total_flight_hours" label={t('totalHours')}>
+                  <Input
+                    id="total_flight_hours"
+                    name="total_flight_hours"
+                    type="number"
+                    min={0}
+                    max={100000}
+                    step={0.1}
+                    inputMode="decimal"
+                    defaultValue={profile.total_flight_hours}
+                  />
+                </Field>
+                <Field id="total_flights" label={t('totalFlights')}>
+                  <Input
+                    id="total_flights"
+                    name="total_flights"
+                    type="number"
+                    min={0}
+                    max={1000000}
+                    inputMode="numeric"
+                    defaultValue={profile.total_flights}
+                  />
+                </Field>
+              </div>
+              <p className="text-sm text-muted">{t('totalsHelp')}</p>
+            </div>,
           )}
           {row(
             'bio',

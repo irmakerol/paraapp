@@ -1,6 +1,7 @@
 import 'server-only';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { sendPush } from '@/lib/push';
+import { MEMBER_LEVEL_ROLES } from '@paraapp/core';
 import { formatDate } from '@/lib/format';
 
 /** Pushes club news that is published, due, flagged for notification and not yet sent. */
@@ -29,7 +30,7 @@ export async function notifyDueNews(): Promise<number> {
       const { data: members } = await admin
         .from('user_roles')
         .select('user_id')
-        .in('role', ['member', 'instructor', 'moderator', 'safety_officer', 'admin']);
+        .in('role', MEMBER_LEVEL_ROLES);
       recipients = [...new Set((members ?? []).map((m) => m.user_id))];
     }
     sent += await sendPush(recipients, 'news', (t, locale) => ({
@@ -84,6 +85,21 @@ export async function pushPendingNotifications(): Promise<number> {
         }),
         url: `/${locale}/logbook/equipment`,
         tag: `${n.kind}-${payload.equipment_id}`,
+      }));
+    } else if (n.kind.startsWith('trip_')) {
+      const payload = (n.payload ?? {}) as { slug?: string; title?: string; status?: string };
+      const staffSide =
+        n.kind === 'trip_new_registration' || n.kind === 'trip_registration_cancelled';
+      sent += await sendPush([n.user_id], 'trips', (t, locale) => ({
+        // trip_registration -> trip.status.<status>; trip_update -> trip.update; etc.
+        title: t(
+          (n.kind === 'trip_registration'
+            ? `trip.status.${payload.status ?? 'pending'}`
+            : `trip.${n.kind.slice(5)}`) as 'trip.update',
+        ),
+        body: payload.title ?? '',
+        url: staffSide ? `/${locale}/admin/trips` : `/${locale}/trips/${payload.slug ?? ''}`,
+        tag: `trip-${payload.slug}-${n.kind}`,
       }));
     }
   }

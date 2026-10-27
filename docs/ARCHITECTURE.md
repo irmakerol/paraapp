@@ -123,6 +123,11 @@ the admin area sends its push immediately, so locally the cron call is only need
   (capacity and deadline checked by a trigger; public counts via `event_counts()`). `rides` and group chats
   (`create_group_chat()`, `add_group_member()`, `remove_group_member()`, `rename_group_chat()`) are adults
   only. `weather_forecasts` is a per-site cache written only by the server.
+- **Trips and pilot profile (Phase 5):** `trips` with `trip_sites`, `trip_guides`, `trip_interests` and
+  `trip_registrations`. Organisers are instructors, trip organisers and admins; a trip's guides see its
+  participants. Pilots sign up through `register_for_trip()` (requirements, minors, deadline checked in
+  the database); triggers keep seats within `max_pilots`, move the waiting list up and notify pilots.
+  Profile totals change only through `add_flights_to_totals()`, which counts each flight once.
 - **Retention:** `retention_policies` table drives pg_cron jobs.
 
 ## 5. Auth flows
@@ -151,6 +156,7 @@ OAuth to `/auth/callback` (PKCE). Redirect targets are restricted to our own ori
 
 ## 7. Path to native
 
-Phase 5. Live flight recording needs background GPS, the barometer and reliable push, which browsers
-cannot provide. Options: wrap this app with Capacitor and add native plugins, or build a small
-React Native recorder sharing `packages/core`. Sign in with Apple is added then.
+Phase 7 (Android first, then iPhone in Phase 8; see `docs/PLAN.md`). Live flight recording needs
+background GPS, the barometer and reliable push, which browsers cannot provide. The plan is a React
+Native (Expo) tracker app sharing `packages/core`, which uploads finished flights through the same
+import path and asks whether to add each flight to the pilot's totals. Sign in with Apple is added then.

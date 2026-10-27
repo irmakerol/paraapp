@@ -24,7 +24,14 @@ export function PushSettings({
   hasNewsConsent,
   isSafetyOfficer,
 }: {
-  prefs: { messages: boolean; news: boolean; ads: boolean; equipment: boolean; safety: boolean };
+  prefs: {
+    messages: boolean;
+    news: boolean;
+    ads: boolean;
+    equipment: boolean;
+    trips: boolean;
+    safety: boolean;
+  };
   hasNewsConsent: boolean;
   isSafetyOfficer: boolean;
 }) {
@@ -139,6 +146,10 @@ export function PushSettings({
               className="size-5"
             />
             {t('topicEquipment')}
+          </label>
+          <label className="flex items-center gap-3">
+            <input type="checkbox" name="trips" defaultChecked={prefs.trips} className="size-5" />
+            {t('topicTrips')}
           </label>
           {isSafetyOfficer ? (
             <label className="flex items-center gap-3">

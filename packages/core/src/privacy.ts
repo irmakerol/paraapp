@@ -13,6 +13,8 @@ export const PRIVATE_PROFILE_FIELDS = [
   'years_flying',
   'wings',
   'bio',
+  'weight',
+  'flight_totals',
 ] as const;
 export type PrivacyField = (typeof PRIVATE_PROFILE_FIELDS)[number];
 export type FieldPrivacy = Record<PrivacyField, Visibility>;
@@ -28,6 +30,8 @@ export function defaultFieldPrivacy(group: Exclude<AgeGroup, 'too_young'>): Fiel
     years_flying: group === 'minor' ? 'private' : 'public',
     wings: group === 'minor' ? 'private' : 'public',
     bio: group === 'minor' ? 'private' : 'public',
+    weight: 'private',
+    flight_totals: group === 'minor' ? 'private' : 'public',
   };
 }
 

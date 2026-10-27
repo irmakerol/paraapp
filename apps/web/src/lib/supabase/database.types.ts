@@ -49,6 +49,10 @@ export type Database = {
           home_site: string | null;
           pilot_level: Database['public']['Enums']['pilot_level'] | null;
           years_flying: number | null;
+          flying_since: number | null;
+          weight_kg: number | null;
+          total_flight_hours: number;
+          total_flights: number;
           wings: string | null;
           bio: string | null;
           field_privacy: Json;
@@ -70,6 +74,10 @@ export type Database = {
           home_site?: string | null;
           pilot_level?: Database['public']['Enums']['pilot_level'] | null;
           years_flying?: number | null;
+          flying_since?: number | null;
+          weight_kg?: number | null;
+          total_flight_hours?: number;
+          total_flights?: number;
           wings?: string | null;
           bio?: string | null;
           field_privacy?: Json;
@@ -587,6 +595,7 @@ export type Database = {
       };
       flights: {
         Row: {
+          counted_in_totals: boolean;
           id: string;
           user_id: string;
           started_at: Timestamp;
@@ -812,6 +821,145 @@ export type Database = {
         };
         Relationships: [];
       };
+      trips: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          summary: string | null;
+          description_md: string;
+          itinerary_md: string;
+          cover_path: string | null;
+          destination_country: string | null;
+          destination_region: string | null;
+          starts_on: string;
+          ends_on: string;
+          meeting_point: string | null;
+          meeting_at: Timestamp | null;
+          registration_opens_at: Timestamp | null;
+          registration_deadline: Timestamp | null;
+          max_pilots: number;
+          min_pilots: number | null;
+          companions_allowed: boolean;
+          min_pilot_level: Database['public']['Enums']['pilot_level'] | null;
+          min_years_flying: number | null;
+          min_flights: number | null;
+          required_equipment: string[];
+          requirements_md: string;
+          price_amount: number | null;
+          price_currency: string;
+          deposit_amount: number | null;
+          payment_deadline: string | null;
+          payment_info_md: string;
+          price_includes: string | null;
+          price_excludes: string | null;
+          cancellation_policy: string | null;
+          accommodation: string | null;
+          transport: string | null;
+          members_only: boolean;
+          allow_minors: boolean;
+          auto_accept: boolean;
+          status: Database['public']['Enums']['trip_status'];
+          news_id: string | null;
+          created_by: string | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: Partial<Omit<Database['public']['Tables']['trips']['Row'], 'id' | 'created_at' | 'updated_at'>> & {
+          slug: string;
+          title: string;
+          starts_on: string;
+          ends_on: string;
+          max_pilots: number;
+        };
+        Update: Partial<Omit<Database['public']['Tables']['trips']['Row'], 'id' | 'created_at' | 'updated_at'>>;
+        Relationships: [];
+      };
+      trip_sites: {
+        Row: { trip_id: string; site_id: string; position: number };
+        Insert: { trip_id: string; site_id: string; position?: number };
+        Update: { position?: number };
+        Relationships: [
+          {
+            foreignKeyName: 'trip_sites_trip_id_fkey';
+            columns: ['trip_id'];
+            isOneToOne: false;
+            referencedRelation: 'trips';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'trip_sites_site_id_fkey';
+            columns: ['site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      trip_guides: {
+        Row: { trip_id: string; user_id: string; role_label: string | null; position: number };
+        Insert: { trip_id: string; user_id: string; role_label?: string | null; position?: number };
+        Update: { role_label?: string | null; position?: number };
+        Relationships: [
+          {
+            foreignKeyName: 'trip_guides_trip_id_fkey';
+            columns: ['trip_id'];
+            isOneToOne: false;
+            referencedRelation: 'trips';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      trip_interests: {
+        Row: { trip_id: string; user_id: string; created_at: Timestamp };
+        Insert: { trip_id: string; user_id: string };
+        Update: Record<string, never>;
+        Relationships: [
+          {
+            foreignKeyName: 'trip_interests_trip_id_fkey';
+            columns: ['trip_id'];
+            isOneToOne: false;
+            referencedRelation: 'trips';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      trip_registrations: {
+        Row: {
+          id: string;
+          trip_id: string;
+          user_id: string;
+          status: Database['public']['Enums']['trip_registration_status'];
+          companions: number;
+          note: string | null;
+          phone: string | null;
+          emergency_name: string | null;
+          emergency_phone: string | null;
+          pilot_level: Database['public']['Enums']['pilot_level'] | null;
+          years_flying: number | null;
+          logged_flights: number | null;
+          payment_status: Database['public']['Enums']['trip_payment_status'];
+          staff_note: string | null;
+          decided_at: Timestamp | null;
+          created_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: never;
+        Update: {
+          status?: Database['public']['Enums']['trip_registration_status'];
+          payment_status?: Database['public']['Enums']['trip_payment_status'];
+          staff_note?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'trip_registrations_trip_id_fkey';
+            columns: ['trip_id'];
+            isOneToOne: false;
+            referencedRelation: 'trips';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       events: {
         Row: {
           id: string;
@@ -975,11 +1123,16 @@ export type Database = {
           bio: string | null;
           is_member: boolean;
           created_at: Timestamp;
+          flying_since: number | null;
+          weight_kg: number | null;
+          total_flight_hours: number | null;
+          total_flights: number | null;
         };
         Relationships: [];
       };
     };
     Functions: {
+      add_flights_to_totals: { Args: { p_flights: string[] }; Returns: number };
       add_incident_injury: { Args: { p_incident: string; p_details_enc: string }; Returns: undefined };
       read_incident_injury: { Args: { p_incident: string }; Returns: string | null };
       log_incident_view: { Args: { p_incident: string }; Returns: undefined };
@@ -991,6 +1144,42 @@ export type Database = {
           severity: Database['public']['Enums']['incident_severity'];
           reports: number;
         }[];
+      };
+      trip_counts: {
+        Args: { p_trip: string };
+        Returns: {
+          seats_taken: number;
+          accepted: number;
+          pending: number;
+          waitlisted: number;
+          interested: number;
+        }[];
+      };
+      register_for_trip: {
+        Args: {
+          p_trip: string;
+          p_companions?: number;
+          p_note?: string | null;
+          p_phone?: string | null;
+          p_emergency_name?: string | null;
+          p_emergency_phone?: string | null;
+        };
+        Returns: Database['public']['Enums']['trip_registration_status'];
+      };
+      cancel_trip_registration: { Args: { p_trip: string }; Returns: undefined };
+      update_trip_registration: {
+        Args: {
+          p_trip: string;
+          p_note: string | null;
+          p_phone: string | null;
+          p_emergency_name: string | null;
+          p_emergency_phone: string | null;
+        };
+        Returns: undefined;
+      };
+      notify_trip_followers: {
+        Args: { p_trip: string; p_include_registered?: boolean };
+        Returns: number;
       };
       event_counts: { Args: { p_event: string }; Returns: { going: number; maybe: number }[] };
       create_group_chat: { Args: { p_title: string; p_members: string[] }; Returns: string };
@@ -1052,11 +1241,32 @@ export type Database = {
       ban_user: { Args: { p_user: string; p_until: Timestamp | null; p_reason: string }; Returns: undefined };
     };
     Enums: {
-      app_role: 'pilot' | 'member' | 'instructor' | 'moderator' | 'safety_officer' | 'admin';
+      app_role:
+        | 'pilot'
+        | 'member'
+        | 'instructor'
+        | 'moderator'
+        | 'safety_officer'
+        | 'trip_organiser'
+        | 'admin';
+      trip_status: 'draft' | 'open' | 'closed' | 'completed' | 'cancelled';
+      trip_registration_status: 'pending' | 'accepted' | 'waitlisted' | 'declined' | 'cancelled';
+      trip_payment_status: 'unpaid' | 'deposit_paid' | 'paid' | 'refunded';
       visibility: 'public' | 'members' | 'private';
       account_status: 'onboarding' | 'pending_guardian' | 'active' | 'deletion_requested';
       age_group: 'minor' | 'adult';
-      pilot_level: 'student' | 'p1' | 'p2' | 'p3' | 'p4' | 'p5' | 'tandem' | 'instructor';
+      pilot_level:
+        | 'student'
+        | 'p1'
+        | 'p2'
+        | 'p3'
+        | 'p4'
+        | 'p5'
+        | 't1'
+        | 't2'
+        | 't3'
+        | 'tandem'
+        | 'instructor';
       legal_document_kind: 'privacy_notice' | 'terms' | 'explicit_consent';
       consent_type:
         | 'marketing_notifications'

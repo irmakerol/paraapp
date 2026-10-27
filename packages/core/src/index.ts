@@ -12,3 +12,4 @@ export * from './flights';
 export * from './safety';
 export * from './events';
 export * from './weather';
+export * from './trips';

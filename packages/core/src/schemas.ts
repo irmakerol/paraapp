@@ -27,9 +27,33 @@ export const PILOT_LEVELS = [
   'p3',
   'p4',
   'p5',
+  't1',
+  't2',
+  't3',
   'tandem',
   'instructor',
 ] as const;
+export type PilotLevel = (typeof PILOT_LEVELS)[number];
+/** Levels offered in forms (the club's list, 2026-10-27); older values stay valid for old data. */
+export const PILOT_LEVEL_CHOICES = [
+  'p2',
+  'p3',
+  'p4',
+  'p5',
+  't1',
+  't2',
+  't3',
+  'instructor',
+] as const;
+
+/** Years flying from the year a pilot started (falls back to the older "years flying" number). */
+export function yearsFlying(
+  p: { flying_since?: number | null; years_flying?: number | null },
+  now: Date,
+): number | null {
+  if (p.flying_since != null) return Math.max(0, now.getFullYear() - p.flying_since);
+  return p.years_flying ?? null;
+}
 
 const optionalText = (max: number) =>
   z
@@ -56,7 +80,15 @@ export const profileSchema = z.object({
   city: optionalText(80),
   home_site: optionalText(120),
   pilot_level: z.enum(PILOT_LEVELS).nullable().optional(),
-  years_flying: z.coerce.number().int().min(0).max(80).nullable().optional(),
+  flying_since: z.coerce.number().int().min(1950).max(2100).nullable().optional(),
+  weight_kg: z.coerce.number().int().min(30).max(250).nullable().optional(),
+  total_flight_hours: z.coerce
+    .number()
+    .min(0)
+    .max(100000)
+    .transform((h) => Math.round(h * 10) / 10)
+    .optional(),
+  total_flights: z.coerce.number().int().min(0).max(1000000).optional(),
   wings: optionalText(200),
   bio: optionalText(500),
   field_privacy: fieldPrivacySchema,

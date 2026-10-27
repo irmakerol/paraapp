@@ -116,7 +116,14 @@ export function toIcs(event: {
   endsAt: string;
   cancelled?: boolean;
   stamp?: string;
+  /** startsAt/endsAt are YYYY-MM-DD dates (both inclusive), e.g. a multi-day trip. */
+  allDay?: boolean;
 }): string {
+  const dayAfter = (d: string) => {
+    const next = new Date(`${d}T00:00:00Z`);
+    next.setUTCDate(next.getUTCDate() + 1);
+    return next.toISOString().slice(0, 10).replaceAll('-', '');
+  };
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
@@ -126,8 +133,10 @@ export function toIcs(event: {
     'BEGIN:VEVENT',
     `UID:${event.uid}`,
     `DTSTAMP:${icsDate(event.stamp ?? new Date().toISOString())}`,
-    `DTSTART:${icsDate(event.startsAt)}`,
-    `DTEND:${icsDate(event.endsAt)}`,
+    event.allDay
+      ? `DTSTART;VALUE=DATE:${event.startsAt.replaceAll('-', '')}`
+      : `DTSTART:${icsDate(event.startsAt)}`,
+    event.allDay ? `DTEND;VALUE=DATE:${dayAfter(event.endsAt)}` : `DTEND:${icsDate(event.endsAt)}`,
     `SUMMARY:${icsEscape(event.title)}`,
     event.description ? `DESCRIPTION:${icsEscape(event.description)}` : null,
     event.location ? `LOCATION:${icsEscape(event.location)}` : null,

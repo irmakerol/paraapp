@@ -54,6 +54,7 @@ export async function saveNotificationPrefs(
         news: bool(formData, 'news'),
         ads: bool(formData, 'ads'),
         equipment: bool(formData, 'equipment'),
+        trips: bool(formData, 'trips'),
         safety: bool(formData, 'safety'),
       },
     })

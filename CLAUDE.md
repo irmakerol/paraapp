@@ -88,6 +88,16 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - Deployment: `Dockerfile` (standalone output) + `deploy/compose.yaml`; steps in `deploy/README.md`.
 - `packages/core` lint is `typescript-eslint` strict (no `!`): use `at()` from `tracks/at.ts` for known-good indices.
 
+- Trips (`trips`, `trip_*` tables) are managed by `instructor`, `trip_organiser` and `admin` (admin area
+  `trips`); a trip's guides (`trip_guides`) see its participants. Registrations are written only through
+  definer functions (`register_for_trip` etc.); seats, the waiting list and pilot notifications are
+  handled by triggers. Payments are tracked by hand (`payment_status`), the app takes no money.
+- Pilot levels offered in the UI are `PILOT_LEVEL_CHOICES` (P2–P5, T1–T3, Instructor); older enum values
+  (student, p1, tandem) stay valid. For requirements, T1–T3 rank like P5 (`pilot_level_rank`).
+- Profile totals (`total_flight_hours`, `total_flights`) grow only through `add_flights_to_totals()`,
+  which counts each flight once (`flights.counted_in_totals`); the importer and the tracker ask first.
+- Years flying is derived from `profiles.flying_since` (`private.years_flying`); `years_flying` is legacy.
+
 ## Decisions (2026-10-26)
 
 - Web first. Next.js because public pages must rank on Google. Native later (Capacitor wrap or a

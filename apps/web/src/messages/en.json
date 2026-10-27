@@ -26,7 +26,8 @@
     "events": "Events",
     "safety": "Safety",
     "rides": "Rides",
-    "sosLabel": "SOS: emergency help and your position"
+    "sosLabel": "SOS: emergency help and your position",
+    "trips": "Trips"
   },
   "footer": {
     "privacyNotice": "Privacy notice",
@@ -66,6 +67,10 @@
       "safety": {
         "title": "Safety",
         "text": "Incident reports and lessons shared with the community."
+      },
+      "trips": {
+        "title": "Paragliding trips",
+        "text": "Club trips at home and abroad: sites, requirements, prices and guides. Show interest or sign up."
       }
     }
   },
@@ -214,7 +219,10 @@
         "p4": "P4",
         "p5": "P5",
         "tandem": "Tandem pilot",
-        "instructor": "Instructor"
+        "instructor": "Instructor",
+        "t1": "T1",
+        "t2": "T2",
+        "t3": "T3"
       },
       "yearsFlying": "Years flying",
       "wings": "Wing(s)",
@@ -236,7 +244,15 @@
       "save": "Save",
       "saved": "Saved.",
       "memberBadge": "Club member",
-      "minorNote": "Because you are under 18, your profile is private by default."
+      "minorNote": "Because you are under 18, your profile is private by default.",
+      "flyingSince": "Flying since (year)",
+      "flyingSinceHelp": "The year of your first solo flight.",
+      "wingsHelp": "Make and model, e.g. Ozone Rush 6 (ML).",
+      "weight": "Pilot weight (kg)",
+      "weightHelp": "Your own weight without gear. Private unless you choose otherwise.",
+      "totalHours": "Total flight hours",
+      "totalFlights": "Number of flights",
+      "totalsHelp": "Your totals so far, including flights you did not log here. Flights you import or add can be added on top."
     },
     "privacy": {
       "consentsTitle": "Consents",
@@ -505,7 +521,8 @@
     "topicAds": "My ads (expiry reminders)",
     "consentLink": "Turn on the “Club news and offers” consent in Privacy to receive club news.",
     "topicEquipment": "Equipment checks and reserve repacks",
-    "topicSafety": "New incident reports (safety officers)"
+    "topicSafety": "New incident reports (safety officers)",
+    "topicTrips": "Trips: registration updates and news from trips you follow"
   },
   "admin": {
     "title": "Admin",
@@ -719,6 +736,102 @@
       "summary": "Summary (optional)",
       "body": "Lesson",
       "markdownHelp": "Markdown: **bold**, *italic*, lists and links."
+    },
+    "trips": "Trips",
+    "tripsAdmin": {
+      "new": "New trip",
+      "edit": "Edit trip",
+      "empty": "No trips yet.",
+      "listCounts": "{taken}/{max} seats · {pending} waiting for confirmation · {waitlisted} on the waiting list · {interested} interested",
+      "statuses": {
+        "draft": "Draft",
+        "open": "Open for registration",
+        "closed": "Registration closed",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "deleteConfirm": "Delete this trip with all its registrations? This cannot be undone. Cancelling it instead keeps the history and tells everyone.",
+      "basics": "Basics",
+      "tripTitle": "Title",
+      "summary": "Summary",
+      "summaryHelp": "One or two sentences for the trip list.",
+      "status": "Status",
+      "region": "Destination",
+      "regionHelp": "Region or town, e.g. Ölüdeniz, Fethiye.",
+      "country": "Country",
+      "countryHelp": "Two-letter code, e.g. TR, NP, ES.",
+      "startsOn": "First day",
+      "endsOn": "Last day",
+      "meetingPoint": "Meeting point",
+      "meetingAt": "Meeting time",
+      "timeHelp": "Türkiye time.",
+      "cover": "Cover photo",
+      "uploading": "Uploading…",
+      "removeCover": "Remove cover photo",
+      "description": "Description",
+      "markdownHelp": "Markdown: **bold**, *italic*, lists and links.",
+      "itinerary": "Day by day plan",
+      "itineraryHelp": "Optional. One line or paragraph per day works well.",
+      "sitesHelp": "Tick every site the group plans to fly.",
+      "seatsAndRequirements": "Seats and requirements",
+      "maxPilots": "Maximum pilots",
+      "minPilots": "Minimum pilots",
+      "minPilotsHelp": "Optional. The trip only goes ahead if this many sign up.",
+      "opensAt": "Registration opens",
+      "opensAtHelp": "Leave empty to open registration as soon as the trip is published.",
+      "deadline": "Registration deadline",
+      "minLevel": "Minimum pilot level",
+      "anyLevel": "Any level",
+      "minYears": "Minimum years flying",
+      "minFlights": "Minimum number of flights",
+      "minFlightsHelp": "Counted from the pilot’s profile totals or logbook, whichever is higher.",
+      "requiredEquipment": "Required equipment",
+      "otherRequirements": "Other requirements",
+      "companionsAllowed": "Non-flying companions allowed",
+      "companionsAllowedHelp": "Companions take a seat each.",
+      "allowMinors": "Pilots aged 14–17 may sign up",
+      "allowMinorsHelp": "Only if a guardian and an instructor travel with the group.",
+      "autoAccept": "Accept registrations automatically",
+      "autoAcceptHelp": "While seats are free, pilots who meet the requirements are accepted at once. Otherwise you confirm each one.",
+      "membersOnly": "Members only (only club members see it)",
+      "price": "Price per pilot",
+      "priceHelp": "Leave empty if the price is not known yet.",
+      "currency": "Currency",
+      "deposit": "Deposit",
+      "paymentDeadline": "Payment deadline",
+      "includes": "Price includes",
+      "excludes": "Price does not include",
+      "paymentInfo": "How to pay",
+      "paymentInfoHelp": "Shown only to accepted pilots, e.g. the club IBAN. Payments are tracked by hand below.",
+      "cancellationPolicy": "Cancellation policy",
+      "accommodation": "Accommodation",
+      "transport": "Transport",
+      "guidesHelp": "Guides see the participant list and their contact details.",
+      "guideRoleFor": "Role of {name} on this trip",
+      "guideRolePlaceholder": "e.g. Lead guide, Retrieve driver",
+      "noPeople": "Nobody to choose yet.",
+      "participants": "Participants",
+      "downloadCsv": "Download as CSV",
+      "registrationStatus": "Registration",
+      "statusFor": "Registration status for {name}",
+      "paymentStatus": "Payment",
+      "paymentFor": "Payment status for {name}",
+      "staffNote": "Note for organisers",
+      "yearsShort": "{count, plural, one {# year} other {# years}}",
+      "flightsShort": "{count, plural, one {# flight} other {# flights}}",
+      "companionsShort": "{count, plural, =0 {no companions} one {+# companion} other {+# companions}}",
+      "emergency": "Emergency contact",
+      "noParticipants": "Nobody has signed up yet.",
+      "notify": "Send an update",
+      "notifyHelp": "Sends a notification to everyone who showed interest. Edit the trip first, then send the update.",
+      "notifyIncludeRegistered": "Also notify registered pilots",
+      "notified": "{count, plural, =0 {Nobody to notify.} one {# person notified.} other {# people notified.}}",
+      "groupChat": "Group chat with accepted pilots",
+      "groupChatHelp": "Creates a group chat with the guides and every accepted adult pilot.",
+      "announce": "Announce in club news",
+      "announceHelp": "Creates a draft news post that links to this trip. You can edit it before publishing.",
+      "announcedHelp": "This trip already has a news post.",
+      "openAnnouncement": "Open the news post"
     }
   },
   "roles": {
@@ -727,7 +840,8 @@
     "instructor": "Instructor",
     "moderator": "Moderator",
     "safety_officer": "Safety officer",
-    "admin": "Admin"
+    "admin": "Admin",
+    "trip_organiser": "Trip organiser"
   },
   "push": {
     "newMessage": "New message from {name}",
@@ -741,7 +855,20 @@
     "equipmentDue": "{model}: due {date}",
     "incidentTitle": "New incident report",
     "incidentBody": "A new safety report is waiting in the safety area.",
-    "newGroupMessage": "{name} in {group}"
+    "newGroupMessage": "{name} in {group}",
+    "trip": {
+      "status": {
+        "pending": "Trip registration received",
+        "accepted": "You are on the trip",
+        "waitlisted": "You are on the waiting list",
+        "declined": "Trip registration declined",
+        "cancelled": "Trip registration cancelled"
+      },
+      "new_registration": "New trip registration",
+      "registration_cancelled": "A pilot cancelled their trip registration",
+      "update": "Trip update",
+      "cancelled": "Trip cancelled"
+    }
   },
   "maps": {
     "load": "Show map",
@@ -812,8 +939,13 @@
         "noFlight": "No flight found in this file (too few points or no movement).",
         "duplicate": "Already in your logbook.",
         "generic": "Something went wrong. Please try again."
-      }
-    }
+      },
+      "totalsQuestion": "Add {count, plural, one {this flight} other {these # flights}} ({duration}) to your total hours and flights?",
+      "totalsYes": "Yes, add",
+      "totalsNo": "No, thanks",
+      "totalsAdded": "{count, plural, =0 {Nothing was added: these flights are already in your totals.} one {# flight added to your totals.} other {# flights added to your totals.}}"
+    },
+    "addToTotals": "Add this flight to my total hours and flights"
   },
   "flight": {
     "metaTitle": "Flight at {site}, {date}",
@@ -962,7 +1094,10 @@
     "compareTitle": "You and {name}",
     "compareLead": "Your records next to theirs. The better number is in bold.",
     "stat": "Stat",
-    "you": "You"
+    "you": "You",
+    "flyingSince": "Flying since {year}",
+    "totals": "{hours} h in {flights, plural, one {# flight} other {# flights}}",
+    "weight": "{kg} kg"
   },
   "weather": {
     "today": "Today",
@@ -1235,5 +1370,135 @@
     "lead": "This page has not been saved on this device. Check your connection and try again.",
     "sos": "Open the SOS page (works offline)",
     "saved": "Pages you visited recently (news, tips, sites, events, safety) are saved for offline reading when you are signed out."
+  },
+  "trips": {
+    "title": "Trips",
+    "lead": "Club paragliding trips. Show interest to hear about a trip, or sign up for a seat.",
+    "upcoming": "Upcoming",
+    "past": "Past",
+    "mine": "My trips",
+    "empty": "No trips planned right now. Check back soon.",
+    "noPast": "No past trips yet.",
+    "trip": "Trip",
+    "membersOnly": "Members only",
+    "days": "{count, plural, one {# day} other {# days}}",
+    "cancelledNotice": "This trip has been cancelled.",
+    "draftNotice": "Draft: only organisers can see this trip.",
+    "cancelled": "Cancelled",
+    "sites": "Flying sites",
+    "sitesHelp": "Where we plan to fly. The weather decides on the day.",
+    "itinerary": "Day by day",
+    "requirements": "Requirements",
+    "minLevel": "Pilot level {level} or higher",
+    "minLevelShort": "{level}+",
+    "minYears": "At least {count, plural, one {# year} other {# years}} of flying",
+    "minFlights": "At least {count, plural, one {# flight} other {# flights}}",
+    "equipment": {
+      "reserve": "Reserve parachute",
+      "helmet": "Certified helmet",
+      "radio": "Radio",
+      "harness_protector": "Harness with back protector",
+      "hook_knife": "Hook knife",
+      "first_aid": "First aid kit",
+      "vario": "Variometer",
+      "live_tracker": "Live tracker",
+      "insurance": "Flying insurance",
+      "licence": "Valid pilot licence"
+    },
+    "minorsAllowed": "Pilots aged 14–17 may join.",
+    "adultsOnly": "Adults only (18+).",
+    "youMiss": "Your profile does not meet these requirements yet.",
+    "updateProfile": "Update your profile",
+    "guides": "Guides",
+    "guide": "Guide",
+    "priceAndPayment": "Price and payment",
+    "price": "Price",
+    "priceTbd": "Price to be announced",
+    "deposit": "Deposit",
+    "paymentDeadline": "Pay by",
+    "includes": "Included",
+    "excludes": "Not included",
+    "cancellationPolicy": "Cancellation policy",
+    "paymentOffline": "Payment is arranged with the organisers; the app does not take payments.",
+    "logistics": "Logistics",
+    "meeting": "Meeting",
+    "accommodation": "Accommodation",
+    "transport": "Transport",
+    "seatsLeft": "{count, plural, =0 {No seats left} one {# of {max} seats left} other {# of {max} seats left}}",
+    "full": "Full",
+    "waitlistCount": "{count, plural, one {# on the waiting list} other {# on the waiting list}}",
+    "interestedCount": "{count, plural, =0 {Nobody interested yet} one {# person interested} other {# people interested}}",
+    "minPilotsNote": "The trip goes ahead with at least {count, plural, one {# pilot} other {# pilots}}.",
+    "deadline": "Register by {date}",
+    "opensAt": "Registration opens {date}",
+    "signInToJoin": "Sign in to show interest or sign up.",
+    "status": {
+      "pending": "Waiting for confirmation",
+      "accepted": "Accepted",
+      "waitlisted": "On the waiting list",
+      "declined": "Declined",
+      "cancelled": "Cancelled"
+    },
+    "statusHelp": {
+      "pending": "The organisers will confirm your seat.",
+      "accepted": "Your seat is confirmed. See you there!",
+      "waitlisted": "You move up automatically when a seat frees up.",
+      "declined": "The organisers could not take you on this trip.",
+      "cancelled": "You cancelled this registration."
+    },
+    "payment": {
+      "unpaid": "Not paid yet",
+      "deposit_paid": "Deposit paid",
+      "paid": "Paid in full",
+      "refunded": "Refunded"
+    },
+    "paymentShort": {
+      "unpaid": "Unpaid",
+      "deposit_paid": "Deposit",
+      "paid": "Paid",
+      "refunded": "Refunded"
+    },
+    "requirementsNotMet": "You do not meet the requirements for this trip yet.",
+    "closedNotice": "Registration is closed.",
+    "addToCalendar": "Add to calendar",
+    "manage": "Manage trip",
+    "participantsForGuides": "Participants (guides)",
+    "interested": "Interested",
+    "showInterest": "Show interest",
+    "interestHelp": "No commitment: we let you know about updates and when registration opens.",
+    "interestedHelp": "You get updates about this trip. Click again to stop.",
+    "phone": "Mobile phone",
+    "phoneHelp": "Only the organisers and guides see it.",
+    "emergencyName": "Emergency contact name",
+    "emergencyPhone": "Emergency contact phone",
+    "noteToOrganisers": "Note to the organisers (optional)",
+    "companions": "Non-flying companions",
+    "companionsHelp": "Each companion takes a seat.",
+    "confirmRequirements": "I meet the requirements and will bring the required equipment.",
+    "confirmRequired": "Please confirm the requirements.",
+    "waitlistNotice": "The trip is full. You can join the waiting list.",
+    "joinWaitlist": "Join the waiting list",
+    "subscribe": "Sign up",
+    "subscribeHelp": "Your contact details are used only for this trip and deleted 30 days after it ends.",
+    "editDetails": "Edit my details",
+    "cancelRegistration": "Cancel my registration",
+    "cancelConfirm": "Cancel your registration? Your seat goes to the next person on the waiting list.",
+    "myRegistrations": "My registrations",
+    "myInterests": "Trips I follow",
+    "noRegistrations": "You have not signed up for a trip yet.",
+    "noInterests": "You are not following any trips.",
+    "errors": {
+      "registration_closed": "Registration for this trip is closed.",
+      "adults_only": "This trip is for adults only.",
+      "no_companions": "This trip does not take companions.",
+      "requirements_not_met": "Your profile does not meet the requirements for this trip.",
+      "already_registered": "You are already signed up for this trip.",
+      "declined": "The organisers have declined your registration for this trip.",
+      "not_registered": "You are not signed up for this trip.",
+      "trip_full": "The trip is full. Free a seat or add seats first.",
+      "order": "Check the order: the end must come after the start, and the deadline before the trip.",
+      "noParticipants": "There are no accepted pilots to add yet.",
+      "groupFailed": "The group chat could not be created."
+    }
   }
 }

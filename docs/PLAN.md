@@ -90,9 +90,47 @@ As built:
   and health data, events, rides, third-party map/video requests, SOS); ready for the lawyer.
 - **Launch checklist:** `docs/LAUNCH.md`.
 
-## Phase 5 – Native apps
+## Rebrand ✅ (PR #6)
 
-Live flight recording (background GPS, barometer, audio vario), auto takeoff/landing detection,
-live-tracking link, "who's flying now", Sign in with Apple, native push, store listings and privacy
-labels, TestFlight / Play internal testing. Apple Developer ($99/year) and Google Play ($25 once) are
-needed here, not before.
+The club's round logo and its name **Fly Anatolia Hava Sporları Kulübü** everywhere (header, icons,
+emails, legal texts).
+
+## Phase 5 – Trips & pilot profile (PR #7)
+
+Asked for on 2026-10-27. Web, free.
+
+- **Trips** as their own section, separate from events and news: destination, dates, meeting point,
+  day-by-day itinerary, flying sites, guide pilots, maximum/minimum pilots, registration window,
+  requirements (minimum level, years flying, flights, required equipment), price, deposit, what's
+  included, payment info and cancellation policy, accommodation and transport, cover photo,
+  members-only and minors options.
+- **Show interest** (non-binding) and **Subscribe** (seat request → pending/accepted/waiting list,
+  automatic move-up when a seat frees, pilots can cancel). Payment is recorded by hand.
+- **Admin → Trips** for trip organisers (new role), instructors and admins: participants with level,
+  experience and contacts, paid status, notes, CSV, notify everyone interested, group chat with the
+  group, "announce" as a linked news post.
+- **Pilot profile:** level (P2–P5, T1–T3, instructor), wing make and model, weight, flying since,
+  bio, photo, total hours and total flights; after importing a flight, the app asks whether to add it
+  to the totals (the phone tracker will ask the same).
+- Public beta can launch after this phase (`docs/LAUNCH.md`).
+
+## Phase 6 – Flight replay
+
+Animated replay of a flight on the web (play/pause, 10–100× speed, the map follows, live altitude,
+climb and speed), then 3D replay over terrain (free elevation tiles), FAI triangle/flat scoring and
+XContest-ready export.
+
+## Phase 7 – Phone tracker, Android first
+
+A phone app that records flights like Wingman (feature list from its public store page, see
+`/mnt/project-files/paraapp/trips-and-tracking-plan.md`): audio vario (GPS + barometer), altitude,
+speed, glide, auto take-off and landing, IGC recording, upload to the logbook with the "add to my
+totals?" question, live-tracking link for family and friends, friends flying nearby, airspace alerts.
+React Native (Expo) sharing `packages/core`, because the vario needs low-latency sound and sensors
+that a web view can't give. Android testers install the app file directly: **free**.
+
+## Phase 8 – Tracker extras and iPhone
+
+Waypoints and routes (.wpt, QR), wind estimate, Bluetooth varios, XContest upload, PureTrack
+forwarding, iPhone version (Apple Developer $99/year, needs the club's OK), Google Play listing
+($25 once), store privacy labels. Apple Watch later.

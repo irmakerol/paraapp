@@ -11,7 +11,7 @@ Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 
 ### 2. İşlenen kişisel veriler
 
 - **Kimlik ve iletişim:** e-posta adresi, görünen ad, ad soyad (isteğe bağlı), profil fotoğrafı (isteğe bağlı).
-- **Profil:** ülke/şehir, ana kalkış yeri, pilot seviyesi, uçuş yılı, kullanılan kanatlar, kısa biyografi, lisans numarası (isteğe bağlı, şifreli saklanır).
+- **Profil:** ülke/şehir, ana kalkış yeri, pilot seviyesi, uçmaya başladığınız yıl, kullanılan kanatlar, kilonuz (isteğe bağlı; siz göstermeyi seçmedikçe gizli), toplam uçuş saati ve uçuş sayısı, kısa biyografi, lisans numarası (isteğe bağlı, şifreli saklanır).
 - **Yaş doğrulama:** doğum tarihi (yaş sınırını ve 18 yaş altı için veli onayını uygulamak için).
 - **Veli bilgileri (14–17 yaş):** velinin adı ve e-posta adresi, onay tarihi.
 - **Hesap güvenliği:** oturum kayıtları, IP adresi ve cihaz bilgisi (kimlik doğrulama sağlayıcısı tarafından).
@@ -21,6 +21,7 @@ Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 
 - **Uçuşlar ve konum verisi:** içe aktardığınız IGC/GPX dosyaları, GPS izleri, uçuş istatistikleri, notlar ve kullandığınız ekipman. Başkaları yalnızca ilk ve son 500 metresi çıkarılmış izi, uçuşun görünürlük ayarı izin veriyorsa görebilir; 18 yaş altı kullanıcıların uçuşları her zaman gizlidir.
 - **Ekipman:** kanat, harness ve yedek paraşütleriniz ile kontrol ve katlama tarihleri.
 - **Takip:** takip ettiğiniz ve sizi takip eden kişiler.
+- **Geziler:** takip ettiğiniz geziler; bir geziye kaydolduğunuzda cep telefonunuz, acil durumda aranacak kişinin adı ve telefonu, isteğe bağlı notunuz, refakatçi sayısı, kayıt anındaki pilot seviyeniz, uçuş yılınız ve uçuş sayınızın bir kopyası ve organizatörlerin kaydettiği ödeme durumu. Bu bilgileri gezinin organizatörleri ve rehberleri görür.
 - **Etkinlikler ve yolculuklar:** etkinlik davetlerine verdiğiniz yanıtlar ve yayımladığınız araç paylaşımı/pilot toplama ilanları (yalnızca yetişkinler).
 - **Olay bildirimleri:** ne olduğu, nerede ve ne zaman olduğu, koşullar ve ekipman. Bildirimin isimli, topluluğa anonim veya tamamen anonim (bu durumda hesabınız bildirimle birlikte saklanmaz) olacağını siz seçersiniz. **Yaralanma bilgileri sağlık verisidir** ve yalnızca bildirim formunda vereceğiniz açık rızayla saklanır.
 - **Bildirimler:** tarayıcınızın anlık bildirim abonelik bilgileri ve bildirim ayarlarınız.
@@ -29,17 +30,17 @@ SOS sayfası konumunuzu yalnızca kendi cihazınızda gösterir; bize gönderilm
 
 ### 3. İşleme amaçları ve hukuki sebepler
 
-| Amaç                                                                            | Hukuki sebep                                                                   |
-| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Hesabınızı oluşturmak ve hizmeti sunmak                                         | KVKK m.5/2-c (sözleşmenin kurulması/ifası), GDPR m.6/1-b                       |
-| Yaş sınırını uygulamak, veli onayı almak                                        | KVKK m.5/2-ç (hukuki yükümlülük) ve m.5/2-f (meşru menfaat), GDPR m.6/1-c ve f |
-| Güvenlik, kötüye kullanımın önlenmesi, denetim kayıtları                        | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
-| Veri sahibi taleplerini yanıtlamak, onay kayıtlarını tutmak                     | KVKK m.5/2-ç, GDPR m.6/1-c                                                     |
-| Topluluk özellikleri: sohbet, ilanlar, uçuşlar, etkinlikler, yolculuklar, takip | KVKK m.5/2-c, GDPR m.6/1-b                                                     |
-| Uçuş güvenliği: olay bildirimleri, güvenlik dersleri ve istatistikler           | KVKK m.5/2-f (meşru menfaat), GDPR m.6/1-f                                     |
-| Olay bildirimlerindeki yaralanma bilgileri (sağlık verisi)                      | Yalnızca açık rızanızla (KVKK m.6/2, GDPR m.9/2-a)                             |
-| Şikâyet edilen içeriklerin denetimi, hesap kısıtlamaları                        | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
-| Pazarlama bildirimleri, analiz, herkese açık profil                             | Yalnızca açık rızanızla (KVKK m.5/1, GDPR m.6/1-a)                             |
+| Amaç                                                                                     | Hukuki sebep                                                                   |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Hesabınızı oluşturmak ve hizmeti sunmak                                                  | KVKK m.5/2-c (sözleşmenin kurulması/ifası), GDPR m.6/1-b                       |
+| Yaş sınırını uygulamak, veli onayı almak                                                 | KVKK m.5/2-ç (hukuki yükümlülük) ve m.5/2-f (meşru menfaat), GDPR m.6/1-c ve f |
+| Güvenlik, kötüye kullanımın önlenmesi, denetim kayıtları                                 | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
+| Veri sahibi taleplerini yanıtlamak, onay kayıtlarını tutmak                              | KVKK m.5/2-ç, GDPR m.6/1-c                                                     |
+| Topluluk özellikleri: sohbet, ilanlar, uçuşlar, etkinlikler, geziler, yolculuklar, takip | KVKK m.5/2-c, GDPR m.6/1-b                                                     |
+| Uçuş güvenliği: olay bildirimleri, güvenlik dersleri ve istatistikler                    | KVKK m.5/2-f (meşru menfaat), GDPR m.6/1-f                                     |
+| Olay bildirimlerindeki yaralanma bilgileri (sağlık verisi)                               | Yalnızca açık rızanızla (KVKK m.6/2, GDPR m.9/2-a)                             |
+| Şikâyet edilen içeriklerin denetimi, hesap kısıtlamaları                                 | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
+| Pazarlama bildirimleri, analiz, herkese açık profil                                      | Yalnızca açık rızanızla (KVKK m.5/1, GDPR m.6/1-a)                             |
 
 ### 4. Aktarım ve yurt dışına aktarım
 
@@ -58,7 +59,7 @@ Veriler, uygulamadaki formlar aracılığıyla ve oturum açma sırasında (e-po
 
 ### 6. Saklama süreleri
 
-Hesabınızı sildiğinizde profiliniz hemen anonimleştirilir, dosyalarınız hemen silinir ve hesabınız 30 gün sonra tamamen silinir. Sohbetler siz silene kadar saklanır. Yolculuk ilanları yolculuktan 30 gün sonra, etkinlik yanıtları etkinlikten bir yıl sonra silinir. Olay bildirimlerinde bildirenle bağlantı ve yaralanma bilgileri, bildirim kapatıldıktan bir yıl sonra silinir; anonim bildirim güvenlik istatistikleri için saklanır. Diğer saklama süreleri talep üzerine bildirilir.
+Hesabınızı sildiğinizde profiliniz hemen anonimleştirilir, dosyalarınız hemen silinir ve hesabınız 30 gün sonra tamamen silinir. Sohbetler siz silene kadar saklanır. Yolculuk ilanları yolculuktan 30 gün sonra, etkinlik yanıtları etkinlikten bir yıl sonra silinir. Gezi iletişim bilgileri (telefon ve acil durum kişisi) gezi bittikten 30 gün sonra, gezi kaydının geri kalanı iki yıl sonra silinir. Olay bildirimlerinde bildirenle bağlantı ve yaralanma bilgileri, bildirim kapatıldıktan bir yıl sonra silinir; anonim bildirim güvenlik istatistikleri için saklanır. Diğer saklama süreleri talep üzerine bildirilir.
 
 ### 7. Haklarınız (KVKK m.11, GDPR m.15–22)
 

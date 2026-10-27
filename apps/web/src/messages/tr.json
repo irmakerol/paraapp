@@ -26,7 +26,8 @@
     "events": "Etkinlikler",
     "safety": "Güvenlik",
     "rides": "Yolculuklar",
-    "sosLabel": "SOS: acil yardım ve konumunuz"
+    "sosLabel": "SOS: acil yardım ve konumunuz",
+    "trips": "Geziler"
   },
   "footer": {
     "privacyNotice": "Aydınlatma metni",
@@ -66,6 +67,10 @@
       "safety": {
         "title": "Güvenlik",
         "text": "Toplulukla paylaşılan olay bildirimleri ve dersler."
+      },
+      "trips": {
+        "title": "Yamaç paraşütü gezileri",
+        "text": "Yurt içi ve yurt dışı kulüp gezileri: bölgeler, şartlar, fiyatlar ve rehberler. İlgilendiğinizi belirtin ya da kaydolun."
       }
     }
   },
@@ -214,7 +219,10 @@
         "p4": "P4",
         "p5": "P5",
         "tandem": "Tandem pilotu",
-        "instructor": "Eğitmen"
+        "instructor": "Eğitmen",
+        "t1": "T1",
+        "t2": "T2",
+        "t3": "T3"
       },
       "yearsFlying": "Uçuş yılı",
       "wings": "Kanat(lar)",
@@ -236,7 +244,15 @@
       "save": "Kaydet",
       "saved": "Kaydedildi.",
       "memberBadge": "Kulüp üyesi",
-      "minorNote": "18 yaşından küçük olduğun için profilin varsayılan olarak gizlidir."
+      "minorNote": "18 yaşından küçük olduğun için profilin varsayılan olarak gizlidir.",
+      "flyingSince": "Uçmaya başladığınız yıl",
+      "flyingSinceHelp": "İlk solo uçuşunuzun yılı.",
+      "wingsHelp": "Marka ve model, ör. Ozone Rush 6 (ML).",
+      "weight": "Pilot kilosu (kg)",
+      "weightHelp": "Ekipmansız kendi kilonuz. Siz değiştirmedikçe gizli kalır.",
+      "totalHours": "Toplam uçuş saati",
+      "totalFlights": "Uçuş sayısı",
+      "totalsHelp": "Burada kaydetmediğiniz uçuşlar dahil bugüne kadarki toplamlarınız. İçe aktardığınız ya da eklediğiniz uçuşlar bunun üstüne eklenebilir."
     },
     "privacy": {
       "consentsTitle": "Onaylar",
@@ -505,7 +521,8 @@
     "topicAds": "İlanlarım (süre hatırlatmaları)",
     "consentLink": "Kulüp haberlerini almak için Gizlilik sekmesinde “Kulüp haberleri ve duyurular” iznini açın.",
     "topicEquipment": "Ekipman kontrolleri ve yedek paraşüt katlamaları",
-    "topicSafety": "Yeni olay raporları (güvenlik sorumluları)"
+    "topicSafety": "Yeni olay raporları (güvenlik sorumluları)",
+    "topicTrips": "Geziler: kayıt durumları ve takip ettiğiniz gezilerden haberler"
   },
   "admin": {
     "title": "Yönetim",
@@ -719,6 +736,102 @@
       "summary": "Özet (isteğe bağlı)",
       "body": "Ders",
       "markdownHelp": "Markdown: **kalın**, *italik*, listeler ve bağlantılar."
+    },
+    "trips": "Geziler",
+    "tripsAdmin": {
+      "new": "Yeni gezi",
+      "edit": "Geziyi düzenle",
+      "empty": "Henüz gezi yok.",
+      "listCounts": "{taken}/{max} yer · {pending} onay bekliyor · {waitlisted} bekleme listesinde · {interested} ilgileniyor",
+      "statuses": {
+        "draft": "Taslak",
+        "open": "Kayıtlar açık",
+        "closed": "Kayıtlar kapandı",
+        "completed": "Tamamlandı",
+        "cancelled": "İptal edildi"
+      },
+      "deleteConfirm": "Bu gezi tüm kayıtlarıyla silinsin mi? Bu geri alınamaz. Bunun yerine iptal ederseniz geçmiş korunur ve herkese haber verilir.",
+      "basics": "Temel bilgiler",
+      "tripTitle": "Başlık",
+      "summary": "Özet",
+      "summaryHelp": "Gezi listesi için bir iki cümle.",
+      "status": "Durum",
+      "region": "Gidilecek yer",
+      "regionHelp": "Bölge ya da ilçe, ör. Ölüdeniz, Fethiye.",
+      "country": "Ülke",
+      "countryHelp": "İki harfli kod, ör. TR, NP, ES.",
+      "startsOn": "İlk gün",
+      "endsOn": "Son gün",
+      "meetingPoint": "Buluşma yeri",
+      "meetingAt": "Buluşma saati",
+      "timeHelp": "Türkiye saati.",
+      "cover": "Kapak fotoğrafı",
+      "uploading": "Yükleniyor…",
+      "removeCover": "Kapak fotoğrafını kaldır",
+      "description": "Açıklama",
+      "markdownHelp": "Markdown: **kalın**, *italik*, listeler ve bağlantılar.",
+      "itinerary": "Günlük program",
+      "itineraryHelp": "İsteğe bağlı. Her gün için bir satır ya da paragraf yeterli.",
+      "sitesHelp": "Grubun uçmayı planladığı tüm bölgeleri işaretleyin.",
+      "seatsAndRequirements": "Kontenjan ve şartlar",
+      "maxPilots": "En fazla pilot",
+      "minPilots": "En az pilot",
+      "minPilotsHelp": "İsteğe bağlı. Gezi ancak bu kadar kişi kaydolursa yapılır.",
+      "opensAt": "Kayıtların açılışı",
+      "opensAtHelp": "Gezi yayınlanır yayınlanmaz kayıt açmak için boş bırakın.",
+      "deadline": "Son kayıt tarihi",
+      "minLevel": "En düşük pilot seviyesi",
+      "anyLevel": "Her seviye",
+      "minYears": "En az uçuş yılı",
+      "minFlights": "En az uçuş sayısı",
+      "minFlightsHelp": "Pilotun profilindeki toplam ya da uçuş defteri, hangisi yüksekse o sayılır.",
+      "requiredEquipment": "Gerekli ekipman",
+      "otherRequirements": "Diğer şartlar",
+      "companionsAllowed": "Uçmayan refakatçi kabul edilir",
+      "companionsAllowedHelp": "Her refakatçi bir yer kaplar.",
+      "allowMinors": "14–17 yaş pilotlar kaydolabilir",
+      "allowMinorsHelp": "Yalnızca grupla bir veli ve bir eğitmen gidiyorsa.",
+      "autoAccept": "Kayıtları otomatik kabul et",
+      "autoAcceptHelp": "Boş yer varken şartları sağlayan pilotlar hemen kabul edilir. Aksi halde her birini siz onaylarsınız.",
+      "membersOnly": "Yalnızca üyeler (yalnızca kulüp üyeleri görür)",
+      "price": "Pilot başına fiyat",
+      "priceHelp": "Fiyat henüz belli değilse boş bırakın.",
+      "currency": "Para birimi",
+      "deposit": "Kapora",
+      "paymentDeadline": "Son ödeme tarihi",
+      "includes": "Fiyata dahil",
+      "excludes": "Fiyata dahil değil",
+      "paymentInfo": "Nasıl ödenir",
+      "paymentInfoHelp": "Yalnızca kabul edilen pilotlara gösterilir, ör. kulübün IBAN’ı. Ödemeler aşağıda elle takip edilir.",
+      "cancellationPolicy": "İptal koşulları",
+      "accommodation": "Konaklama",
+      "transport": "Ulaşım",
+      "guidesHelp": "Rehberler katılımcı listesini ve iletişim bilgilerini görür.",
+      "guideRoleFor": "{name} bu gezideki görevi",
+      "guideRolePlaceholder": "ör. Baş rehber, Toplama şoförü",
+      "noPeople": "Henüz seçilecek kimse yok.",
+      "participants": "Katılımcılar",
+      "downloadCsv": "CSV olarak indir",
+      "registrationStatus": "Kayıt",
+      "statusFor": "{name} kayıt durumu",
+      "paymentStatus": "Ödeme",
+      "paymentFor": "{name} ödeme durumu",
+      "staffNote": "Organizatör notu",
+      "yearsShort": "{count} yıl",
+      "flightsShort": "{count} uçuş",
+      "companionsShort": "{count, plural, =0 {refakatçi yok} other {+# refakatçi}}",
+      "emergency": "Acil durum kişisi",
+      "noParticipants": "Henüz kimse kaydolmadı.",
+      "notify": "Güncelleme gönder",
+      "notifyHelp": "İlgilendiğini belirten herkese bildirim gönderir. Önce geziyi düzenleyin, sonra güncellemeyi gönderin.",
+      "notifyIncludeRegistered": "Kayıtlı pilotlara da bildir",
+      "notified": "{count, plural, =0 {Bildirilecek kimse yok.} other {# kişiye bildirildi.}}",
+      "groupChat": "Kabul edilen pilotlarla grup sohbeti",
+      "groupChatHelp": "Rehberler ve kabul edilen tüm yetişkin pilotlarla bir grup sohbeti oluşturur.",
+      "announce": "Kulüp haberlerinde duyur",
+      "announceHelp": "Bu geziye bağlantı veren taslak bir haber oluşturur. Yayınlamadan önce düzenleyebilirsiniz.",
+      "announcedHelp": "Bu gezinin zaten bir haberi var.",
+      "openAnnouncement": "Haberi aç"
     }
   },
   "roles": {
@@ -727,7 +840,8 @@
     "instructor": "Eğitmen",
     "moderator": "Moderatör",
     "safety_officer": "Güvenlik sorumlusu",
-    "admin": "Yönetici"
+    "admin": "Yönetici",
+    "trip_organiser": "Gezi organizatörü"
   },
   "push": {
     "newMessage": "{name} size mesaj gönderdi",
@@ -741,7 +855,20 @@
     "equipmentDue": "{model}: {date} tarihinde",
     "incidentTitle": "Yeni olay raporu",
     "incidentBody": "Güvenlik alanında yeni bir rapor bekliyor.",
-    "newGroupMessage": "{name}, {group} grubunda"
+    "newGroupMessage": "{name}, {group} grubunda",
+    "trip": {
+      "status": {
+        "pending": "Gezi kaydınız alındı",
+        "accepted": "Gezidesiniz",
+        "waitlisted": "Bekleme listesindesiniz",
+        "declined": "Gezi kaydınız kabul edilmedi",
+        "cancelled": "Gezi kaydınız iptal edildi"
+      },
+      "new_registration": "Yeni gezi kaydı",
+      "registration_cancelled": "Bir pilot gezi kaydını iptal etti",
+      "update": "Gezi güncellemesi",
+      "cancelled": "Gezi iptal edildi"
+    }
   },
   "maps": {
     "load": "Haritayı göster",
@@ -812,8 +939,13 @@
         "noFlight": "Bu dosyada uçuş bulunamadı (nokta sayısı az ya da hareket yok).",
         "duplicate": "Zaten uçuş defterinizde.",
         "generic": "Bir sorun oluştu. Lütfen tekrar deneyin."
-      }
-    }
+      },
+      "totalsQuestion": "{count, plural, one {Bu uçuş} other {Bu # uçuş}} ({duration}) toplam saat ve uçuş sayınıza eklensin mi?",
+      "totalsYes": "Evet, ekle",
+      "totalsNo": "Hayır, teşekkürler",
+      "totalsAdded": "{count, plural, =0 {Hiçbir şey eklenmedi: bu uçuşlar zaten toplamlarınızda.} other {# uçuş toplamlarınıza eklendi.}}"
+    },
+    "addToTotals": "Bu uçuşu toplam saat ve uçuş sayıma ekle"
   },
   "flight": {
     "metaTitle": "{site} uçuşu, {date}",
@@ -962,7 +1094,10 @@
     "compareTitle": "Siz ve {name}",
     "compareLead": "Rekorlarınız onunkilerin yanında. Daha iyi olan sayı kalın yazılır.",
     "stat": "İstatistik",
-    "you": "Siz"
+    "you": "Siz",
+    "flyingSince": "{year} yılından beri uçuyor",
+    "totals": "{flights} uçuşta {hours} saat",
+    "weight": "{kg} kg"
   },
   "weather": {
     "today": "Bugün",
@@ -1235,5 +1370,135 @@
     "lead": "Bu sayfa bu cihaza kaydedilmemiş. Bağlantınızı kontrol edip tekrar deneyin.",
     "sos": "SOS sayfasını aç (çevrimdışı çalışır)",
     "saved": "Son ziyaret ettiğiniz sayfalar (haberler, ipuçları, uçuş yerleri, etkinlikler, güvenlik) oturum kapalıyken çevrimdışı okumak için kaydedilir."
+  },
+  "trips": {
+    "title": "Geziler",
+    "lead": "Kulübün yamaç paraşütü gezileri. Haberdar olmak için ilgilendiğinizi belirtin ya da yer ayırtmak için kaydolun.",
+    "upcoming": "Yaklaşan",
+    "past": "Geçmiş",
+    "mine": "Gezilerim",
+    "empty": "Şu anda planlanmış gezi yok. Yakında tekrar bakın.",
+    "noPast": "Henüz geçmiş gezi yok.",
+    "trip": "Gezi",
+    "membersOnly": "Yalnızca üyeler",
+    "days": "{count} gün",
+    "cancelledNotice": "Bu gezi iptal edildi.",
+    "draftNotice": "Taslak: bu geziyi yalnızca organizatörler görebilir.",
+    "cancelled": "İptal edildi",
+    "sites": "Uçuş bölgeleri",
+    "sitesHelp": "Uçmayı planladığımız yerler. Günün havası karar verir.",
+    "itinerary": "Günlük program",
+    "requirements": "Şartlar",
+    "minLevel": "{level} ya da üstü pilot seviyesi",
+    "minLevelShort": "{level}+",
+    "minYears": "En az {count} yıllık uçuş deneyimi",
+    "minFlights": "En az {count} uçuş",
+    "equipment": {
+      "reserve": "Yedek paraşüt",
+      "helmet": "Sertifikalı kask",
+      "radio": "Telsiz",
+      "harness_protector": "Sırt koruyuculu harness",
+      "hook_knife": "Kanca bıçak",
+      "first_aid": "İlk yardım çantası",
+      "vario": "Variometre",
+      "live_tracker": "Canlı takip cihazı",
+      "insurance": "Uçuş sigortası",
+      "licence": "Geçerli pilot lisansı"
+    },
+    "minorsAllowed": "14–17 yaş pilotlar katılabilir.",
+    "adultsOnly": "Yalnızca yetişkinler (18+).",
+    "youMiss": "Profiliniz henüz bu şartları sağlamıyor.",
+    "updateProfile": "Profilinizi güncelleyin",
+    "guides": "Rehberler",
+    "guide": "Rehber",
+    "priceAndPayment": "Fiyat ve ödeme",
+    "price": "Fiyat",
+    "priceTbd": "Fiyat daha sonra açıklanacak",
+    "deposit": "Kapora",
+    "paymentDeadline": "Son ödeme",
+    "includes": "Dahil",
+    "excludes": "Dahil değil",
+    "cancellationPolicy": "İptal koşulları",
+    "paymentOffline": "Ödeme organizatörlerle ayarlanır; uygulama ödeme almaz.",
+    "logistics": "Lojistik",
+    "meeting": "Buluşma",
+    "accommodation": "Konaklama",
+    "transport": "Ulaşım",
+    "seatsLeft": "{count, plural, =0 {Boş yer kalmadı} other {{max} yerden # yer boş}}",
+    "full": "Dolu",
+    "waitlistCount": "Bekleme listesinde {count} kişi",
+    "interestedCount": "{count, plural, =0 {Henüz ilgilenen yok} other {# kişi ilgileniyor}}",
+    "minPilotsNote": "Gezi en az {count} pilotla yapılır.",
+    "deadline": "Son kayıt: {date}",
+    "opensAt": "Kayıtlar {date} tarihinde açılır",
+    "signInToJoin": "İlgilendiğinizi belirtmek ya da kaydolmak için giriş yapın.",
+    "status": {
+      "pending": "Onay bekliyor",
+      "accepted": "Kabul edildi",
+      "waitlisted": "Bekleme listesinde",
+      "declined": "Kabul edilmedi",
+      "cancelled": "İptal edildi"
+    },
+    "statusHelp": {
+      "pending": "Organizatörler yerinizi onaylayacak.",
+      "accepted": "Yeriniz onaylandı. Görüşmek üzere!",
+      "waitlisted": "Bir yer boşalınca otomatik olarak listeye geçersiniz.",
+      "declined": "Organizatörler sizi bu geziye alamadı.",
+      "cancelled": "Bu kaydı iptal ettiniz."
+    },
+    "payment": {
+      "unpaid": "Henüz ödenmedi",
+      "deposit_paid": "Kapora ödendi",
+      "paid": "Tamamı ödendi",
+      "refunded": "İade edildi"
+    },
+    "paymentShort": {
+      "unpaid": "Ödenmedi",
+      "deposit_paid": "Kapora",
+      "paid": "Ödendi",
+      "refunded": "İade"
+    },
+    "requirementsNotMet": "Henüz bu gezinin şartlarını sağlamıyorsunuz.",
+    "closedNotice": "Kayıtlar kapandı.",
+    "addToCalendar": "Takvime ekle",
+    "manage": "Geziyi yönet",
+    "participantsForGuides": "Katılımcılar (rehberler)",
+    "interested": "İlgileniyorum",
+    "showInterest": "İlgileniyorum",
+    "interestHelp": "Bağlayıcı değildir: güncellemeleri ve kayıtların açıldığını size bildiririz.",
+    "interestedHelp": "Bu geziyle ilgili güncellemeleri alıyorsunuz. Durdurmak için tekrar tıklayın.",
+    "phone": "Cep telefonu",
+    "phoneHelp": "Yalnızca organizatörler ve rehberler görür.",
+    "emergencyName": "Acil durumda aranacak kişi",
+    "emergencyPhone": "Acil durumda aranacak telefon",
+    "noteToOrganisers": "Organizatörlere not (isteğe bağlı)",
+    "companions": "Uçmayan refakatçiler",
+    "companionsHelp": "Her refakatçi bir yer kaplar.",
+    "confirmRequirements": "Şartları sağlıyorum ve gerekli ekipmanı getireceğim.",
+    "confirmRequired": "Lütfen şartları onaylayın.",
+    "waitlistNotice": "Gezi dolu. Bekleme listesine katılabilirsiniz.",
+    "joinWaitlist": "Bekleme listesine katıl",
+    "subscribe": "Kaydol",
+    "subscribeHelp": "İletişim bilgileriniz yalnızca bu gezi için kullanılır ve gezi bittikten 30 gün sonra silinir.",
+    "editDetails": "Bilgilerimi düzenle",
+    "cancelRegistration": "Kaydımı iptal et",
+    "cancelConfirm": "Kaydınız iptal edilsin mi? Yeriniz bekleme listesindeki sıradaki kişiye geçer.",
+    "myRegistrations": "Kayıtlarım",
+    "myInterests": "Takip ettiğim geziler",
+    "noRegistrations": "Henüz bir geziye kaydolmadınız.",
+    "noInterests": "Hiçbir geziyi takip etmiyorsunuz.",
+    "errors": {
+      "registration_closed": "Bu gezinin kayıtları kapalı.",
+      "adults_only": "Bu gezi yalnızca yetişkinler için.",
+      "no_companions": "Bu geziye refakatçi alınmıyor.",
+      "requirements_not_met": "Profiliniz bu gezinin şartlarını sağlamıyor.",
+      "already_registered": "Bu geziye zaten kayıtlısınız.",
+      "declined": "Organizatörler bu gezi için kaydınızı kabul etmedi.",
+      "not_registered": "Bu geziye kayıtlı değilsiniz.",
+      "trip_full": "Gezi dolu. Önce bir yer boşaltın ya da kontenjanı artırın.",
+      "order": "Sırayı kontrol edin: bitiş başlangıçtan sonra, son kayıt tarihi geziden önce olmalı.",
+      "noParticipants": "Henüz eklenecek kabul edilmiş pilot yok.",
+      "groupFailed": "Grup sohbeti oluşturulamadı."
+    }
   }
 }

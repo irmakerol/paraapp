@@ -5,7 +5,7 @@ import { MAX_TRACK_FILE_BYTES, formatDuration } from '@paraapp/core';
 import { Link } from '@/i18n/navigation';
 import { Alert, buttonClass } from '@/components/ui';
 import type { ImportResult } from '@/lib/flight-import';
-import { importFlight } from '../actions';
+import { addFlightsToTotals, importFlight } from '../actions';
 
 interface Row {
   name: string;
@@ -18,11 +18,13 @@ export function Importer() {
   const locale = useLocale();
   const [rows, setRows] = useState<Row[]>([]);
   const [busy, setBusy] = useState(false);
+  const [totals, setTotals] = useState<'ask' | 'saving' | 'added' | 'skipped'>('ask');
 
   async function run(files: FileList | null) {
     if (!files?.length) return;
     const list = Array.from(files);
     setRows(list.map((f) => ({ name: f.name, state: 'waiting' })));
+    setTotals('ask');
     setBusy(true);
     for (const [i, file] of list.entries()) {
       setRows((r) => r.map((row, j) => (j === i ? { ...row, state: 'working' } : row)));
@@ -48,6 +50,14 @@ export function Importer() {
   }
 
   const done = rows.filter((r) => r.state === 'done').length;
+  const imported = rows.flatMap((r) => (r.result?.ok ? [r.result] : []));
+  const importedSeconds = imported.reduce((s, r) => s + r.durationS, 0);
+
+  async function addToTotals() {
+    setTotals('saving');
+    const added = await addFlightsToTotals(imported.map((r) => r.id));
+    setTotals(added === null ? 'ask' : 'added');
+  }
   const dateFormat = new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
     timeStyle: 'short',
@@ -113,6 +123,43 @@ export function Importer() {
             {t('title')}
           </Link>
         </Alert>
+      ) : null}
+      {!busy && done > 0 && totals !== 'skipped' ? (
+        <div
+          className="space-y-3 rounded-2xl border border-border bg-card p-4"
+          role="group"
+          aria-labelledby="totals-question"
+        >
+          {totals === 'added' ? (
+            <p className="font-semibold">{t('import.totalsAdded', { count: done })}</p>
+          ) : (
+            <>
+              <p id="totals-question" className="font-semibold">
+                {t('import.totalsQuestion', {
+                  count: done,
+                  duration: formatDuration(importedSeconds),
+                })}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  className={buttonClass('primary')}
+                  disabled={totals === 'saving'}
+                  onClick={() => void addToTotals()}
+                >
+                  {t('import.totalsYes')}
+                </button>
+                <button
+                  type="button"
+                  className={buttonClass('secondary')}
+                  onClick={() => setTotals('skipped')}
+                >
+                  {t('import.totalsNo')}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       ) : null}
       <p className="text-sm text-muted">{t('import.privacy')}</p>
     </div>

@@ -11,6 +11,7 @@ const PAGES = [
   '/en/market',
   '/en/sites',
   '/en/events',
+  '/en/trips',
   '/en/safety',
   '/en/sos',
   '/en/auth/sign-in',
