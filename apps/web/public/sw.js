@@ -9,7 +9,7 @@
  * - Build files (/_next/static) are cached because their names change with every build.
  * - Nothing else (API, server actions, uploads, maps) is touched.
  */
-const VERSION = 'v1';
+const VERSION = 'v2';
 const STATIC_CACHE = `paraapp-static-${VERSION}`;
 const PAGE_CACHE = `paraapp-pages-${VERSION}`;
 const MAX_PAGES = 40;
@@ -110,8 +110,8 @@ self.addEventListener('push', (event) => {
   event.waitUntil(
     self.registration.showNotification(data.title || 'ParaApp', {
       body: data.body || '',
-      icon: '/brand/logo-192.png',
-      badge: '/brand/logo-96.png',
+      icon: '/brand/fly-anatolia-192.png',
+      badge: '/brand/fly-anatolia-96.png',
       tag: data.tag,
       data: { url: typeof data.url === 'string' && data.url.startsWith('/') ? data.url : '/' },
     }),
