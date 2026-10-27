@@ -1,6 +1,6 @@
 # CLAUDE.md – ParaApp
 
-Paragliding community web app for **Fly Anatolia Havacılık Kulübü** (a dernek in İstanbul).
+Paragliding community web app for **Fly Anatolia Hava Sporları Kulübü** (a dernek in İstanbul).
 Web first; native iOS/Android come later (Phase 5). The decisions that matter are recorded below
 and in `docs/`.
 

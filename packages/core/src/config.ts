@@ -5,7 +5,7 @@
 export const APP_CONFIG = {
   name: 'ParaApp',
   club: {
-    legalName: 'Fly Anatolia Havacılık Kulübü',
+    legalName: 'Fly Anatolia Hava Sporları Kulübü',
     shortName: 'Fly Anatolia',
     legalForm: 'dernek',
     address: 'Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul, Türkiye',

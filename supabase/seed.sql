@@ -10,7 +10,7 @@ Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") madde 10 v
 
 ### 1. Veri sorumlusu
 
-Fly Anatolia Havacılık Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul. E-posta: info@flyanatolia.com
+Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul. E-posta: info@flyanatolia.com
 
 ### 2. İşlenen kişisel veriler
 
@@ -33,17 +33,17 @@ SOS sayfası konumunuzu yalnızca kendi cihazınızda gösterir; bize gönderilm
 
 ### 3. İşleme amaçları ve hukuki sebepler
 
-| Amaç                                                        | Hukuki sebep                                                                   |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------ |
-| Hesabınızı oluşturmak ve hizmeti sunmak                     | KVKK m.5/2-c (sözleşmenin kurulması/ifası), GDPR m.6/1-b                       |
-| Yaş sınırını uygulamak, veli onayı almak                    | KVKK m.5/2-ç (hukuki yükümlülük) ve m.5/2-f (meşru menfaat), GDPR m.6/1-c ve f |
-| Güvenlik, kötüye kullanımın önlenmesi, denetim kayıtları    | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
-| Veri sahibi taleplerini yanıtlamak, onay kayıtlarını tutmak | KVKK m.5/2-ç, GDPR m.6/1-c                                                     |
-| Topluluk özellikleri: sohbet, ilanlar, uçuşlar, etkinlikler, yolculuklar, takip | KVKK m.5/2-c, GDPR m.6/1-b |
-| Uçuş güvenliği: olay bildirimleri, güvenlik dersleri ve istatistikler | KVKK m.5/2-f (meşru menfaat), GDPR m.6/1-f |
-| Olay bildirimlerindeki yaralanma bilgileri (sağlık verisi)  | Yalnızca açık rızanızla (KVKK m.6/2, GDPR m.9/2-a) |
-| Şikâyet edilen içeriklerin denetimi, hesap kısıtlamaları    | KVKK m.5/2-f, GDPR m.6/1-f |
-| Pazarlama bildirimleri, analiz, herkese açık profil         | Yalnızca açık rızanızla (KVKK m.5/1, GDPR m.6/1-a)                             |
+| Amaç                                                                            | Hukuki sebep                                                                   |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Hesabınızı oluşturmak ve hizmeti sunmak                                         | KVKK m.5/2-c (sözleşmenin kurulması/ifası), GDPR m.6/1-b                       |
+| Yaş sınırını uygulamak, veli onayı almak                                        | KVKK m.5/2-ç (hukuki yükümlülük) ve m.5/2-f (meşru menfaat), GDPR m.6/1-c ve f |
+| Güvenlik, kötüye kullanımın önlenmesi, denetim kayıtları                        | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
+| Veri sahibi taleplerini yanıtlamak, onay kayıtlarını tutmak                     | KVKK m.5/2-ç, GDPR m.6/1-c                                                     |
+| Topluluk özellikleri: sohbet, ilanlar, uçuşlar, etkinlikler, yolculuklar, takip | KVKK m.5/2-c, GDPR m.6/1-b                                                     |
+| Uçuş güvenliği: olay bildirimleri, güvenlik dersleri ve istatistikler           | KVKK m.5/2-f (meşru menfaat), GDPR m.6/1-f                                     |
+| Olay bildirimlerindeki yaralanma bilgileri (sağlık verisi)                      | Yalnızca açık rızanızla (KVKK m.6/2, GDPR m.9/2-a)                             |
+| Şikâyet edilen içeriklerin denetimi, hesap kısıtlamaları                        | KVKK m.5/2-f, GDPR m.6/1-f                                                     |
+| Pazarlama bildirimleri, analiz, herkese açık profil                             | Yalnızca açık rızanızla (KVKK m.5/1, GDPR m.6/1-a)                             |
 
 ### 4. Aktarım ve yurt dışına aktarım
 
@@ -76,7 +76,7 @@ This notice is given under Article 10 of the Turkish Personal Data Protection La
 
 ### 1. Data controller
 
-Fly Anatolia Havacılık Kulübü (association), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul, Türkiye. Email: info@flyanatolia.com
+Fly Anatolia Hava Sporları Kulübü (association), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul, Türkiye. Email: info@flyanatolia.com
 
 ### 2. Personal data we process
 
@@ -99,17 +99,17 @@ The SOS page shows your position only on your own device; it is not sent to us.
 
 ### 3. Purposes and legal bases
 
-| Purpose                                                     | Legal basis                                                                               |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| Creating your account and providing the service             | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b                                               |
-| Applying the age limit and obtaining guardian consent       | KVKK Art. 5/2-ç (legal obligation) and 5/2-f (legitimate interest), GDPR Art. 6/1-c and f |
-| Security, abuse prevention, audit logs                      | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
-| Answering data-subject requests and keeping consent records | KVKK Art. 5/2-ç, GDPR Art. 6/1-c                                                          |
-| Community features: chat, ads, flights, events, rides, follows | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b |
-| Flight safety: incident reports, safety lessons and statistics | KVKK Art. 5/2-f (legitimate interest), GDPR Art. 6/1-f |
-| Injury details in incident reports (health data)            | Only with your explicit consent (KVKK Art. 6/2, GDPR Art. 9/2-a) |
-| Moderation of reported content, bans                        | KVKK Art. 5/2-f, GDPR Art. 6/1-f |
-| Marketing notifications, analytics, public profile          | Only with your explicit consent (KVKK Art. 5/1, GDPR Art. 6/1-a)                          |
+| Purpose                                                        | Legal basis                                                                               |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| Creating your account and providing the service                | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b                                               |
+| Applying the age limit and obtaining guardian consent          | KVKK Art. 5/2-ç (legal obligation) and 5/2-f (legitimate interest), GDPR Art. 6/1-c and f |
+| Security, abuse prevention, audit logs                         | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
+| Answering data-subject requests and keeping consent records    | KVKK Art. 5/2-ç, GDPR Art. 6/1-c                                                          |
+| Community features: chat, ads, flights, events, rides, follows | KVKK Art. 5/2-c (contract), GDPR Art. 6/1-b                                               |
+| Flight safety: incident reports, safety lessons and statistics | KVKK Art. 5/2-f (legitimate interest), GDPR Art. 6/1-f                                    |
+| Injury details in incident reports (health data)               | Only with your explicit consent (KVKK Art. 6/2, GDPR Art. 9/2-a)                          |
+| Moderation of reported content, bans                           | KVKK Art. 5/2-f, GDPR Art. 6/1-f                                                          |
+| Marketing notifications, analytics, public profile             | Only with your explicit consent (KVKK Art. 5/1, GDPR Art. 6/1-a)                          |
 
 ### 4. Recipients and transfers abroad
 
@@ -138,7 +138,7 @@ $legal$, now()),
 
 ## Kullanım Koşulları
 
-1. **Kapsam.** Bu uygulama Fly Anatolia Havacılık Kulübü tarafından yamaç paraşütü topluluğu için ücretsiz olarak sunulur.
+1. **Kapsam.** Bu uygulama Fly Anatolia Hava Sporları Kulübü tarafından yamaç paraşütü topluluğu için ücretsiz olarak sunulur.
 2. **Yaş.** Kullanıcılar en az 14 yaşında olmalıdır. 14–17 yaş arası kullanıcıların hesabı, velilerinin onayından sonra etkinleşir.
 3. **Hesap.** Bilgilerinizin doğru olmasından ve şifrenizin gizliliğinden siz sorumlusunuz.
 4. **İçerik kuralları.** Hakaret, taciz, nefret söylemi, müstehcenlik, yasa dışı içerik, spam ve başkalarının kişisel verilerini izinsiz paylaşmak yasaktır. Bu kurallara uymayan içerikler kaldırılabilir ve hesaplar askıya alınabilir veya kapatılabilir. İçerikleri ve kullanıcıları uygulama içinden şikâyet edebilir ve engelleyebilirsiniz.
@@ -153,7 +153,7 @@ $legal$, now()),
 
 ## Terms of Use
 
-1. **Scope.** This app is provided free of charge for the paragliding community by Fly Anatolia Havacılık Kulübü.
+1. **Scope.** This app is provided free of charge for the paragliding community by Fly Anatolia Hava Sporları Kulübü.
 2. **Age.** Users must be at least 14. Accounts of users aged 14–17 are activated after their guardian consents.
 3. **Your account.** You are responsible for keeping your details accurate and your password secret.
 4. **Content rules.** Insults, harassment, hate speech, obscene or illegal content, spam and sharing other people's personal data without permission are prohibited. Content that breaks these rules may be removed and accounts may be suspended or closed. You can report and block content and users in the app.

@@ -2,7 +2,7 @@
 
 ## Kullanım Koşulları
 
-1. **Kapsam.** Bu uygulama Fly Anatolia Havacılık Kulübü tarafından yamaç paraşütü topluluğu için ücretsiz olarak sunulur.
+1. **Kapsam.** Bu uygulama Fly Anatolia Hava Sporları Kulübü tarafından yamaç paraşütü topluluğu için ücretsiz olarak sunulur.
 2. **Yaş.** Kullanıcılar en az 14 yaşında olmalıdır. 14–17 yaş arası kullanıcıların hesabı, velilerinin onayından sonra etkinleşir.
 3. **Hesap.** Bilgilerinizin doğru olmasından ve şifrenizin gizliliğinden siz sorumlusunuz.
 4. **İçerik kuralları.** Hakaret, taciz, nefret söylemi, müstehcenlik, yasa dışı içerik, spam ve başkalarının kişisel verilerini izinsiz paylaşmak yasaktır. Bu kurallara uymayan içerikler kaldırılabilir ve hesaplar askıya alınabilir veya kapatılabilir. İçerikleri ve kullanıcıları uygulama içinden şikâyet edebilir ve engelleyebilirsiniz.
