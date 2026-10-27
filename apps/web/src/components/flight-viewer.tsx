@@ -633,6 +633,10 @@ function TrackMap({
         );
       };
       instance.on('idle', lift);
+      // The map style's 3D buildings hide the ribbon and warn about buildings without heights.
+      if (instance.getLayer('building-3d')) {
+        instance.setLayoutProperty('building-3d', 'visibility', 'none');
+      }
       instance.setLayoutProperty('air', 'visibility', 'visible');
       instance.setLayoutProperty('pole', 'visibility', 'visible');
       instance.setPaintProperty('track', 'line-opacity', 0.35);
@@ -647,6 +651,9 @@ function TrackMap({
     }
     if (instance.getLayer('air')) {
       instance.setLayoutProperty('air', 'visibility', 'none');
+      if (instance.getLayer('building-3d')) {
+        instance.setLayoutProperty('building-3d', 'visibility', 'visible');
+      }
       instance.setLayoutProperty('pole', 'visibility', 'none');
       instance.setPaintProperty('track', 'line-opacity', 1);
       instance.setPaintProperty('track-casing', 'line-opacity', 0.5);
