@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { formatDistance, formatDuration } from '@paraapp/core';
+import { formatDistance, formatDuration, XC_MULTIPLIER, type XcType } from '@paraapp/core';
 import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getViewer } from '@/lib/session';
 import { displayNames } from '@/lib/people';
-import { getFlight, siteLabel, visibleTrack } from '@/lib/flights';
+import { getFlight, ownerScore, sameDayFlights, siteLabel, visibleTrack } from '@/lib/flights';
 import { flightFormOptions } from '@/lib/flight-options';
 import { formatDate, formatDateTime } from '@/lib/format';
 import { Button, buttonClass, Card } from '@/components/ui';
@@ -63,10 +63,20 @@ export default async function FlightPage({
   const viewer = await getViewer();
   const isOwner = viewer?.user.id === flight.user_id;
   const supabase = await createClient();
-  const [names, { track, trimmed }] = await Promise.all([
+  const [names, { track, trimmed }, sameDay] = await Promise.all([
     displayNames(supabase, [flight.user_id]),
     visibleTrack(flight, viewer?.user.id),
+    sameDayFlights(flight),
   ]);
+  const xc = isOwner && !trimmed ? await ownerScore(flight, track) : null;
+  const xcType = (xc?.type ?? flight.xc_type) as XcType | null;
+  const xcPoints = xc?.points ?? flight.xc_points;
+  const xcDistance = xc?.distanceM ?? flight.xc_distance_m;
+  const companions = sameDay.map((f) => ({
+    id: f.id,
+    name: f.name ?? t('pilot'),
+    startedAt: f.startedAt,
+  }));
   const pilot = names.get(flight.user_id);
   const site = siteLabel(flight);
   const wing = flight.wing
@@ -141,7 +151,7 @@ export default async function FlightPage({
       <div className="grid gap-8 lg:grid-cols-[1fr_20rem]">
         <div className="space-y-6">
           {track ? (
-            <FlightViewer track={track} trimmed={trimmed} />
+            <FlightViewer track={track} trimmed={trimmed} xc={xc} companions={companions} />
           ) : flight.source !== 'manual' ? (
             <Card>
               <p className="text-muted">{t('noTrack')}</p>
@@ -160,6 +170,42 @@ export default async function FlightPage({
                 </div>
               ))}
           </dl>
+          {xcType && xcPoints != null && xcDistance != null ? (
+            <section aria-labelledby="xc-title" className="space-y-2">
+              <h2 id="xc-title" className="text-xl font-bold">
+                {t('xc.title')}
+              </h2>
+              <p className="text-lg">
+                <strong className="tabular-nums">
+                  {t('xc.points', { points: Number(xcPoints).toFixed(2) })}
+                </strong>
+                {' · '}
+                {t(`xc.types.${xcType}`)}
+                {' · '}
+                <span className="tabular-nums">
+                  {formatDistance(xcDistance, locale)} × {XC_MULTIPLIER[xcType]}
+                </span>
+              </p>
+              <p className="text-sm text-muted">
+                {t('xc.estimate')} {xc ? t('xc.dashedNote') : ''}
+              </p>
+              {isOwner && flight.file_path?.endsWith('.igc') ? (
+                <p className="text-sm">
+                  {t('xc.submit')}{' '}
+                  <a
+                    href="https://www.xcontest.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-primary underline"
+                  >
+                    XContest ↗
+                  </a>
+                </p>
+              ) : isOwner ? (
+                <p className="text-sm text-muted">{t('xc.noOriginal')}</p>
+              ) : null}
+            </section>
+          ) : null}
           {flight.notes ? (
             <section>
               <h2 className="mb-2 text-xl font-bold">{lt('fields.notes')}</h2>

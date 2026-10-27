@@ -24,6 +24,7 @@ Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 
 - **Mesajlar:** bire bir ve grup sohbeti mesajları, sohbette paylaşmayı seçtiğiniz fotoğraf ve konumlar.
 - **Uçuşlar ve konum verisi:** içe aktardığınız IGC/GPX dosyaları, GPS izleri, uçuş istatistikleri, notlar ve kullandığınız ekipman. Başkaları yalnızca ilk ve son 500 metresi çıkarılmış izi, uçuşun görünürlük ayarı izin veriyorsa görebilir; 18 yaş altı kullanıcıların uçuşları her zaman gizlidir.
 - **Ekipman:** kanat, harness ve yedek paraşütleriniz ile kontrol ve katlama tarihleri.
+- **Uçuş puanları:** izinizden hesaplanan mesafe (XC) puanı (tür, mesafe, puan); uçuşun görülebildiği her yerde gösterilir.
 - **Takip:** takip ettiğiniz ve sizi takip eden kişiler.
 - **Geziler:** takip ettiğiniz geziler; bir geziye kaydolduğunuzda cep telefonunuz, acil durumda aranacak kişinin adı ve telefonu, isteğe bağlı notunuz, refakatçi sayısı, kayıt anındaki pilot seviyeniz, uçuş yılınız ve uçuş sayınızın bir kopyası ve organizatörlerin kaydettiği ödeme durumu. Bu bilgileri gezinin organizatörleri ve rehberleri görür.
 - **Etkinlikler ve yolculuklar:** etkinlik davetlerine verdiğiniz yanıtlar ve yayımladığınız araç paylaşımı/pilot toplama ilanları (yalnızca yetişkinler).
@@ -52,7 +53,7 @@ Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (Frankfurt, Alman
 
 - **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
 - **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.
-- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
+- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları, 3D tekrar oynatmayı açarsanız AWS Open Data arazi karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
 - **Google ile oturum açma**, bunu seçerseniz.
 
 Güncel hizmet sağlayıcı listesi talep üzerine sunulur.
@@ -91,6 +92,7 @@ Fly Anatolia Hava Sporları Kulübü (association), Kordonboyu Mah. Ankara Cd. N
 - **Messages:** one-to-one and group chat messages, photos and locations you choose to share in a chat.
 - **Flights and location data:** the IGC/GPX files you import, GPS tracks, flight statistics, notes and the gear you used. Other people only ever see a track with the first and last 500 m removed, and only if the flight's visibility allows it; flights of users under 18 are always private.
 - **Equipment:** your wings, harnesses and reserves with check and repack dates.
+- **Flight scores:** a cross-country score (type, distance, points) worked out from your track; shown wherever the flight is visible.
 - **Follows:** who you follow and who follows you.
 - **Events and rides:** your answers to event invitations, and the carpool/retrieve posts you publish (adults only).
 - **Trips:** the trips you follow, and when you sign up for a trip: your mobile phone, an emergency contact's name and phone, an optional note, the number of companions, a copy of your pilot level, years flying and flight count at sign-up, and the payment status the organisers record. The organisers and the trip's guides see these details.
@@ -119,7 +121,7 @@ Data is stored on our service providers' servers in the European Union (Frankfur
 
 - **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
 - **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
-- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map"; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
+- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map", and elevation tiles from AWS Open Data when you turn on the 3D replay; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
 - **Sign in with Google**, if you choose it.
 
 The current list of processors is available on request.

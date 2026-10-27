@@ -873,7 +873,7 @@
   "maps": {
     "load": "Show map",
     "remember": "Always show maps on this device",
-    "notice": "The map is loaded from OpenFreeMap (OpenStreetMap data). Your IP address is sent to their servers when you open it.",
+    "notice": "The map is loaded from OpenFreeMap (OpenStreetMap data); 3D terrain, when you turn it on, from AWS Open Data. Your IP address is sent to their servers.",
     "airspace": "Airspace",
     "airspaceCredit": "Airspace © OpenAIP"
   },
@@ -982,6 +982,33 @@
       "maxSink": "Strongest sink",
       "glider": "Glider",
       "landing": "Landing site"
+    },
+    "replay": {
+      "controls": "Replay",
+      "play": "Play",
+      "pause": "Pause",
+      "again": "Replay again",
+      "speed": "Replay speed",
+      "follow": "Follow",
+      "elapsed": "Flight time",
+      "groundSpeed": "Ground speed",
+      "together": "Replay together",
+      "togetherHelp": "Other flights from this takeoff on the same day. Tick one to fly it on the same clock.",
+      "loadFailed": "That flight could not be loaded.",
+      "terrainCredit": "3D terrain: Terrain Tiles on AWS Open Data (Mapzen)."
+    },
+    "xc": {
+      "title": "Cross-country score",
+      "points": "{points} points",
+      "types": {
+        "free": "Free distance",
+        "flat": "Flat triangle",
+        "fai": "FAI triangle"
+      },
+      "estimate": "An estimate using XContest-style rules (free distance ×1, flat triangle ×1.2, FAI triangle ×1.4, triangles closed within 20%). XContest gives the official score.",
+      "dashedNote": "The dashed line on the map shows the scored route.",
+      "submit": "To enter it in XContest, download the IGC above (it is your original file) and upload it on",
+      "noOriginal": "XContest needs your original IGC file from the instrument; this flight was imported from GPX or added by hand."
     }
   },
   "equipment": {

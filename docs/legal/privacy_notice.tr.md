@@ -20,6 +20,7 @@ Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 
 - **Mesajlar:** bire bir ve grup sohbeti mesajları, sohbette paylaşmayı seçtiğiniz fotoğraf ve konumlar.
 - **Uçuşlar ve konum verisi:** içe aktardığınız IGC/GPX dosyaları, GPS izleri, uçuş istatistikleri, notlar ve kullandığınız ekipman. Başkaları yalnızca ilk ve son 500 metresi çıkarılmış izi, uçuşun görünürlük ayarı izin veriyorsa görebilir; 18 yaş altı kullanıcıların uçuşları her zaman gizlidir.
 - **Ekipman:** kanat, harness ve yedek paraşütleriniz ile kontrol ve katlama tarihleri.
+- **Uçuş puanları:** izinizden hesaplanan mesafe (XC) puanı (tür, mesafe, puan); uçuşun görülebildiği her yerde gösterilir.
 - **Takip:** takip ettiğiniz ve sizi takip eden kişiler.
 - **Geziler:** takip ettiğiniz geziler; bir geziye kaydolduğunuzda cep telefonunuz, acil durumda aranacak kişinin adı ve telefonu, isteğe bağlı notunuz, refakatçi sayısı, kayıt anındaki pilot seviyeniz, uçuş yılınız ve uçuş sayınızın bir kopyası ve organizatörlerin kaydettiği ödeme durumu. Bu bilgileri gezinin organizatörleri ve rehberleri görür.
 - **Etkinlikler ve yolculuklar:** etkinlik davetlerine verdiğiniz yanıtlar ve yayımladığınız araç paylaşımı/pilot toplama ilanları (yalnızca yetişkinler).
@@ -48,7 +49,7 @@ Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (Frankfurt, Alman
 
 - **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
 - **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.
-- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
+- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları, 3D tekrar oynatmayı açarsanız AWS Open Data arazi karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
 - **Google ile oturum açma**, bunu seçerseniz.
 
 Güncel hizmet sağlayıcı listesi talep üzerine sunulur.

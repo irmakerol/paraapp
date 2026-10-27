@@ -85,6 +85,14 @@ club has set an OpenAIP key.
 Trip guides are named on the public trip page (from `profile_cards`). The app takes no payments; the
 organisers record payment status by hand.
 
+## 1f. Phase 6 (flight replay)
+
+- `flights.xc_type`, `xc_distance_m`, `xc_points`: a score computed by the server from the track,
+  visible wherever the flight is. Only the numbers are stored; the scored route (which can start at
+  takeoff and end at landing) is drawn only for the owner.
+- Replaying flights together uses the same visibility rules: other pilots' flights come from
+  `/api/flights/[id]/track`, which returns the trimmed public track unless the viewer is the owner.
+
 ### Special category data
 
 **Incident reports** may contain health data (injuries): explicit consent in the form
@@ -102,18 +110,19 @@ its own consent.
 
 ## 2. Processors and transfers
 
-| Processor                                                   | Role                                                                     | Location                                            | Safeguard to complete                                                                                   |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Supabase Inc. (on AWS)                                      | Database, auth, storage                                                  | EU, Frankfurt (eu-central-1) when hosted; local now | Supabase DPA; KVKK Art. 9 standard contract notified to the Authority within 5 business days of signing |
-| Web server host (Oracle Cloud or an EU VPS; owner's choice) | Runs the web app; sees IPs; holds the nightly encrypted database backups | EU, Frankfurt / Germany                             | DPA + KVKK standard contract                                                                            |
-| Brevo (Sendinblue SAS)                                      | Sign-up, reset, guardian emails                                          | EU, France                                          | DPA + KVKK standard contract                                                                            |
-| Google (only if Google sign-in is enabled)                  | Identity provider                                                        | USA/global                                          | Google's terms; user chooses this option; mention in privacy notice                                     |
-| Sentry (not used yet)                                       | Error tracking, only after analytics consent                             | EU region                                           | DPA + KVKK standard contract                                                                            |
-| Browser push services (Google FCM, Mozilla, Apple)          | Deliver push messages to the user's browser                              | Global                                              | Payload is short (sender name + preview); user turns push on per device; mention in privacy notice      |
-| YouTube / Vimeo (only when the reader presses play)         | Video embeds in tips                                                     | USA/global                                          | Click-to-load (no request before consent); youtube-nocookie.com and Vimeo `dnt=1`; privacy notice       |
-| OpenFreeMap (only when the user presses "Show map")         | Map tiles for flights and sites                                          | To confirm (OpenFreeMap project servers)            | Click-to-load; no account or cookies; mention in privacy notice                                         |
-| Open-Meteo (server to server)                               | Weather forecasts per site                                               | EU (Switzerland/Germany)                            | Only site coordinates are sent, no personal data; free non-commercial use                               |
-| OpenAIP (only with a key and after "Show map")              | Airspace tiles                                                           | To confirm (Germany)                                | Click-to-load; the user's IP and map area reach OpenAIP; mention in privacy notice                      |
+| Processor                                                    | Role                                                                     | Location                                            | Safeguard to complete                                                                                   |
+| ------------------------------------------------------------ | ------------------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Supabase Inc. (on AWS)                                       | Database, auth, storage                                                  | EU, Frankfurt (eu-central-1) when hosted; local now | Supabase DPA; KVKK Art. 9 standard contract notified to the Authority within 5 business days of signing |
+| Web server host (Oracle Cloud or an EU VPS; owner's choice)  | Runs the web app; sees IPs; holds the nightly encrypted database backups | EU, Frankfurt / Germany                             | DPA + KVKK standard contract                                                                            |
+| Brevo (Sendinblue SAS)                                       | Sign-up, reset, guardian emails                                          | EU, France                                          | DPA + KVKK standard contract                                                                            |
+| Google (only if Google sign-in is enabled)                   | Identity provider                                                        | USA/global                                          | Google's terms; user chooses this option; mention in privacy notice                                     |
+| Sentry (not used yet)                                        | Error tracking, only after analytics consent                             | EU region                                           | DPA + KVKK standard contract                                                                            |
+| Browser push services (Google FCM, Mozilla, Apple)           | Deliver push messages to the user's browser                              | Global                                              | Payload is short (sender name + preview); user turns push on per device; mention in privacy notice      |
+| YouTube / Vimeo (only when the reader presses play)          | Video embeds in tips                                                     | USA/global                                          | Click-to-load (no request before consent); youtube-nocookie.com and Vimeo `dnt=1`; privacy notice       |
+| OpenFreeMap (only when the user presses "Show map")          | Map tiles for flights and sites                                          | To confirm (OpenFreeMap project servers)            | Click-to-load; no account or cookies; mention in privacy notice                                         |
+| AWS Open Data Terrain Tiles (only when the user turns on 3D) | Elevation tiles for the 3D flight replay                                 | AWS (S3, us-east-1)                                 | Click-to-load; no account or cookies; mentioned in the privacy notice                                   |
+| Open-Meteo (server to server)                                | Weather forecasts per site                                               | EU (Switzerland/Germany)                            | Only site coordinates are sent, no personal data; free non-commercial use                               |
+| OpenAIP (only with a key and after "Show map")               | Airspace tiles                                                           | To confirm (Germany)                                | Click-to-load; the user's IP and map area reach OpenAIP; mention in privacy notice                      |
 
 **KVKK Art. 9 (since June 2024):** transfers abroad need an adequacy decision or appropriate safeguards.
 For each processor above, the club signs the Board's standard contract (or relies on another listed

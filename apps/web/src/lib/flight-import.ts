@@ -7,6 +7,7 @@ import {
   detectFormat,
   downsample,
   parseTrack,
+  scoreFlight,
   toCompact,
   trimEnds,
 } from '@paraapp/core';
@@ -56,6 +57,8 @@ export async function importTrack(viewer: Viewer, file: File): Promise<ImportRes
   ]);
   const points = downsample(flight.points, 2000);
   const publicPoints = trimEnds(points, APP_CONFIG.publicTrackTrimMetres);
+  // Scored on the stored (thinned) track so the flight page can redraw the same result.
+  const xc = scoreFlight(points);
 
   const id = crypto.randomUUID();
   const path = `${userId}/${id}.${format}`;
@@ -87,6 +90,9 @@ export async function importTrack(viewer: Viewer, file: File): Promise<ImportRes
     file_path: path,
     file_sha256: sha256,
     public_track: publicPoints.length > 1 ? json(toCompact(publicPoints)) : null,
+    xc_type: xc?.type ?? null,
+    xc_distance_m: xc?.distanceM ?? null,
+    xc_points: xc?.points ?? null,
   });
   if (error) {
     await admin.storage.from('flight-files').remove([path]);

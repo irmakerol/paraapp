@@ -873,7 +873,7 @@
   "maps": {
     "load": "Haritayı göster",
     "remember": "Bu cihazda haritaları hep göster",
-    "notice": "Harita OpenFreeMap'ten (OpenStreetMap verisi) yüklenir. Açtığınızda IP adresiniz onların sunucularına gönderilir.",
+    "notice": "Harita OpenFreeMap’ten (OpenStreetMap verisi), 3D araziyi açarsanız arazi AWS Open Data’dan yüklenir. IP adresiniz bu sunuculara gönderilir.",
     "airspace": "Hava sahası",
     "airspaceCredit": "Hava sahası © OpenAIP"
   },
@@ -982,6 +982,33 @@
       "maxSink": "En güçlü çöküş",
       "glider": "Kanat",
       "landing": "İniş alanı"
+    },
+    "replay": {
+      "controls": "Tekrar oynatma",
+      "play": "Oynat",
+      "pause": "Duraklat",
+      "again": "Yeniden oynat",
+      "speed": "Oynatma hızı",
+      "follow": "Takip et",
+      "elapsed": "Uçuş süresi",
+      "groundSpeed": "Yer hızı",
+      "together": "Birlikte oynat",
+      "togetherHelp": "Aynı gün bu kalkıştan yapılan diğer uçuşlar. Aynı saatte uçurmak için birini işaretleyin.",
+      "loadFailed": "Bu uçuş yüklenemedi.",
+      "terrainCredit": "3D arazi: AWS Open Data üzerindeki Terrain Tiles (Mapzen)."
+    },
+    "xc": {
+      "title": "Mesafe (XC) puanı",
+      "points": "{points} puan",
+      "types": {
+        "free": "Serbest mesafe",
+        "flat": "Düz üçgen",
+        "fai": "FAI üçgeni"
+      },
+      "estimate": "XContest benzeri kurallarla yapılan bir tahmindir (serbest mesafe ×1, düz üçgen ×1,2, FAI üçgeni ×1,4, üçgenler %20 içinde kapanmalı). Resmî puanı XContest verir.",
+      "dashedNote": "Haritadaki kesikli çizgi puanlanan rotayı gösterir.",
+      "submit": "XContest’e girmek için yukarıdan IGC dosyasını indirin (orijinal dosyanızdır) ve şuraya yükleyin:",
+      "noOriginal": "XContest, cihazınızdan çıkan orijinal IGC dosyasını ister; bu uçuş GPX’ten aktarıldı ya da elle eklendi."
     }
   },
   "equipment": {
