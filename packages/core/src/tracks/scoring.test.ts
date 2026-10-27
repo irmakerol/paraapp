@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { freeDistance, scoreFlight, triangles, XC_MULTIPLIER } from './scoring';
+import { varioSeries } from './analyse';
 import { distance } from './geo';
 import type { TrackPoint } from './types';
 import { at } from './at';
@@ -136,5 +137,13 @@ describe('XC scoring', () => {
         ]),
       ).flat,
     ).toBeNull();
+  });
+});
+
+describe('varioSeries on thinned tracks', () => {
+  it('still measures climb when fixes are further apart than the window', () => {
+    const pts = Array.from({ length: 10 }, (_, i) => ({ t: T0 + i * 20_000, alt: 1000 + i * 40 }));
+    const v = varioSeries(pts);
+    for (const x of v) expect(x).toBeCloseTo(2, 5);
   });
 });

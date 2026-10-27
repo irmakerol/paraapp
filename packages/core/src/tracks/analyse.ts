@@ -119,8 +119,11 @@ export function varioSeries(points: { t: number; alt: number }[]): number[] {
     const t = at(points, i).t;
     while (at(points, lo).t < t - VARIO_HALF_WINDOW_S * 1000) lo++;
     while (hi + 1 < points.length && at(points, hi + 1).t <= t + VARIO_HALF_WINDOW_S * 1000) hi++;
-    const dt = (at(points, hi).t - at(points, lo).t) / 1000;
-    out.push(dt > 0 ? (at(points, hi).alt - at(points, lo).alt) / dt : 0);
+    // Thinned tracks can have fixes further apart than the window: use the nearest neighbours.
+    const a = Math.min(lo, Math.max(0, i - 1));
+    const b = Math.max(hi, Math.min(points.length - 1, i + 1));
+    const dt = (at(points, b).t - at(points, a).t) / 1000;
+    out.push(dt > 0 ? (at(points, b).alt - at(points, a).alt) / dt : 0);
   }
   return out;
 }

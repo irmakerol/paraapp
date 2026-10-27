@@ -95,6 +95,66 @@ function varioColour(v: number): string {
   return `rgb(${Math.round(150 - 110 * k)},${Math.round(180 - 40 * k)},${Math.round(160 + 80 * k)})`;
 }
 
+type Elevation = (lngLat: [number, number]) => number | null;
+
+const EMPTY = { type: 'FeatureCollection' as const, features: [] };
+
+/** A small rectangle along a→b (or a square around a point), `halfWidth` metres either side. */
+function quad(a: [number, number], b: [number, number], halfWidth: number): [number, number][] {
+  const mLng = 111_320 * Math.cos((a[1] * Math.PI) / 180);
+  const dx = (b[0] - a[0]) * mLng;
+  const dy = (b[1] - a[1]) * 111_320;
+  const len = Math.hypot(dx, dy) || 1;
+  const ox = (-dy / len) * halfWidth;
+  const oy = (dx / len) * halfWidth;
+  const off = (p: [number, number], s: number): [number, number] => [
+    p[0] + (s * ox) / mLng,
+    p[1] + (s * oy) / 111_320,
+  ];
+  return [off(a, 1), off(b, 1), off(b, -1), off(a, -1), off(a, 1)];
+}
+
+/**
+ * The track as a ribbon at the height actually flown. Map lines can only lie on the ground,
+ * so in 3D each segment is a thin box lifted to its height above the terrain.
+ */
+function airRibbon(points: Point[], elevation: Elevation) {
+  const features = [];
+  for (let i = 1; i < points.length; i++) {
+    const a = points[i - 1]!;
+    const b = points[i]!;
+    const ground = elevation([(a.lng + b.lng) / 2, (a.lat + b.lat) / 2]);
+    if (ground === null) continue;
+    const agl = Math.max(2, (a.alt + b.alt) / 2 - ground);
+    features.push({
+      type: 'Feature' as const,
+      properties: { colour: varioColour(b.vario), base: Math.max(0, agl - 8), height: agl },
+      geometry: {
+        type: 'Polygon' as const,
+        coordinates: [quad([a.lng, a.lat], [b.lng, b.lat], 10)],
+      },
+    });
+  }
+  return { type: 'FeatureCollection' as const, features };
+}
+
+/** A thin pole from the ground up to the glider, so its height is easy to read in 3D. */
+function heightPole(position: [number, number], alt: number, elevation: Elevation) {
+  const ground = elevation(position);
+  if (ground === null) return EMPTY;
+  const east: [number, number] = [position[0] + 0.0001, position[1]];
+  return {
+    type: 'FeatureCollection' as const,
+    features: [
+      {
+        type: 'Feature' as const,
+        properties: { height: Math.max(2, alt - ground) },
+        geometry: { type: 'Polygon' as const, coordinates: [quad(position, east, 12)] },
+      },
+    ],
+  };
+}
+
 export function FlightViewer({
   track,
   trimmed,
@@ -423,6 +483,31 @@ function TrackMap({
           source: 'xc',
           paint: { 'line-color': '#111827', 'line-width': 2, 'line-dasharray': [2, 2] },
         });
+        instance.addSource('air', { type: 'geojson', data: EMPTY });
+        instance.addLayer({
+          id: 'air',
+          type: 'fill-extrusion',
+          source: 'air',
+          layout: { visibility: 'none' },
+          paint: {
+            'fill-extrusion-color': ['get', 'colour'],
+            'fill-extrusion-base': ['get', 'base'],
+            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-opacity': 0.9,
+          },
+        });
+        instance.addSource('pole', { type: 'geojson', data: EMPTY });
+        instance.addLayer({
+          id: 'pole',
+          type: 'fill-extrusion',
+          source: 'pole',
+          layout: { visibility: 'none' },
+          paint: {
+            'fill-extrusion-color': '#de4750',
+            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-opacity': 0.8,
+          },
+        });
         setReady(true);
       });
       const el = document.createElement('div');
@@ -527,18 +612,49 @@ function TrackMap({
           maxzoom: 15,
         });
       }
-      instance.setTerrain({ source: 'terrain', exaggeration: 1.3 });
+      // No exaggeration, so the flown heights line up with the terrain.
+      instance.setTerrain({ source: 'terrain', exaggeration: 1 });
       instance.easeTo({ pitch: 65, duration: 800 });
-    } else if (instance.getTerrain()) {
+      const elevation: Elevation = (p) => instance.queryTerrainElevation(p);
+      // Terrain tiles arrive in steps; rebuild the ribbon whenever the map settles.
+      const lift = () => {
+        (instance.getSource('air') as GeoJSONSource | undefined)?.setData(
+          airRibbon(points, elevation),
+        );
+      };
+      instance.on('idle', lift);
+      instance.setLayoutProperty('air', 'visibility', 'visible');
+      instance.setLayoutProperty('pole', 'visibility', 'visible');
+      instance.setPaintProperty('track', 'line-opacity', 0.35);
+      instance.setPaintProperty('track-casing', 'line-opacity', 0.15);
+      return () => {
+        instance.off('idle', lift);
+      };
+    }
+    if (instance.getTerrain()) {
       instance.setTerrain(null);
       instance.easeTo({ pitch: 0, duration: 800 });
     }
-  }, [ready, threeD]);
+    if (instance.getLayer('air')) {
+      instance.setLayoutProperty('air', 'visibility', 'none');
+      instance.setLayoutProperty('pole', 'visibility', 'none');
+      instance.setPaintProperty('track', 'line-opacity', 1);
+      instance.setPaintProperty('track-casing', 'line-opacity', 0.5);
+    }
+  }, [ready, threeD, points]);
 
   // Move the markers (and the camera when following) to the replay time.
   useEffect(() => {
     const position = positionAt(points, time);
     marker.current?.setLngLat(position);
+    const instance = map.current;
+    if (threeD && instance?.getTerrain()) {
+      (instance.getSource('pole') as GeoJSONSource | undefined)?.setData(
+        heightPole(position, points[indexAt(points, time)]!.alt, (p) =>
+          instance.queryTerrainElevation(p),
+        ),
+      );
+    }
     for (const o of others) {
       const m = otherMarkers.current.get(o.id);
       const first = o.points[0]!;
@@ -549,7 +665,7 @@ function TrackMap({
       m.setLngLat(positionAt(o.points, Math.max(first.t, Math.min(last.t, time))));
     }
     if (follow) map.current?.jumpTo({ center: position });
-  }, [time, points, others, follow]);
+  }, [time, points, others, follow, threeD]);
 
   return (
     <div
