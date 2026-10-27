@@ -4,6 +4,12 @@ import { publicEnv } from '@/lib/env';
 /** Free vector tiles, no API key, no tracking. © OpenStreetMap contributors. */
 export const MAP_STYLE = 'https://tiles.openfreemap.org/styles/liberty';
 export const MAP_CONSENT_KEY = 'paraapp.maps';
+/**
+ * Free elevation tiles (Terrain Tiles on AWS Open Data, terrarium encoding, no key) for the
+ * 3D replay. Requested only when the user turns 3D on.
+ */
+export const TERRAIN_TILES =
+  'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
 
 /** OpenAIP raster tiles (airspace, obstacles, airports). Needs a free key; off without one. */
 const OPENAIP_TILES = ['a', 'b', 'c'].map(

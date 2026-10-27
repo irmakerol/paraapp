@@ -128,6 +128,10 @@ the admin area sends its push immediately, so locally the cron call is only need
   participants. Pilots sign up through `register_for_trip()` (requirements, minors, deadline checked in
   the database); triggers keep seats within `max_pilots`, move the waiting list up and notify pilots.
   Profile totals change only through `add_flights_to_totals()`, which counts each flight once.
+- **Flight replay (Phase 6):** the replay, 3D terrain and multi-flight view run in the browser
+  (`components/flight-viewer.tsx`); tracks for "replay together" come from `/api/flights/[id]/track`
+  with the normal visibility rules. `scoreFlight()` in `packages/core` (free distance, flat and FAI
+  triangles) runs on the server at import; `flights.xc_*` hold only the numbers.
 - **Retention:** `retention_policies` table drives pg_cron jobs.
 
 ## 5. Auth flows

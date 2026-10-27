@@ -114,11 +114,19 @@ Asked for on 2026-10-27. Web, free.
   to the totals (the phone tracker will ask the same).
 - Public beta can launch after this phase (`docs/LAUNCH.md`).
 
-## Phase 6 – Flight replay
+## Phase 6 – Flight replay (PR #8)
 
-Animated replay of a flight on the web (play/pause, 10–100× speed, the map follows, live altitude,
-climb and speed), then 3D replay over terrain (free elevation tiles), FAI triangle/flat scoring and
-XContest-ready export.
+Asked for on 2026-10-27. Web, free.
+
+- **Replay** on every flight page: play/pause, 10×/25×/50×/100×, the map follows the glider, live
+  clock, flight time, altitude, climb and ground speed; drag or use the arrow keys on the chart.
+- **3D** over terrain (free Terrain Tiles on AWS Open Data, loaded only when 3D is turned on).
+- **Replay together:** other visible flights from the same takeoff on the same day, on the same clock,
+  each with its own colour on the map and the altitude chart (others get the trimmed track).
+- **XC score** (XContest-style estimate): free distance via 3 turnpoints ×1, flat triangle ×1.2, FAI
+  triangle ×1.4, triangles closed within 20 %. Computed by the server at import and stored on the
+  flight; the scored route is drawn for the owner only.
+- **XContest-ready:** the IGC download gives the owner their original file, with a link to upload it.
 
 ## Phase 7 – Phone tracker, Android first
 

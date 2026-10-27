@@ -20,6 +20,7 @@ Fly Anatolia Hava Sporları Kulübü (association), Kordonboyu Mah. Ankara Cd. N
 - **Messages:** one-to-one and group chat messages, photos and locations you choose to share in a chat.
 - **Flights and location data:** the IGC/GPX files you import, GPS tracks, flight statistics, notes and the gear you used. Other people only ever see a track with the first and last 500 m removed, and only if the flight's visibility allows it; flights of users under 18 are always private.
 - **Equipment:** your wings, harnesses and reserves with check and repack dates.
+- **Flight scores:** a cross-country score (type, distance, points) worked out from your track; shown wherever the flight is visible.
 - **Follows:** who you follow and who follows you.
 - **Events and rides:** your answers to event invitations, and the carpool/retrieve posts you publish (adults only).
 - **Trips:** the trips you follow, and when you sign up for a trip: your mobile phone, an emergency contact's name and phone, an optional note, the number of companions, a copy of your pilot level, years flying and flight count at sign-up, and the payment status the organisers record. The organisers and the trip's guides see these details.
@@ -48,7 +49,7 @@ Data is stored on our service providers' servers in the European Union (Frankfur
 
 - **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
 - **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
-- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map"; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
+- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map", and elevation tiles from AWS Open Data when you turn on the 3D replay; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
 - **Sign in with Google**, if you choose it.
 
 The current list of processors is available on request.

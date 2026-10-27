@@ -96,6 +96,11 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   (student, p1, tandem) stay valid. For requirements, T1–T3 rank like P5 (`pilot_level_rank`).
 - Profile totals (`total_flight_hours`, `total_flights`) grow only through `add_flights_to_totals()`,
   which counts each flight once (`flights.counted_in_totals`); the importer and the tracker ask first.
+- XC scores (`flights.xc_type`, `xc_distance_m`, `xc_points`) are set only by the server
+  (`scoreFlight()` on the stored track at import, or lazily on the owner's flight page). Store numbers
+  only; the scored route can include takeoff and landing, so draw it for the owner only.
+- The 3D replay uses Terrain Tiles on AWS Open Data (`TERRAIN_TILES` in `lib/map.ts`, in the CSP),
+  requested only when the user turns 3D on.
 - Years flying is derived from `profiles.flying_since` (`private.years_flying`); `years_flying` is legacy.
 
 ## Decisions (2026-10-26)

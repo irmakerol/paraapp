@@ -1,8 +1,10 @@
 import 'server-only';
 import { cache } from 'react';
 import { z } from 'zod';
-import type { CompactTrack } from '@paraapp/core';
+import { fromCompact, scoreFlight, type CompactTrack, type XcScore } from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { displayNames } from '@/lib/people';
 
 export const FLIGHT_LIST_COLUMNS =
   'id, started_at, duration_s, distance_m, max_alt_m, visibility, source, site_name, glider, takeoff_site_id, sites:takeoff_site_id(name, slug)';
@@ -89,4 +91,59 @@ export async function visibleTrack(
 
 export function siteLabel(flight: Pick<FlightDetail, 'takeoff' | 'site_name'>): string | null {
   return flight.takeoff?.name ?? flight.site_name;
+}
+
+/**
+ * The cross-country score drawn for the owner, from their full track. Flights imported before
+ * scoring existed get their numbers saved now (the service role writes them, as at import).
+ */
+export async function ownerScore(
+  flight: FlightDetail,
+  track: CompactTrack | null,
+): Promise<XcScore | null> {
+  if (!track || flight.source === 'manual') return null;
+  const xc = scoreFlight(fromCompact(track));
+  if (xc && flight.xc_type === null) {
+    await createAdminClient()
+      .from('flights')
+      .update({ xc_type: xc.type, xc_distance_m: xc.distanceM, xc_points: xc.points })
+      .eq('id', flight.id)
+      .is('xc_type', null);
+  }
+  return xc;
+}
+
+export interface SameDayFlight {
+  id: string;
+  name: string | null;
+  startedAt: string;
+}
+
+/** Other flights from the same takeoff on the same (Türkiye) day that the viewer may see. */
+export async function sameDayFlights(flight: FlightDetail): Promise<SameDayFlight[]> {
+  if (!flight.takeoff_site_id) return [];
+  // Türkiye is UTC+3 all year.
+  const day = new Date(new Date(flight.started_at).getTime() + 3 * 3_600_000)
+    .toISOString()
+    .slice(0, 10);
+  const from = new Date(`${day}T00:00:00+03:00`);
+  const to = new Date(from.getTime() + 86_400_000);
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from('flights')
+    .select('id, user_id, started_at')
+    .eq('takeoff_site_id', flight.takeoff_site_id)
+    .gte('started_at', from.toISOString())
+    .lt('started_at', to.toISOString())
+    .neq('id', flight.id)
+    .not('public_track', 'is', null)
+    .order('started_at')
+    .limit(12);
+  const rows = data ?? [];
+  const names = await displayNames(supabase, [...new Set(rows.map((r) => r.user_id))]);
+  return rows.map((r) => ({
+    id: r.id,
+    name: names.get(r.user_id) ?? null,
+    startedAt: r.started_at,
+  }));
 }

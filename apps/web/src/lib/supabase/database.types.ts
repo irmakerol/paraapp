@@ -620,6 +620,9 @@ export type Database = {
           file_path: string | null;
           file_sha256: string | null;
           public_track: Json | null;
+          xc_distance_m: number | null;
+          xc_points: number | null;
+          xc_type: string | null;
           created_at: Timestamp;
           updated_at: Timestamp;
         };
@@ -649,6 +652,9 @@ export type Database = {
           file_path?: string | null;
           file_sha256?: string | null;
           public_track?: Json | null;
+          xc_distance_m?: number | null;
+          xc_points?: number | null;
+          xc_type?: string | null;
         };
         Update: {
           takeoff_site_id?: string | null;
@@ -658,6 +664,10 @@ export type Database = {
           wing_id?: string | null;
           visibility?: Database['public']['Enums']['visibility'];
           notes?: string | null;
+          // Service role only (no user grant).
+          xc_type?: string | null;
+          xc_distance_m?: number | null;
+          xc_points?: number | null;
         };
         Relationships: [
           {
