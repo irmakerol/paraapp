@@ -46,7 +46,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
           )}
         </div>
         <Image
-          src="/brand/logo-512.png"
+          src="/brand/fly-anatolia-512.png"
           alt={APP_CONFIG.club.legalName}
           width={260}
           height={260}
