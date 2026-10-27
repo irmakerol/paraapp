@@ -99,19 +99,29 @@ type Elevation = (lngLat: [number, number]) => number | null;
 
 const EMPTY = { type: 'FeatureCollection' as const, features: [] };
 
-/** A small rectangle along a→b (or a square around a point), `halfWidth` metres either side. */
-function quad(a: [number, number], b: [number, number], halfWidth: number): [number, number][] {
+/**
+ * A small rectangle along a→b, `halfWidth` metres either side and `overhang` metres past each
+ * end so neighbouring segments overlap at bends instead of leaving gaps.
+ */
+function quad(
+  a: [number, number],
+  b: [number, number],
+  halfWidth: number,
+  overhang = 0,
+): [number, number][] {
   const mLng = 111_320 * Math.cos((a[1] * Math.PI) / 180);
   const dx = (b[0] - a[0]) * mLng;
   const dy = (b[1] - a[1]) * 111_320;
   const len = Math.hypot(dx, dy) || 1;
   const ox = (-dy / len) * halfWidth;
   const oy = (dx / len) * halfWidth;
-  const off = (p: [number, number], s: number): [number, number] => [
-    p[0] + (s * ox) / mLng,
-    p[1] + (s * oy) / 111_320,
+  const ex = (dx / len) * overhang;
+  const ey = (dy / len) * overhang;
+  const off = (p: [number, number], side: number, end: number): [number, number] => [
+    p[0] + (side * ox + end * ex) / mLng,
+    p[1] + (side * oy + end * ey) / 111_320,
   ];
-  return [off(a, 1), off(b, 1), off(b, -1), off(a, -1), off(a, 1)];
+  return [off(a, 1, -1), off(b, 1, 1), off(b, -1, 1), off(a, -1, -1), off(a, 1, -1)];
 }
 
 /**
@@ -128,10 +138,10 @@ function airRibbon(points: Point[], elevation: Elevation) {
     const agl = Math.max(2, (a.alt + b.alt) / 2 - ground);
     features.push({
       type: 'Feature' as const,
-      properties: { colour: varioColour(b.vario), base: Math.max(0, agl - 8), height: agl },
+      properties: { colour: varioColour(b.vario), base: Math.max(0, agl - 12), height: agl + 4 },
       geometry: {
         type: 'Polygon' as const,
-        coordinates: [quad([a.lng, a.lat], [b.lng, b.lat], 10)],
+        coordinates: [quad([a.lng, a.lat], [b.lng, b.lat], 10, 10)],
       },
     });
   }
@@ -491,8 +501,8 @@ function TrackMap({
           layout: { visibility: 'none' },
           paint: {
             'fill-extrusion-color': ['get', 'colour'],
-            'fill-extrusion-base': ['get', 'base'],
-            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-base': ['coalesce', ['get', 'base'], 0],
+            'fill-extrusion-height': ['coalesce', ['get', 'height'], 0],
             'fill-extrusion-opacity': 0.9,
           },
         });
@@ -504,7 +514,7 @@ function TrackMap({
           layout: { visibility: 'none' },
           paint: {
             'fill-extrusion-color': '#de4750',
-            'fill-extrusion-height': ['get', 'height'],
+            'fill-extrusion-height': ['coalesce', ['get', 'height'], 0],
             'fill-extrusion-opacity': 0.8,
           },
         });
