@@ -1,6 +1,6 @@
 # ParaApp
 
-The paragliding community app of **Fly Anatolia Havacılık Kulübü**: news, tips, a gear market,
+The paragliding community app of **Fly Anatolia Hava Sporları Kulübü**: news, tips, a gear market,
 a flight logbook and safety reports for pilots in Türkiye. Web first, Turkish and English.
 
 > Status: **Phase 2 (flights & sites)**. Accounts and privacy (Phase 0), news, tips, the gear market,

@@ -50,7 +50,7 @@ export async function Header({ locale }: { locale: string }) {
       </a>
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 2xl:max-w-[96rem]">
         <Link href="/" className="flex shrink-0 items-center gap-2">
-          <Image src="/brand/logo-96.png" alt="" width={44} height={44} priority />
+          <Image src="/brand/fly-anatolia-96.png" alt="" width={44} height={44} priority />
           <span className="text-lg font-bold">{APP_CONFIG.name}</span>
         </Link>
 

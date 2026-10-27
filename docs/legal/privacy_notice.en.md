@@ -6,7 +6,7 @@ This notice is given under Article 10 of the Turkish Personal Data Protection La
 
 ### 1. Data controller
 
-Fly Anatolia Havacılık Kulübü (association), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul, Türkiye. Email: info@flyanatolia.com
+Fly Anatolia Hava Sporları Kulübü (association), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul, Türkiye. Email: info@flyanatolia.com
 
 ### 2. Personal data we process
 

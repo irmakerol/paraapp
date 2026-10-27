@@ -1,7 +1,7 @@
 # Data inventory (KVKK / GDPR) – draft
 
 Status: **draft for the club's lawyer**, Phase 1. Updated whenever a feature adds personal data.
-Controller: Fly Anatolia Havacılık Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:108,
+Controller: Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:108,
 34862 Kartal / İstanbul · info@flyanatolia.com
 
 Legal bases use KVKK Art. 5/6 and GDPR Art. 6/9. "Contract" = providing the service the user signed up for.

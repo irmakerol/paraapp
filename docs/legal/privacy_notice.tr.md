@@ -6,7 +6,7 @@ Bu metin, 6698 sayılı Kişisel Verilerin Korunması Kanunu ("KVKK") madde 10 v
 
 ### 1. Veri sorumlusu
 
-Fly Anatolia Havacılık Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul. E-posta: info@flyanatolia.com
+Fly Anatolia Hava Sporları Kulübü (dernek), Kordonboyu Mah. Ankara Cd. No:27 D:108, 34862 Kartal / İstanbul. E-posta: info@flyanatolia.com
 
 ### 2. İşlenen kişisel veriler
 

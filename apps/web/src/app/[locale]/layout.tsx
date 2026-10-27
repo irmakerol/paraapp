@@ -28,7 +28,7 @@ export async function generateMetadata({
     alternates: {
       languages: Object.fromEntries(routing.locales.map((l) => [l, `/${l}`])),
     },
-    openGraph: { siteName: APP_CONFIG.name, images: ['/brand/logo-512.png'], locale },
+    openGraph: { siteName: APP_CONFIG.name, images: ['/brand/fly-anatolia-512.png'], locale },
   };
 }
 
