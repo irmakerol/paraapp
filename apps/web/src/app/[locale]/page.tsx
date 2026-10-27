@@ -5,8 +5,9 @@ import { Link } from '@/i18n/navigation';
 import { getViewer } from '@/lib/session';
 import { buttonClass } from '@/components/ui';
 
-const features = ['news', 'tips', 'market', 'logbook', 'sites', 'safety'] as const;
+const features = ['trips', 'news', 'tips', 'market', 'logbook', 'sites', 'safety'] as const;
 const featureHref: Record<(typeof features)[number], string> = {
+  trips: '/trips',
   news: '/news',
   tips: '/tips',
   market: '/market',

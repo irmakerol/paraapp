@@ -77,7 +77,13 @@ test('tips can be filtered by category', async ({ page }) => {
 });
 
 test('messages, posting ads and admin require sign-in', async ({ page }) => {
-  for (const path of ['/en/messages', '/en/market/new', '/en/admin', '/en/tips/suggest']) {
+  for (const path of [
+    '/en/messages',
+    '/en/market/new',
+    '/en/admin',
+    '/en/tips/suggest',
+    '/en/trips/mine',
+  ]) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
   }
@@ -88,6 +94,13 @@ test('sites page renders in both languages', async ({ page }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Uçuş alanları');
   await page.goto('/en/sites');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Flying sites');
+});
+
+test('trips page renders in both languages', async ({ page }) => {
+  await page.goto('/tr/trips');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Geziler');
+  await page.goto('/en/trips');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Trips');
 });
 
 test('logbook pages require sign-in', async ({ page }) => {

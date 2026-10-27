@@ -14,6 +14,7 @@ const navItems = [
   { href: '/tips', key: 'tips' },
   { href: '/market', key: 'market' },
   { href: '/sites', key: 'sites' },
+  { href: '/trips', key: 'trips' },
   { href: '/events', key: 'events' },
   { href: '/logbook', key: 'logbook' },
   { href: '/safety', key: 'safety' },

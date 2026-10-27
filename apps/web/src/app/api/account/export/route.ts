@@ -60,6 +60,9 @@ export async function GET() {
     incidents,
     rsvps,
     rides,
+    tripRegistrations,
+    tripInterests,
+    tripGuiding,
   ] = await Promise.all([
     admin.from('news_comments').select('news_id, body, hidden_at, created_at').eq('author_id', uid),
     admin.from('news_likes').select('news_id, created_at').eq('user_id', uid),
@@ -95,6 +98,15 @@ export async function GET() {
       .eq('reporter_id', uid),
     admin.from('event_rsvps').select('event_id, status, note, created_at').eq('user_id', uid),
     admin.from('rides').select('*').eq('user_id', uid),
+    // Staff notes are the organisers' own working notes; everything the pilot gave is included.
+    admin
+      .from('trip_registrations')
+      .select(
+        'trip_id, status, companions, note, phone, emergency_name, emergency_phone, pilot_level, years_flying, logged_flights, payment_status, decided_at, created_at',
+      )
+      .eq('user_id', uid),
+    admin.from('trip_interests').select('trip_id, created_at').eq('user_id', uid),
+    admin.from('trip_guides').select('trip_id, role_label').eq('user_id', uid),
   ]);
 
   const incidentKey = serverEnv().INCIDENT_ENCRYPTION_KEY;
@@ -167,6 +179,9 @@ export async function GET() {
     })),
     event_rsvps: rsvps.data ?? [],
     rides: rides.data ?? [],
+    trip_registrations: tripRegistrations.data ?? [],
+    trip_interests: tripInterests.data ?? [],
+    trips_guided: tripGuiding.data ?? [],
   };
 
   const date = new Date().toISOString().slice(0, 10);

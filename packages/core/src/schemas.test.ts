@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { defaultFieldPrivacy } from './privacy';
-import { profileSchema, signUpSchema } from './schemas';
+import { profileSchema, signUpSchema, yearsFlying } from './schemas';
 
 describe('signUpSchema', () => {
   it('normalises email and enforces password length', () => {
@@ -15,11 +15,13 @@ describe('profileSchema', () => {
     const parsed = profileSchema.parse({
       display_name: 'Ayşe',
       bio: '',
-      years_flying: '3',
+      flying_since: '2019',
+      total_flight_hours: '120.34',
       field_privacy: defaultFieldPrivacy('adult'),
     });
     expect(parsed.bio).toBeNull();
-    expect(parsed.years_flying).toBe(3);
+    expect(parsed.flying_since).toBe(2019);
+    expect(parsed.total_flight_hours).toBe(120.3);
   });
   it('rejects unknown visibility values', () => {
     const result = profileSchema.safeParse({
@@ -27,5 +29,14 @@ describe('profileSchema', () => {
       field_privacy: { ...defaultFieldPrivacy('adult'), bio: 'everyone' },
     });
     expect(result.success).toBe(false);
+  });
+});
+
+describe('yearsFlying', () => {
+  it('counts from the year a pilot started', () => {
+    const now = new Date('2026-10-27');
+    expect(yearsFlying({ flying_since: 2019 }, now)).toBe(7);
+    expect(yearsFlying({ flying_since: null, years_flying: 4 }, now)).toBe(4);
+    expect(yearsFlying({}, now)).toBeNull();
   });
 });

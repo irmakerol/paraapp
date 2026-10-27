@@ -63,7 +63,11 @@ export default async function PilotPage({
   const name = card?.display_name ?? t('pilot');
   const facts = [
     card?.pilot_level ? account(`levels.${card.pilot_level}`) : null,
-    card?.years_flying != null ? t('yearsFlying', { years: card.years_flying }) : null,
+    card?.flying_since != null
+      ? t('flyingSince', { year: card.flying_since })
+      : card?.years_flying != null
+        ? t('yearsFlying', { years: card.years_flying })
+        : null,
     card?.home_site ? t('homeSite', { site: card.home_site }) : null,
     [card?.city, card?.country].filter(Boolean).join(', ') || null,
   ].filter(Boolean);
@@ -127,6 +131,23 @@ export default async function PilotPage({
         </div>
       </header>
       {card?.wings ? <p className="text-sm">{t('flies', { wings: card.wings })}</p> : null}
+      {card?.total_flights != null || card?.weight_kg != null ? (
+        <p className="text-sm">
+          {[
+            card.total_flights != null
+              ? t('totals', {
+                  hours: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
+                    Number(card.total_flight_hours ?? 0),
+                  ),
+                  flights: card.total_flights,
+                })
+              : null,
+            card.weight_kg != null ? t('weight', { kg: card.weight_kg }) : null,
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+        </p>
+      ) : null}
       {card?.bio ? <p className="whitespace-pre-line">{card.bio}</p> : null}
       {card ? null : <p className="text-sm text-muted">{t('privateProfile')}</p>}
 

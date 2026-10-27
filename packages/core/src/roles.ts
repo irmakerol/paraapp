@@ -5,6 +5,7 @@ export const ROLES = [
   'instructor',
   'moderator',
   'safety_officer',
+  'trip_organiser',
   'admin',
 ] as const;
 export type Role = (typeof ROLES)[number];
@@ -15,6 +16,7 @@ export const MEMBER_LEVEL_ROLES: readonly Role[] = [
   'instructor',
   'moderator',
   'safety_officer',
+  'trip_organiser',
   'admin',
 ];
 

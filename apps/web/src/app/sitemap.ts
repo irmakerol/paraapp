@@ -6,7 +6,17 @@ import { routing } from '@/i18n/routing';
 
 export const revalidate = 3600;
 
-const SECTIONS = ['', '/news', '/tips', '/market', '/sites', '/events', '/safety', '/sos'];
+const SECTIONS = [
+  '',
+  '/trips',
+  '/news',
+  '/tips',
+  '/market',
+  '/sites',
+  '/events',
+  '/safety',
+  '/sos',
+];
 
 /**
  * Public pages only, read as a guest so RLS keeps out drafts, members-only content and anything
@@ -23,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { auth: { persistSession: false } },
   );
   try {
-    const [news, tips, sites, events, lessons] = await Promise.all([
+    const [news, tips, sites, events, lessons, trips] = await Promise.all([
       supabase
         .from('news')
         .select('slug, locale, updated_at')
@@ -40,6 +50,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         .from('safety_lessons')
         .select('slug, locale, updated_at')
         .eq('status', 'published')
+        .limit(5000),
+      supabase
+        .from('trips')
+        .select('slug, updated_at')
+        .neq('status', 'draft')
+        .eq('members_only', false)
         .limit(5000),
     ]);
     for (const n of news.data ?? []) {
@@ -60,6 +76,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }
       for (const e of events.data ?? []) {
         entries.push({ url: `${base}/${locale}/events/${e.slug}`, lastModified: e.updated_at });
+      }
+      for (const trip of trips.data ?? []) {
+        entries.push({
+          url: `${base}/${locale}/trips/${trip.slug}`,
+          lastModified: trip.updated_at,
+        });
       }
     }
   } catch {

@@ -22,6 +22,18 @@ export async function importFlight(formData: FormData): Promise<ImportResult> {
   return result;
 }
 
+/** "Add these flights to my totals?" (asked after an import; the tracker will ask the same). */
+export async function addFlightsToTotals(ids: string[]): Promise<number | null> {
+  const viewer = await getViewer();
+  const valid = ids.filter((id) => uuid.safeParse(id).success).slice(0, 500);
+  if (!viewer || !valid.length) return null;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc('add_flights_to_totals', { p_flights: valid });
+  if (error) return null;
+  revalidatePath('/[locale]/account', 'layout');
+  return data;
+}
+
 function fieldErrors(error: z.ZodError): Record<string, string> {
   const out: Record<string, string> = {};
   for (const issue of error.issues) out[String(issue.path[0])] = 'validation';
@@ -75,6 +87,8 @@ export async function addManualFlight(
     .select('id')
     .single();
   if (error) return { error: 'generic' };
+  if (str(formData, 'add_to_totals') === 'on')
+    await supabase.rpc('add_flights_to_totals', { p_flights: [data.id] });
   revalidatePath('/[locale]/logbook', 'page');
   redirect(`/${localeFrom(formData)}/flights/${data.id}`);
 }

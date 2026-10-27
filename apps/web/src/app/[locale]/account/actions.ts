@@ -38,7 +38,10 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     city: field('city'),
     home_site: field('home_site'),
     pilot_level: field('pilot_level') || null,
-    years_flying: field('years_flying') === '' ? null : field('years_flying'),
+    flying_since: field('flying_since') === '' ? null : field('flying_since'),
+    weight_kg: field('weight_kg') === '' ? null : field('weight_kg'),
+    total_flight_hours: field('total_flight_hours') === '' ? 0 : field('total_flight_hours'),
+    total_flights: field('total_flights') === '' ? 0 : field('total_flights'),
     wings: field('wings'),
     bio: field('bio'),
     field_privacy: {
@@ -50,6 +53,8 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
       years_flying: field('privacy_years_flying'),
       wings: field('privacy_wings'),
       bio: field('privacy_bio'),
+      weight: field('privacy_weight'),
+      flight_totals: field('privacy_flight_totals'),
     },
   });
   const prefs = preferencesSchema.safeParse({

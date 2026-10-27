@@ -15,7 +15,7 @@ function authorised(request: NextRequest): boolean {
 
 /**
  * Called every few minutes by a scheduler (see docs/ARCHITECTURE.md): sends scheduled club
- * news and ad expiry reminders as push notifications.
+ * news, reminders and trip updates as push notifications.
  */
 export async function POST(request: NextRequest) {
   if (!authorised(request)) return new NextResponse(null, { status: 401 });

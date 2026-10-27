@@ -26,6 +26,7 @@ export default async function NotificationsPage({
         news: prefs.news !== false,
         ads: prefs.ads !== false,
         equipment: prefs.equipment !== false,
+        trips: prefs.trips !== false,
         safety: prefs.safety !== false,
       }}
       isSafetyOfficer={viewer.roles.includes('safety_officer')}
