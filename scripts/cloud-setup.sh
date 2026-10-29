@@ -125,6 +125,7 @@ if [ -n "${ADMIN_EMAIL:-}" ]; then
        on conflict do nothing" > /dev/null
 fi
 
+echo "::notice title=Test server is up::Website: $WEB_URL"
 {
   echo "### Test server is up"
   echo ""
