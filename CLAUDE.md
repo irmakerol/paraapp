@@ -20,6 +20,7 @@ and in `docs/`.
 
 ```
 apps/web          Next.js 16 (App Router) + next-intl + Tailwind v4 + Supabase SSR
+apps/mobile       Expo (React Native) phone app: flight recorder + upload. npm, not in the pnpm workspace
 packages/core     Pure TS shared logic: APP_CONFIG, age gate, privacy, units, roles, zod schemas
 supabase/         config.toml, migrations, seed.sql (generated), email templates, pgTAP tests
 scripts/          db-test.sh (+ shim for plain Postgres), gen-legal-seed.mjs
@@ -101,6 +102,11 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   only; the scored route can include takeoff and landing, so draw it for the owner only.
 - The 3D replay uses Terrain Tiles on AWS Open Data (`TERRAIN_TILES` in `lib/map.ts`, in the CSP),
   requested only when the user turns 3D on.
+- Phone app (`apps/mobile`, docs/MOBILE.md): its strings live in `src/messages.ts` (TR default, EN
+  fallback, typed so both stay in sync). It talks to the website with a Bearer token
+  (`lib/supabase/bearer.ts`, `/api/mobile/*`). Built and uploaded to TestFlight by
+  `.github/workflows/ios.yml`; the hosted test server is set up by `.github/workflows/cloud.yml`.
+  Public repo = public Actions logs: mask every key (`::add-mask::`).
 - Years flying is derived from `profiles.flying_since` (`private.years_flying`); `years_flying` is legacy.
 
 ## Decisions (2026-10-26)

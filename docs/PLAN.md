@@ -128,6 +128,16 @@ Asked for on 2026-10-27. Web, free.
   flight; the scored route is drawn for the owner only.
 - **XContest-ready:** the IGC download gives the owner their original file, with a link to upload it.
 
+## Phase 7a – iPhone test app (TestFlight), 2026-10-29
+
+Change of plan for the club's flying weekend (31 Oct): an **iOS** test build first, via TestFlight
+(the club has an Apple Developer account). Scope: sign-in with Apple / Google / email (onboarding as
+on the website), the flight recorder (background GPS, barometer vario with sound, altitude, speed,
+glide, flight time, auto take-off/landing, IGC file), the flight list with share, and upload to the
+logbook with the "add to my totals?" question. Hosted test server: Supabase Cloud free + Vercel
+Hobby, set up by GitHub Actions. Details: `docs/MOBILE.md`. Live tracking, friends nearby and
+airspace alerts stay in Phase 7/8.
+
 ## Phase 7 – Phone tracker, Android first
 
 A phone app that records flights like Wingman (feature list from its public store page, see
