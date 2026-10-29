@@ -5,7 +5,14 @@ on:
   workflow_dispatch:
   push:
     branches: [phase-7-ios]
-    paths: ['supabase/migrations/**', 'apps/web/**', 'packages/core/**', 'scripts/cloud-setup.sh']
+    paths:
+      [
+        'supabase/migrations/**',
+        'apps/web/**',
+        'packages/core/**',
+        'scripts/cloud-setup.sh',
+        'scripts/check-secrets.sh',
+      ]
 
 concurrency:
   group: cloud
@@ -24,7 +31,15 @@ jobs:
       GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
       GOOGLE_WEB_CLIENT_SECRET: ${{ secrets.GOOGLE_WEB_CLIENT_SECRET }}
       ADMIN_EMAIL: ${{ secrets.ADMIN_EMAIL }}
+      # Only for the secrets check (the iOS workflow uses these).
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
     steps:
+      - uses: actions/checkout@v4
+      - name: Secrets look right (names and OK/problem only)
+        run: scripts/check-secrets.sh
       - name: Check secrets
         id: check
         run: |
@@ -34,8 +49,6 @@ jobs:
           else
             echo "ready=true" >> "$GITHUB_OUTPUT"
           fi
-      - uses: actions/checkout@v4
-        if: steps.check.outputs.ready == 'true'
       - uses: pnpm/action-setup@v4
         if: steps.check.outputs.ready == 'true'
       - uses: actions/setup-node@v4

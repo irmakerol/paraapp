@@ -23,7 +23,7 @@ flat `node_modules`, so use `npm` inside `apps/mobile`.
 
 ## Hosted test server
 
-`.github/workflows/cloud.yml` runs `scripts/cloud-setup.sh`: Supabase Cloud (migrations, legal
+`.github/workflows/cloud.yml` checks the secrets (`scripts/check-secrets.sh`, never prints values) and runs `scripts/cloud-setup.sh`: Supabase Cloud (migrations, legal
 texts, example sites, Apple/Google sign-in settings) and the website on Vercel (env vars, keys
 generated once). Both are free tiers, see `docs/COSTS.md`.
 
