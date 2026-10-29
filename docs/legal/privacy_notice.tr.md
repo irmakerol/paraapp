@@ -45,7 +45,7 @@ SOS sayfası konumunuzu yalnızca kendi cihazınızda gösterir; bize gönderilm
 
 ### 4. Aktarım ve yurt dışına aktarım
 
-Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (Frankfurt, Almanya) sunucularında saklanır. Yurt dışına aktarım KVKK m.9 kapsamında standart sözleşme ve benzeri uygun güvencelerle yapılır. Verileriniz satılmaz.
+Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (İrlanda ve Almanya) sunucularında saklanır. Yurt dışına aktarım KVKK m.9 kapsamında standart sözleşme ve benzeri uygun güvencelerle yapılır. Verileriniz satılmaz.
 
 - **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
 - **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.

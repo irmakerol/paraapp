@@ -15,7 +15,7 @@ in 2025–2026 and must be re-checked before signing up. Today the app runs on l
 
 | Part                           | Choice                                                  | Cost            | Free-tier limits that matter                                                                                   |
 | ------------------------------ | ------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------- |
-| Database, auth, storage        | Supabase free, Frankfurt                                | €0              | 500 MB database, 1 GB files, 5 GB egress/month, 50k monthly active users; pauses after 7 idle days; no backups |
+| Database, auth, storage        | Supabase free, Ireland                                  | €0              | 500 MB database, 1 GB files, 5 GB egress/month, 50k monthly active users; pauses after 7 idle days; no backups |
 | Web server                     | Owner's choice (see below)                              | €0 to ~€5/month |                                                                                                                |
 | HTTPS certificate              | Let's Encrypt via Caddy                                 | €0              | Renewed automatically                                                                                          |
 | Email (sign-up, guardian mail) | Brevo free                                              | €0              | 300 emails/day                                                                                                 |

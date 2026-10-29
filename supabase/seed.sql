@@ -49,7 +49,7 @@ SOS sayfası konumunuzu yalnızca kendi cihazınızda gösterir; bize gönderilm
 
 ### 4. Aktarım ve yurt dışına aktarım
 
-Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (Frankfurt, Almanya) sunucularında saklanır. Yurt dışına aktarım KVKK m.9 kapsamında standart sözleşme ve benzeri uygun güvencelerle yapılır. Verileriniz satılmaz.
+Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (İrlanda ve Almanya) sunucularında saklanır. Yurt dışına aktarım KVKK m.9 kapsamında standart sözleşme ve benzeri uygun güvencelerle yapılır. Verileriniz satılmaz.
 
 - **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
 - **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.
@@ -117,7 +117,7 @@ The SOS page shows your position only on your own device; it is not sent to us.
 
 ### 4. Recipients and transfers abroad
 
-Data is stored on our service providers' servers in the European Union (Frankfurt, Germany). Transfers abroad rely on standard contractual clauses or other appropriate safeguards under KVKK Art. 9. We do not sell your data.
+Data is stored on our service providers' servers in the European Union (Ireland and Germany). Transfers abroad rely on standard contractual clauses or other appropriate safeguards under KVKK Art. 9. We do not sell your data.
 
 - **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
 - **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
