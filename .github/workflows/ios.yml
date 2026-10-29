@@ -93,22 +93,20 @@ jobs:
         if: steps.signing.outputs.upload != 'true'
         working-directory: apps/mobile/ios
         run: |
-          set -o pipefail
-          xcodebuild -workspace FlyAnatolia.xcworkspace -scheme FlyAnatolia -configuration Release \
+          ../../../scripts/xcodebuild-run.sh -workspace FlyAnatolia.xcworkspace -scheme FlyAnatolia -configuration Release \
             -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
-            CODE_SIGNING_ALLOWED=NO archive | tail -n 200
+            CODE_SIGNING_ALLOWED=NO archive
       - name: Archive (signed by Xcode with the API key)
         if: steps.signing.outputs.upload == 'true'
         working-directory: apps/mobile/ios
         run: |
-          set -o pipefail
-          xcodebuild -workspace FlyAnatolia.xcworkspace -scheme FlyAnatolia -configuration Release \
+          ../../../scripts/xcodebuild-run.sh -workspace FlyAnatolia.xcworkspace -scheme FlyAnatolia -configuration Release \
             -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
             -allowProvisioningUpdates \
             -authenticationKeyPath "${{ steps.signing.outputs.key }}" \
             -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
-            archive | tail -n 200
+            archive
       - name: Upload to TestFlight
         if: steps.signing.outputs.upload == 'true'
         run: |
@@ -127,11 +125,11 @@ jobs:
           </dict>
           </plist>
           PLIST
-          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
+          scripts/xcodebuild-run.sh -exportArchive -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/export.plist" -exportPath "$RUNNER_TEMP/export" \
             -allowProvisioningUpdates \
             -authenticationKeyPath "${{ steps.signing.outputs.key }}" \
-            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" | tail -n 60
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID"
           echo "### Uploaded build $IOS_BUILD_NUMBER to TestFlight" >> "$GITHUB_STEP_SUMMARY"
       - name: Remove the key
         if: always()
