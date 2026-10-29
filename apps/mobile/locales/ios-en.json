@@ -1,6 +1,6 @@
 {
   "CFBundleDisplayName": "Fly Anatolia",
   "NSLocationWhenInUseUsageDescription": "Fly Anatolia records your flight track with GPS while you fly.",
-  "NSLocationAlwaysAndWhenInUseUsageDescription": "Fly Anatolia keeps recording your flight when the screen is locked. Choose \"Always\" so a flight is not cut off.",
+  "NSLocationAlwaysAndWhenInUseUsageDescription": "Fly Anatolia keeps recording your flight when the screen is locked. Choose “Always” so a flight is not cut off.",
   "NSMotionUsageDescription": "Fly Anatolia uses the barometer for an accurate climb rate (vario)."
 }

@@ -1,6 +1,6 @@
 {
   "CFBundleDisplayName": "Fly Anatolia",
   "NSLocationWhenInUseUsageDescription": "Fly Anatolia uçarken uçuş izinizi GPS ile kaydeder.",
-  "NSLocationAlwaysAndWhenInUseUsageDescription": "Fly Anatolia ekran kilitliyken de uçuşunuzu kaydetmeye devam eder. Uçuşun yarıda kesilmemesi için \"Her Zaman\"ı seçin.",
+  "NSLocationAlwaysAndWhenInUseUsageDescription": "Fly Anatolia ekran kilitliyken de uçuşunuzu kaydetmeye devam eder. Uçuşun yarıda kesilmemesi için “Her Zaman”ı seçin.",
   "NSMotionUsageDescription": "Fly Anatolia doğru tırmanma hızı (vario) için barometreyi kullanır."
 }

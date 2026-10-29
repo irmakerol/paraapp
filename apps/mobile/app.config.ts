@@ -50,7 +50,7 @@ const config: ExpoConfig = {
         locationWhenInUsePermission:
           'Fly Anatolia records your flight track with GPS while you fly.',
         locationAlwaysAndWhenInUsePermission:
-          'Fly Anatolia keeps recording your flight when the screen is locked. Choose "Always" so a flight is not cut off.',
+          'Fly Anatolia keeps recording your flight when the screen is locked. Choose “Always” so a flight is not cut off.',
       },
     ],
     [
