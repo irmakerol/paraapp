@@ -36,12 +36,13 @@ secrets it only does an unsigned compile check. The build number is the workflow
 
 ### Secrets (repo → Settings → Secrets and variables → Actions)
 
-| Secret                                                                     | Used for                                                    |
-| -------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `APPLE_TEAM_ID`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`               | Signing and TestFlight upload (API key with the Admin role) |
-| `SUPABASE_PROJECT_REF`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`    | Hosted database and sign-in                                 |
-| `VERCEL_TOKEN`                                                             | Hosted website (project `fly-anatolia`)                     |
-| `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, `GOOGLE_WEB_CLIENT_SECRET` | Google sign-in                                              |
+| Secret                                                                     | Used for                                                                                 |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `APPLE_TEAM_ID`, `ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_KEY_P8`               | Signing and TestFlight upload (API key with the Admin role)                              |
+| `SUPABASE_PROJECT_REF`, `SUPABASE_ACCESS_TOKEN`, `SUPABASE_DB_PASSWORD`    | Hosted database and sign-in                                                              |
+| `ADMIN_EMAIL` (optional)                                                   | This account gets the admin and member roles once it has signed in (re-run the workflow) |
+| `VERCEL_TOKEN`                                                             | Hosted website (project `fly-anatolia`)                                                  |
+| `GOOGLE_IOS_CLIENT_ID`, `GOOGLE_WEB_CLIENT_ID`, `GOOGLE_WEB_CLIENT_SECRET` | Google sign-in                                                                           |
 
 The repository is public, so workflow logs are public: scripts mask every generated or fetched
 key with `::add-mask::` and never print one.
