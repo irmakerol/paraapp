@@ -49,7 +49,6 @@ export function ProfileForm(props: {
   licenceBody: string;
   avatarUrl: string | null;
   isMinor: boolean;
-  isMember: boolean;
   /** Just saved with a new language (the page reloaded in it). */
   justSaved?: boolean;
 }) {
@@ -99,11 +98,6 @@ export function ProfileForm(props: {
   return (
     <div className="space-y-6">
       {props.isMinor ? <Alert>{t('minorNote')}</Alert> : null}
-      {props.isMember ? (
-        <p className="inline-block rounded-full bg-brand-orange/20 px-3 py-1 text-sm font-semibold">
-          {t('memberBadge')}
-        </p>
-      ) : null}
 
       <Card>{row('photo', <AvatarEditor userId={props.userId} url={props.avatarUrl} />)}</Card>
 

@@ -1295,7 +1295,19 @@
     "you": "Siz",
     "flyingSince": "{year} yılından beri uçuyor",
     "totals": "{flights} uçuşta {hours} saat",
-    "weight": "{kg} kg"
+    "weight": "{kg} kg",
+    "levelBadge": {
+      "pilot": "Pilot {level}",
+      "tandem": "Tandem pilotu {level}"
+    },
+    "viewPublic": "Herkese açık profilimi gör",
+    "totalHours": "Toplam uçuş saati",
+    "totalFlights": "Toplam uçuş",
+    "yearsFlyingStat": "Uçuş yılı",
+    "sinceStat": "{year} yılından beri",
+    "memberSince": "Üyelik: {date}",
+    "levelStat": "Seviye",
+    "noLevel": "Belirtilmedi"
   },
   "weather": {
     "today": "Bugün",

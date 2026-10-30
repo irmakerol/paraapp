@@ -1271,6 +1271,7 @@ export type Database = {
           weight_kg: number | null;
           total_flight_hours: number | null;
           total_flights: number | null;
+          roles: string[];
         };
         Relationships: [];
       };
