@@ -190,7 +190,10 @@ export async function stopRecording(): Promise<LocalFlight | null> {
     if (!active) return null;
     await flush();
     const id = active.id;
-    const points: TrackPoint[] = fixes.map((f) => ({ t: f.t, lat: f.lat, lng: f.lng, alt: f.alt }));
+    // Waiting for takeoff is not part of the flight: keep only the 30 s before it (the launch run).
+    const takeoffAt = detector.state.takeoffAt;
+    const kept = takeoffAt !== null ? fixes.filter((f) => f.t >= takeoffAt - 30_000) : fixes;
+    const points: TrackPoint[] = kept.map((f) => ({ t: f.t, lat: f.lat, lng: f.lng, alt: f.alt }));
     active = null;
     fixes = [];
     detector = new FlightDetector();

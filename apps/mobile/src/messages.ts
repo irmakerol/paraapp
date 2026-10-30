@@ -75,7 +75,7 @@ const en = {
     openSettings: 'Open Settings',
     onlyWhileUsing:
       'Location is set to "While Using". Recording may stop when the screen locks. Set it to "Always" in Settings.',
-    hint: 'Start before takeoff. Takeoff and landing are detected automatically; recording stops by itself after 5 minutes on the ground.',
+    hint: 'Press Start whenever you are ready: stowing the phone and waiting for the wind do not count. The flight begins when you are 15 m from here and moving faster than walking. Recording stops by itself after 5 minutes on the ground.',
     saved: 'Flight saved',
     totalsQuestion: 'Add this flight to your total flights and hours?',
     tooShort: 'No flight was recorded (too few GPS points).',
@@ -219,7 +219,7 @@ const tr: DeepStrings<Messages> = {
     openSettings: 'Ayarları aç',
     onlyWhileUsing:
       'Konum izni "Uygulamayı Kullanırken" olarak ayarlı. Ekran kilitlenince kayıt durabilir. Ayarlar’dan "Her Zaman" yapın.',
-    hint: 'Kalkıştan önce başlatın. Kalkış ve iniş otomatik algılanır; yerde 5 dakika sonra kayıt kendiliğinden durur.',
+    hint: 'Hazır olduğunuzda Başlat’a basın: telefonu yerleştirmek ve rüzgârı beklemek sayılmaz. Uçuş, buradan 15 m uzaklaşıp yürüme hızından hızlı hareket ettiğinizde başlar. Yerde 5 dakika sonra kayıt kendiliğinden durur.',
     saved: 'Uçuş kaydedildi',
     totalsQuestion: 'Bu uçuş toplam uçuş sayınıza ve saatinize eklensin mi?',
     tooShort: 'Uçuş kaydedilmedi (çok az GPS noktası).',

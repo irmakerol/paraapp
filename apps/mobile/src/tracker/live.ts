@@ -25,9 +25,16 @@ export interface LiveState {
   glide: number | null;
 }
 
-/** Ground speed that counts as flying (≈ 14 km/h), and for how long. */
-export const TAKEOFF_SPEED = 4;
-export const TAKEOFF_SECONDS = 8;
+/**
+ * Takeoff: at least TAKEOFF_DISTANCE from where Start was pressed, while moving faster than
+ * walking (≈ 9 km/h) for TAKEOFF_SECONDS. Pressing Start early, stowing the phone, laying out the
+ * wing or waiting for the wind never counts; a launch run or the first seconds in the air do.
+ */
+export const TAKEOFF_DISTANCE = 15;
+export const TAKEOFF_SPEED = 2.5;
+export const TAKEOFF_SECONDS = 3;
+/** GPS fixes less accurate than this are not used as the Start position. */
+const ANCHOR_ACCURACY = 20;
 /** A climb or drop this big from the start position also counts as a takeoff (strong wind). */
 export const TAKEOFF_ALT_CHANGE = 50;
 /**
@@ -61,7 +68,14 @@ export class FlightDetector {
   push(fix: Fix): LiveState {
     const prev = this.fixes[this.fixes.length - 1];
     if (prev && fix.t <= prev.t) return this.state;
-    this.first ??= fix;
+    // Where Start was pressed: the first reasonably accurate fix.
+    if (
+      !this.first ||
+      (this.state.phase === 'waiting' &&
+        (this.first.acc ?? 0) > ANCHOR_ACCURACY &&
+        (fix.acc ?? 0) <= ANCHOR_ACCURACY)
+    )
+      this.first = fix;
     // Keep a minute of history for the live numbers.
     this.fixes.push(fix);
     while (this.fixes.length > 2 && (this.fixes[0]?.t ?? 0) < fix.t - 60_000) this.fixes.shift();
@@ -76,8 +90,11 @@ export class FlightDetector {
     if (s.phase === 'waiting') {
       const fast = speed !== null && speed >= TAKEOFF_SPEED;
       this.fastSince = fast ? (this.fastSince ?? fix.t) : null;
-      const moved = this.first && Math.abs(fix.alt - this.first.alt) >= TAKEOFF_ALT_CHANGE;
-      if ((this.fastSince !== null && fix.t - this.fastSince >= TAKEOFF_SECONDS * 1000) || moved) {
+      const away = this.first !== null && distance(this.first, fix) >= TAKEOFF_DISTANCE;
+      const climbed = this.first && Math.abs(fix.alt - this.first.alt) >= TAKEOFF_ALT_CHANGE;
+      const launched =
+        away && this.fastSince !== null && fix.t - this.fastSince >= TAKEOFF_SECONDS * 1000;
+      if (launched || climbed) {
         s.phase = 'flying';
         s.takeoffAt = this.fastSince ?? fix.t;
         s.takeoffAlt = this.altAt(s.takeoffAt) ?? fix.alt;

@@ -49,6 +49,25 @@ describe('FlightDetector', () => {
     expect(d.state.gpsVario).toBeCloseTo(2, 1);
   });
 
+  it('waits while walking around on launch, then starts on the launch run 15 m away', () => {
+    const d = new FlightDetector();
+    let t = 0;
+    let north = 0;
+    // Ten minutes waiting for the wind, walking about at 1.4 m/s.
+    for (; t < 600; t++) {
+      north = 30 * Math.sin(t / 30);
+      d.push(fix(t, north, 1000, 1.4));
+    }
+    expect(d.state.phase).toBe('waiting');
+    // Running back to the start point at 3 m/s does not count until 15 m away from it.
+    const back = north;
+    d.push(fix(t++, back, 1000, 3));
+    expect(d.state.phase).toBe('waiting');
+    // Launch run then air: 3 s fast and more than 15 m from the start position.
+    for (let i = 1; i <= 8; i++, t++) d.push(fix(t, back + i * 4, 1000, 4));
+    expect(d.state.phase).toBe('flying');
+  });
+
   it('ignores fixes that go back in time', () => {
     const d = new FlightDetector();
     d.push(fix(10, 0, 1000, 0));
