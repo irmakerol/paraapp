@@ -13,6 +13,14 @@ import {
 } from 'react-native';
 import { locale, t, type MessageKey } from '../i18n';
 import {
+  AD_CATEGORIES,
+  AD_CONDITIONS,
+  CURRENCIES,
+  MAX_AD_PHOTOS,
+  deleteAd,
+  postAd,
+  setAdStatus,
+  type AdInput,
   NOTICE_CATEGORIES,
   NOTICE_KINDS,
   closeNotice,
@@ -68,6 +76,7 @@ export function BoardScreen({
   const [openNotice, setOpenNotice] = useState<Notice | null>(null);
   const [openAd, setOpenAd] = useState<Ad | null>(null);
   const [posting, setPosting] = useState(false);
+  const [selling, setSelling] = useState(false);
   const [posted, setPosted] = useState(false);
 
   const load = useCallback(async () => {
@@ -88,6 +97,18 @@ export function BoardScreen({
     void load();
   }, [load]);
 
+  if (selling && userId)
+    return (
+      <AdForm
+        userId={userId}
+        onBack={() => setSelling(false)}
+        onPosted={() => {
+          setSelling(false);
+          setPosted(true);
+          void load();
+        }}
+      />
+    );
   if (posting && userId)
     return (
       <NoticeForm
@@ -114,7 +135,18 @@ export function BoardScreen({
       />
     );
   if (openAd)
-    return <AdDetail ad={openAd} userId={userId} onBack={() => setOpenAd(null)} onChat={onChat} />;
+    return (
+      <AdDetail
+        ad={openAd}
+        userId={userId}
+        onBack={() => setOpenAd(null)}
+        onChanged={() => {
+          setOpenAd(null);
+          void load();
+        }}
+        onChat={onChat}
+      />
+    );
 
   const header = (
     <View>
@@ -136,6 +168,10 @@ export function BoardScreen({
         <Button label={`＋ ${t('noticeForm.new')}`} onPress={() => setPosting(true)} />
       ) : null}
       {section === 'notices' && posted ? <Body>{t('noticeForm.posted')}</Body> : null}
+      {section === 'market' && userId ? (
+        <Button label={`＋ ${t('adForm.new')}`} onPress={() => setSelling(true)} />
+      ) : null}
+      {section === 'market' && posted ? <Body>{t('adForm.posted')}</Body> : null}
       {section === 'notices' && signedIn && notices?.length === 0 ? (
         <Body muted>{t('board.noNotices')}</Body>
       ) : null}
@@ -285,13 +321,19 @@ function AdDetail({
   ad: a,
   userId,
   onBack,
+  onChanged,
   onChat,
 }: {
   ad: Ad;
   userId: string | null;
   onBack: () => void;
+  onChanged: () => void;
   onChat?: (chatId: string) => void;
 }) {
+  const mine = Boolean(userId && userId === a.ownerId);
+  const status = (next: 'active' | 'reserved' | 'sold') =>
+    userId &&
+    void setAdStatus(userId, a.id, next).then(onChanged, () => Alert.alert(t('common.error')));
   const c = useTheme();
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
@@ -344,7 +386,42 @@ function AdDetail({
         <Fact label={t('board.posted')} value={day(a.createdAt)} />
       </View>
       {a.description ? <Body>{a.description}</Body> : null}
-      {userId && onChat && userId !== a.ownerId ? (
+      {mine && userId ? (
+        <>
+          <Body muted>{t('adForm.yours')}</Body>
+          {a.status === 'reserved' ? (
+            <Button
+              label={t('adForm.markActive')}
+              kind="secondary"
+              onPress={() => status('active')}
+            />
+          ) : (
+            <Button
+              label={t('adForm.markReserved')}
+              kind="secondary"
+              onPress={() => status('reserved')}
+            />
+          )}
+          <Button label={t('adForm.markSold')} kind="secondary" onPress={() => status('sold')} />
+          <Button
+            label={t('adForm.delete')}
+            kind="danger"
+            onPress={() =>
+              Alert.alert(t('adForm.deleteConfirm'), undefined, [
+                { text: t('common.cancel'), style: 'cancel' },
+                {
+                  text: t('adForm.delete'),
+                  style: 'destructive',
+                  onPress: () =>
+                    void deleteAd(userId, a.id).then(onChanged, () =>
+                      Alert.alert(t('common.error')),
+                    ),
+                },
+              ])
+            }
+          />
+        </>
+      ) : userId && onChat ? (
         <Button label={t('board.contactSeller')} busy={busy} onPress={() => void contact()} />
       ) : null}
       {message ? <Body muted>{message}</Body> : null}
@@ -375,6 +452,8 @@ const s = StyleSheet.create({
   photo: { width: '100%', height: 220, borderRadius: 14 },
   label: { fontSize: 16, fontWeight: '600', marginTop: 8 },
   photoButtons: { flexDirection: 'row', gap: 10 },
+  adThumb: { width: 96, height: 96, borderRadius: 10 },
+  removeX: { position: 'absolute', top: 2, right: 6, fontSize: 18, fontWeight: '800' },
   photoPage: { width: 340, height: 240, borderRadius: 14, marginRight: 8 },
   facts: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 8, gap: 4 },
   fact: { flexDirection: 'row', justifyContent: 'space-between', gap: 12, paddingVertical: 4 },
@@ -551,6 +630,183 @@ function NoticeForm({
       )}
       <Body muted>{t('noticeForm.photoNote')}</Body>
       <Button label={t('noticeForm.submit')} busy={busy} onPress={() => void submit()} />
+      {message ? <Body>{message}</Body> : null}
+    </ScrollView>
+  );
+}
+
+function AdForm({
+  userId,
+  onBack,
+  onPosted,
+}: {
+  userId: string;
+  onBack: () => void;
+  onPosted: () => void;
+}) {
+  const c = useTheme();
+  const [form, setForm] = useState<AdInput>({
+    title: '',
+    category: 'wing',
+    brand: '',
+    model: '',
+    size: '',
+    condition: 'good',
+    price: '',
+    currency: 'TRY',
+    city: '',
+    description: '',
+  });
+  const [photos, setPhotos] = useState<PreparedImage[]>([]);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const set = <K extends keyof AdInput>(key: K, value: AdInput[K]) =>
+    setForm((f) => ({ ...f, [key]: value }));
+
+  const add = async (source: 'library' | 'camera') => {
+    try {
+      const picked = await pickImage(source);
+      if (picked) setPhotos((p) => [...p, picked].slice(0, MAX_AD_PHOTOS));
+    } catch {
+      Alert.alert(t('noticeForm.photoError'));
+    }
+  };
+
+  const submit = async () => {
+    const next: Record<string, string> = {};
+    const title = form.title.trim();
+    if (title.length < 3 || title.length > 120) next.title = t('adForm.titleInvalid');
+    const price = Number(form.price.replace(',', '.'));
+    if (!form.price.trim() || !Number.isFinite(price) || price < 0)
+      next.price = t('adForm.priceInvalid');
+    setErrors(next);
+    if (Object.keys(next).length) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      await postAd(userId, form, photos);
+      onPosted();
+    } catch (e) {
+      const code = (e as { code?: string }).code;
+      setMessage(
+        code === '42501'
+          ? t('adForm.adultsOnly')
+          : e instanceof Error && e.message === 'photo'
+            ? t('noticeForm.photoError')
+            : t('common.error'),
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={s.page} keyboardShouldPersistTaps="handled">
+      <BackBar label={t('board.market')} onBack={onBack} />
+      <Title>{t('adForm.title')}</Title>
+      <Field
+        label={t('adForm.heading')}
+        value={form.title}
+        onChangeText={(v) => set('title', v)}
+        maxLength={120}
+        error={errors.title}
+      />
+      <Chips
+        label={t('adForm.category')}
+        options={AD_CATEGORIES.map((cat) => ({
+          value: cat,
+          label: t(`board.adCategories.${cat}`),
+        }))}
+        value={form.category}
+        onChange={(v) => v && set('category', v)}
+      />
+      <Field
+        label={t('adForm.brand')}
+        value={form.brand}
+        onChangeText={(v) => set('brand', v)}
+        maxLength={60}
+      />
+      <Field
+        label={t('adForm.model')}
+        value={form.model}
+        onChangeText={(v) => set('model', v)}
+        maxLength={80}
+      />
+      <Field
+        label={t('adForm.size')}
+        value={form.size}
+        onChangeText={(v) => set('size', v)}
+        maxLength={20}
+      />
+      <Chips
+        label={t('adForm.condition')}
+        options={AD_CONDITIONS.map((cond) => ({
+          value: cond,
+          label: t(`board.conditions.${cond}`),
+        }))}
+        value={form.condition}
+        onChange={(v) => v && set('condition', v)}
+      />
+      <Field
+        label={t('adForm.price')}
+        value={form.price}
+        onChangeText={(v) => set('price', v)}
+        keyboardType="decimal-pad"
+        maxLength={12}
+        error={errors.price}
+      />
+      <Segmented
+        label={t('adForm.currency')}
+        options={CURRENCIES.map((cur) => ({ value: cur, label: cur }))}
+        value={form.currency}
+        onChange={(v) => set('currency', v)}
+      />
+      <Field
+        label={t('adForm.city')}
+        value={form.city}
+        onChangeText={(v) => set('city', v)}
+        maxLength={80}
+      />
+      <Field
+        label={t('adForm.description')}
+        value={form.description}
+        onChangeText={(v) => set('description', v)}
+        maxLength={5000}
+        multiline
+      />
+      <Text style={[s.label, { color: c.text }]}>{t('adForm.photos')}</Text>
+      <ScrollView horizontal contentContainerStyle={{ gap: 8 }}>
+        {photos.map((p, i) => (
+          <Pressable
+            key={p.uri}
+            accessibilityRole="button"
+            accessibilityLabel={t('noticeForm.removePhoto')}
+            onPress={() => setPhotos((cur) => cur.filter((_, j) => j !== i))}
+          >
+            <Image source={{ uri: p.uri }} style={s.adThumb} />
+            <Text style={[s.removeX, { color: c.danger }]}>✕</Text>
+          </Pressable>
+        ))}
+      </ScrollView>
+      {photos.length < MAX_AD_PHOTOS ? (
+        <View style={s.photoButtons}>
+          <Button
+            label={t('noticeForm.addPhoto')}
+            kind="secondary"
+            onPress={() => void add('library')}
+            style={{ flex: 1 }}
+          />
+          <Button
+            label={t('noticeForm.takePhoto')}
+            kind="secondary"
+            onPress={() => void add('camera')}
+            style={{ flex: 1 }}
+          />
+        </View>
+      ) : null}
+      <Body muted>{t('noticeForm.photoNote')}</Body>
+      <Button label={t('adForm.submit')} busy={busy} onPress={() => void submit()} />
       {message ? <Body>{message}</Body> : null}
     </ScrollView>
   );

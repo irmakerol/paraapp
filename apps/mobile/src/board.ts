@@ -254,3 +254,90 @@ export async function deleteNotice(userId: string, id: string): Promise<void> {
   const path = (data as { photo_path: string | null } | null)?.photo_path;
   if (path) await supabase.storage.from('notice-photos').remove([path]);
 }
+
+/** Must match AD_CATEGORIES / AD_CONDITIONS / CURRENCIES in packages/core/src/market.ts. */
+export const AD_CATEGORIES = [
+  'wing',
+  'harness',
+  'reserve',
+  'instrument',
+  'helmet',
+  'radio',
+  'clothing',
+  'accessories',
+  'other',
+] as const;
+export const AD_CONDITIONS = ['new', 'like_new', 'good', 'fair', 'for_parts'] as const;
+export const CURRENCIES = ['TRY', 'EUR', 'USD'] as const;
+export const MAX_AD_PHOTOS = 8;
+
+export interface AdInput {
+  title: string;
+  category: (typeof AD_CATEGORIES)[number];
+  brand: string;
+  model: string;
+  size: string;
+  condition: (typeof AD_CONDITIONS)[number];
+  price: string;
+  currency: (typeof CURRENCIES)[number];
+  city: string;
+  description: string;
+}
+
+/** Posts an ad as the signed-in adult (RLS "ads: adults post"), then its photos in order. */
+export async function postAd(userId: string, a: AdInput, photos: PreparedImage[]): Promise<string> {
+  const blank = (v: string) => (v.trim() === '' ? null : v.trim());
+  const price = Number(a.price.replace(',', '.'));
+  if (!Number.isFinite(price) || price < 0) throw new Error('validation');
+  const id = Crypto.randomUUID();
+  const { error } = await supabase.from('ads').insert({
+    id,
+    owner_id: userId,
+    title: a.title.trim(),
+    category: a.category,
+    brand: blank(a.brand),
+    model: blank(a.model),
+    size: blank(a.size),
+    condition: a.condition,
+    price,
+    currency: a.currency,
+    city: blank(a.city),
+    description: a.description.trim(),
+  });
+  if (error) throw error;
+  const rows: { ad_id: string; path: string; position: number }[] = [];
+  for (const [position, photo] of photos.slice(0, MAX_AD_PHOTOS).entries()) {
+    const path = `${userId}/${id}/${Crypto.randomUUID()}.jpg`;
+    const { error: uploadError } = await supabase.storage
+      .from('ad-photos')
+      .upload(path, photo.bytes, { contentType: photo.contentType });
+    if (uploadError) throw new Error('photo');
+    rows.push({ ad_id: id, path, position });
+  }
+  if (rows.length) {
+    const { error: rowsError } = await supabase.from('ad_photos').insert(rows);
+    if (rowsError) throw new Error('photo');
+  }
+  return id;
+}
+
+export async function setAdStatus(
+  userId: string,
+  id: string,
+  status: 'active' | 'reserved' | 'sold',
+): Promise<void> {
+  const { error } = await supabase
+    .from('ads')
+    .update({ status })
+    .eq('id', id)
+    .eq('owner_id', userId);
+  if (error) throw error;
+}
+
+export async function deleteAd(userId: string, id: string): Promise<void> {
+  const { data: photos } = await supabase.from('ad_photos').select('path').eq('ad_id', id);
+  const paths = ((photos ?? []) as { path: string }[]).map((p) => p.path);
+  if (paths.length) await supabase.storage.from('ad-photos').remove(paths);
+  const { error } = await supabase.from('ads').delete().eq('id', id).eq('owner_id', userId);
+  if (error) throw error;
+}
