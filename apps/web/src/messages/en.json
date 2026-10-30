@@ -843,7 +843,9 @@
     "moderator": "Moderator",
     "safety_officer": "Safety officer",
     "admin": "Admin",
-    "trip_organiser": "Trip organiser"
+    "trip_organiser": "Trip organiser",
+    "guide": "Guide",
+    "super_admin": "Super admin"
   },
   "push": {
     "newMessage": "New message from {name}",

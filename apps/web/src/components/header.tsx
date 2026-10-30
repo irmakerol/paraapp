@@ -63,19 +63,24 @@ export async function Header({ locale }: { locale: string }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          <Link
-            href="/fly"
-            className={`inline-flex min-h-11 items-center justify-center whitespace-nowrap rounded-lg px-3 font-extrabold text-white ${flying ? 'motion-safe:animate-pulse bg-sos' : 'bg-fly'}`}
-          >
-            {flying ? t('flying') : t('flyNow')}
-          </Link>
-          <Link
-            href="/sos"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-sos px-3 font-extrabold text-white"
-            aria-label={t('sosLabel')}
-          >
-            SOS
-          </Link>
+          {viewer ? (
+            <>
+              {/* Flight recording is for phones and tablets; desktops only show logbook and replays. */}
+              <Link
+                href="/fly"
+                className={`hidden min-h-11 items-center justify-center whitespace-nowrap rounded-lg px-3 font-extrabold text-white pointer-coarse:inline-flex ${flying ? 'motion-safe:animate-pulse bg-sos' : 'bg-fly'}`}
+              >
+                {flying ? t('flying') : t('flyNow')}
+              </Link>
+              <Link
+                href="/sos"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-sos px-3 font-extrabold text-white"
+                aria-label={t('sosLabel')}
+              >
+                SOS
+              </Link>
+            </>
+          ) : null}
           <div className="hidden items-center gap-2 sm:flex 2xl:hidden">
             <LocaleSwitcher />
             <ThemeToggle />

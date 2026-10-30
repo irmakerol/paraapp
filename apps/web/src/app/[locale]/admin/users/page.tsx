@@ -1,5 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { ROLES } from '@paraapp/core';
+import { ROLES, SUPER_ADMIN_ONLY_ROLES } from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireStaff } from '@/lib/staff';
@@ -59,6 +59,7 @@ export default async function UsersPage({
     }),
   );
   const now = currentTime();
+  const isSuperAdmin = viewer.roles.includes('super_admin');
 
   return (
     <div className="space-y-4">
@@ -94,6 +95,9 @@ export default async function UsersPage({
               <div className="flex flex-wrap gap-2">
                 {ROLES.map((role) => {
                   const has = mine.includes(role);
+                  const superOnly = SUPER_ADMIN_ONLY_ROLES.includes(role);
+                  // Admins see who is admin but only the super admin can change it.
+                  if (superOnly && !isSuperAdmin && !has) return null;
                   return (
                     <form key={role} action={setRole}>
                       <input type="hidden" name="user_id" value={u.id} />
@@ -107,7 +111,7 @@ export default async function UsersPage({
                         }`}
                         aria-pressed={has}
                         title={has ? t('revoke') : t('grant')}
-                        disabled={role === 'admin' && has && u.id === viewer.user.id}
+                        disabled={superOnly && (!isSuperAdmin || (has && u.id === viewer.user.id))}
                       >
                         {roleNames(role)}
                       </button>

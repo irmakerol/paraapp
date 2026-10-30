@@ -1,7 +1,7 @@
 'use server';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { ROLES, type Role } from '@paraapp/core';
+import { ROLES, SUPER_ADMIN_ONLY_ROLES, type Role } from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
 import { getViewer } from '@/lib/session';
 import { canUse } from '@/lib/staff';
@@ -17,8 +17,12 @@ export async function setRole(formData: FormData): Promise<void> {
   const grant = str(formData, 'grant') === '1';
   if (!viewer || !canUse(viewer, 'users') || !uuid.safeParse(userId).success) return;
   if (!ROLES.includes(role)) return;
-  // Admins cannot remove their own admin role by accident.
-  if (!grant && role === 'admin' && userId === viewer.user.id) return;
+  // Only the super admin manages admins, and nobody removes their own admin role by accident.
+  // RLS enforces both.
+  if (SUPER_ADMIN_ONLY_ROLES.includes(role)) {
+    if (!viewer.roles.includes('super_admin')) return;
+    if (!grant && userId === viewer.user.id) return;
+  }
   const supabase = await createClient();
   if (grant) {
     await supabase

@@ -1266,10 +1266,12 @@ export type Database = {
         | 'pilot'
         | 'member'
         | 'instructor'
+        | 'guide'
         | 'moderator'
         | 'safety_officer'
         | 'trip_organiser'
-        | 'admin';
+        | 'admin'
+        | 'super_admin';
       trip_status: 'draft' | 'open' | 'closed' | 'completed' | 'cancelled';
       trip_registration_status: 'pending' | 'accepted' | 'waitlisted' | 'declined' | 'cancelled';
       trip_payment_status: 'unpaid' | 'deposit_paid' | 'paid' | 'refunded';

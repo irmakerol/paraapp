@@ -118,7 +118,7 @@ function Main() {
         edges={['bottom']}
         style={[s.tabs, { borderColor: c.border, backgroundColor: c.card }]}
       >
-        {TABS.map((item) => {
+        {TABS.filter((item) => item.id !== 'fly' || signedIn || recording).map((item) => {
           const active = tab === item.id;
           const flying = item.id === 'fly' && recording;
           return (

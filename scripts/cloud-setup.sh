@@ -119,11 +119,11 @@ auth=$(jq -n --arg site "$WEB_URL" --arg bundle "$BUNDLE_ID" \
 sb -X PATCH "$SB_API/config/auth" --data "$auth" > /dev/null
 
 if [ -n "${ADMIN_EMAIL:-}" ]; then
-  echo "== Admin role (for the account in the ADMIN_EMAIL secret, once it has signed in)"
+  echo "== Super admin role (for the account in the ADMIN_EMAIL secret, once it has signed in)"
   email_sql=$(jq -rn --arg e "$ADMIN_EMAIL" '$e | ascii_downcase | gsub("'"'"'"; "")')
   sql "insert into public.user_roles (user_id, role)
        select u.id, r.role::public.app_role from auth.users u
-       cross join (values ('admin'), ('member')) as r(role)
+       cross join (values ('admin'), ('super_admin'), ('member')) as r(role)
        where lower(u.email) = '$email_sql'
        on conflict do nothing" > /dev/null
 fi

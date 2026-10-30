@@ -843,7 +843,9 @@
     "moderator": "Moderatör",
     "safety_officer": "Güvenlik sorumlusu",
     "admin": "Yönetici",
-    "trip_organiser": "Gezi organizatörü"
+    "trip_organiser": "Gezi organizatörü",
+    "guide": "Rehber",
+    "super_admin": "Süper yönetici"
   },
   "push": {
     "newMessage": "{name} size mesaj gönderdi",

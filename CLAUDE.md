@@ -65,6 +65,8 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - Error keys in `ActionState` live under `auth.errors` unless they contain a dot (then they are full keys, e.g. `market.adultsOnly`).
 - Names of other people always come from the `profile_cards` view (`lib/people.ts`), never from `profiles`.
 - Admin pages call `requireStaff(locale, area)` (`lib/staff.ts`); RLS enforces the same roles.
+  `super_admin` (the club owner, `ADMIN_EMAIL` on the test server) always also holds `admin` and is
+  the only one who can grant or revoke `admin`/`super_admin`. `guide` (rehber) counts as a member.
 - Push goes through `sendPush()` (`lib/push.ts`): it checks topic settings and, for club news, marketing consent.
 - Third-party embeds are click-to-load (`components/video-embed.tsx`). No third-party request before the user acts.
 - In render, use `currentTime()` from `lib/format.ts` instead of `Date.now()` (the React purity lint rule).
