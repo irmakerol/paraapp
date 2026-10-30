@@ -105,10 +105,16 @@ fi
 deploy() {
   npx -y vercel@latest pull --yes --environment=production --token "$VERCEL_TOKEN" > /dev/null
   npx -y vercel@latest build --prod --token "$VERCEL_TOKEN"
-  if ! npx -y vercel@latest deploy --prebuilt --prod --token "$VERCEL_TOKEN" 2>&1 | tee "$RUNNER_TEMP/deploy.log"; then
-    echo "::error title=Vercel deploy failed::$(grep -v '^\s*$' "$RUNNER_TEMP/deploy.log" | tail -n 5 | tr '\n' ' ' | head -c 900)"
-    return 1
-  fi
+  # Uploads to Vercel fail now and then; try a few times before giving up.
+  local attempt
+  for attempt in 1 2 3; do
+    if npx -y vercel@latest deploy --prebuilt --prod --token "$VERCEL_TOKEN" 2>&1 | tee "$RUNNER_TEMP/deploy.log"; then
+      return 0
+    fi
+    echo "::warning title=Vercel deploy attempt $attempt failed::$(grep -iE 'error|limit|rate|429|exceed' "$RUNNER_TEMP/deploy.log" | grep -v '^\s*at ' | head -n 6 | tr '\n' ' ' | head -c 900)"
+    sleep $((attempt * 30))
+  done
+  return 1
 }
 
 STAGE=website
