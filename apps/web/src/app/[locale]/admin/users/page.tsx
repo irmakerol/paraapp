@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { sampleLabel } from '@/lib/sample';
 import { Alert, Button, buttonClass, Input } from '@/components/ui';
 import { Pagination } from '@/components/pagination';
+import { RoleBadges } from '@/components/role-badges';
 import { RoleToggles } from './role-toggles';
 
 const PAGE_SIZE = 30;
@@ -30,7 +31,9 @@ export default async function UsersPage({
   const supabase = await createClient();
   let query = supabase
     .from('profiles')
-    .select('id, display_name, full_name, avatar_path, status, age_group, created_at, last_seen_at')
+    .select(
+      'id, display_name, full_name, avatar_path, status, age_group, created_at, last_seen_at, pilot_level, training_level, is_instructor',
+    )
     .order('created_at', { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   if (q) {
@@ -118,11 +121,19 @@ export default async function UsersPage({
                       : t('neverSeen')}
                     {banned ? ` · ${t('banned')}` : ''}
                   </p>
+                  <RoleBadges
+                    roles={mine}
+                    level={u.pilot_level}
+                    trainingLevel={u.training_level}
+                    instructor={u.is_instructor}
+                    className="pt-1"
+                  />
                 </div>
                 <Link href={`/admin/users/${u.id}`} className={buttonClass('secondary')}>
                   {t('edit')}
                 </Link>
               </div>
+              <p className="text-xs font-semibold text-muted">{t('roles')}</p>
               <RoleToggles
                 userId={u.id}
                 roles={mine}

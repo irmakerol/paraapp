@@ -10,6 +10,7 @@ import { requireStaff } from '@/lib/staff';
 import { currentTime, formatDate, formatDateTime, formatPrice } from '@/lib/format';
 import { sampleLabel } from '@/lib/sample';
 import { Button, Field, Input } from '@/components/ui';
+import { RoleBadges } from '@/components/role-badges';
 import { setGroupMember } from '../../groups/actions';
 import { adminDeleteNotice, adminRemoveAd, setBan } from '../actions';
 import { RoleToggles } from '../role-toggles';
@@ -107,7 +108,6 @@ export default async function UserDetailPage({
   if (!z.string().uuid().safeParse(id).success) notFound();
   const t = await getTranslations('admin.usersAdmin');
   const p = await getTranslations('account.profile');
-  const roleNames = await getTranslations('roles');
   const g = await getTranslations('admin.groupsAdmin');
   const activityT = await getTranslations('admin.activity');
   const logbook = await getTranslations('logbook');
@@ -219,14 +219,13 @@ export default async function UserDetailPage({
               ) : null}
             </p>
             <div className="flex flex-wrap gap-1.5 pt-1">
-              {roles.map((r) => (
-                <span
-                  key={r}
-                  className="rounded-full bg-brand-navy px-2.5 py-0.5 text-xs font-semibold text-white"
-                >
-                  {roleNames(r)}
-                </span>
-              ))}
+              {/* The same badges members see on the profile; roles are changed below. */}
+              <RoleBadges
+                roles={roles}
+                level={profile.pilot_level}
+                trainingLevel={profile.training_level}
+                instructor={profile.is_instructor}
+              />
               {banned ? (
                 <span className="rounded-full bg-danger px-2.5 py-0.5 text-xs font-semibold text-white">
                   {t('banned')}
