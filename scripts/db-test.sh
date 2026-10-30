@@ -54,5 +54,6 @@ if [ "${SKIP_SEED:-0}" != "1" ]; then
   "${PSQL[@]}" -tA -c "select 'sample: ' || (select count(*) from public.profiles where display_name like '%(Ö)') || ' people, '
     || (select count(*) from public.events where title like '%(Ö)') || ' events, '
     || (select count(*) from public.sites where name like '%(Ö)') || ' sites, '
-    || (select count(distinct role) from public.user_roles where user_id::text like 'a0000000-%') || ' roles'"
+    || (select count(distinct role) from public.user_roles where user_id::text like 'a0000000-%') || ' roles, '
+    || (select count(*) from public.ads where title like '%(Ö)') || ' ads'"
 fi

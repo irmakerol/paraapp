@@ -129,3 +129,40 @@ from (values
 ) as e(slug, title, body, kind, day_offset, start_time, end_days, end_time, site, location, members_only, capacity)
 where exists (select 1 from auth.users where id = 'a0000000-0000-4000-8000-000000000001')
 on conflict (slug) do nothing;
+
+-- Gear market: sample listings from the sample people. Fixed ids keep the file safe to run twice;
+-- a re-run pushes the expiry date forward so the samples stay visible.
+insert into public.ads (id, owner_id, title, category, brand, model, size, weight_min, weight_max,
+                        year, hours, certification, condition, price, currency, city, description)
+select a.id::uuid, a.owner::uuid, a.title, a.category::public.ad_category, a.brand, a.model, a.size,
+       a.wmin, a.wmax, a.year, a.hours, a.cert, a.cond::public.ad_condition, a.price,
+       a.currency::public.currency, a.city, a.description
+from (values
+  ('b0000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000006',
+   'Ozone Rush 5 MS, temiz (Ö)', 'wing', 'Ozone', 'Rush 5', 'MS', 85, 105, 2020, 140.0, 'EN-B',
+   'good', 1450, 'EUR', 'Antalya',
+   E'Düzenli kontrolleri yapıldı, son porozite testi iyi. Kılıf ve iç çanta dahil.\n\n> Örnek ilan.'),
+  ('b0000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000003',
+   'Advance Success 4 yedek paraşüt (Ö)', 'reserve', 'Advance', 'Success 4', '115', 70, 115, 2021, null, 'EN 12491',
+   'like_new', 18000, 'TRY', 'Ankara',
+   E'Hiç açılmadı, son katlama iki ay önce.\n\n> Örnek ilan.'),
+  ('b0000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000007',
+   'Skytraxx 2.1 vario (Ö)', 'instrument', 'Skytraxx', '2.1', null, null, null, 2022, null, null,
+   'good', 9500, 'TRY', 'Bursa',
+   E'GPS ve hava sahası uyarısı var, şarj kablosu ve kutusuyla.\n\n> Örnek ilan.'),
+  ('b0000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000004',
+   'Supair Access 2 harness, M (Ö)', 'harness', 'Supair', 'Access 2', 'M', null, null, 2019, null, 'EN 1651',
+   'fair', 7000, 'TRY', 'İstanbul',
+   E'Okul kanadından sonra ilk harness için ideal. Airbag var, yedek kabı ön tarafta.\n\n> Örnek ilan.'),
+  ('b0000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000002',
+   'Kask, Supair Pilot, L (Ö)', 'helmet', 'Supair', 'Pilot', 'L', null, null, 2023, null, 'EN 966',
+   'like_new', 2500, 'TRY', 'Fethiye',
+   E'Birkaç uçuş yapıldı, çizik yok.\n\n> Örnek ilan.'),
+  ('b0000000-0000-4000-8000-000000000006', 'a0000000-0000-4000-8000-000000000005',
+   'Gin Yeti 5 hafif kanat, 22 (Ö)', 'wing', 'Gin', 'Yeti 5', '22', 60, 85, 2021, 60.0, 'EN-B',
+   'good', 1900, 'EUR', 'İzmir',
+   E'Hike & fly için çok hafif (2,3 kg). Kontrol kartı mevcut.\n\n> Örnek ilan.')
+) as a(id, owner, title, category, brand, model, size, wmin, wmax, year, hours, cert, cond, price,
+       currency, city, description)
+join auth.users u on u.id = a.owner::uuid
+on conflict (id) do update set expires_at = now() + interval '60 days', status = 'active';
