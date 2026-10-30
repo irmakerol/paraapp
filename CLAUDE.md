@@ -107,6 +107,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   (`lib/supabase/bearer.ts`, `/api/mobile/*`). Built and uploaded to TestFlight by
   `.github/workflows/ios.yml`; the hosted test server is set up by `.github/workflows/cloud.yml`.
   Public repo = public Actions logs: mask every key (`::add-mask::`).
+- Sample data for testing lives in `supabase/seeds/sample_data.sql`: names/titles end in "(Ö)",
+  shown as "(S)" on English pages via `sampleLabel()` (`lib/sample.ts`). Seeds must be safe to run
+  twice (the test server re-applies them on every deploy).
 - Years flying is derived from `profiles.flying_since` (`private.years_flying`); `years_flying` is legacy.
 
 ## Decisions (2026-10-26)

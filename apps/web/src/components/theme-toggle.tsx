@@ -19,7 +19,7 @@ export function ThemeToggle() {
       <span className="sr-only">{t('theme')}</span>
       <select
         className="min-h-11 rounded-lg border border-border bg-card px-2"
-        value={mounted ? theme : 'system'}
+        value={mounted ? theme : 'light'}
         onChange={(e) => setTheme(e.target.value)}
         aria-label={t('theme')}
       >

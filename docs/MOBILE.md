@@ -29,7 +29,7 @@ generated once). Both are free tiers, see `docs/COSTS.md`.
 
 ## Builds and TestFlight
 
-`.github/workflows/ios.yml` builds on a GitHub macOS runner (free for public repos), runs
+`.github/workflows/ios.yml` builds on a GitHub macOS runner (free for public repos; pushes only compile, a TestFlight upload needs a manual "Run workflow"), runs
 `expo prebuild`, archives with Xcode, and uploads to TestFlight using an App Store Connect API
 key (Xcode's automatic, cloud-managed signing: no certificates to keep). Without the Apple
 secrets it only does an unsigned compile check. The build number is the workflow run number.

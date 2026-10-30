@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import { analyseTrack, toIgc, type TrackPoint } from '@paraapp/core-tracks';
 import { FLIGHTS_DIR, addFlight, type LocalFlight } from './flights';
 import { FlightDetector, type Fix, type LiveState } from './live';
+import { keepFlying, markFlying, markLanded } from './presence';
 
 export const LOCATION_TASK = 'flight-recorder';
 
@@ -103,10 +104,11 @@ export async function startRecording(): Promise<StartResult> {
   if (fg.status !== 'granted') return 'denied';
   const bg = await Location.requestBackgroundPermissionsAsync().catch(() => null);
 
+  const startedAt = Date.now();
   await locked(async () => {
     await FileSystem.deleteAsync(REC_DIR, { idempotent: true });
     await FileSystem.makeDirectoryAsync(REC_DIR, { intermediates: true });
-    active = { id: Crypto.randomUUID(), startedAt: Date.now(), chunks: 0 };
+    active = { id: Crypto.randomUUID(), startedAt, chunks: 0 };
     fixes = [];
     pending = [];
     detector = new FlightDetector();
@@ -121,6 +123,7 @@ export async function startRecording(): Promise<StartResult> {
     showsBackgroundLocationIndicator: true,
   });
   emitState();
+  void markFlying(startedAt).catch(() => undefined);
   return bg?.status === 'granted' ? 'started' : 'foregroundOnly';
 }
 
@@ -151,6 +154,7 @@ export async function onLocations(locations: Location.LocationObject[]) {
     if (pending.length >= CHUNK_EVERY) await flush();
   });
   emitState();
+  if (active) void keepFlying(active.startedAt);
   if (landed) await stopRecording();
 }
 
@@ -203,6 +207,7 @@ export async function stopRecording(): Promise<LocalFlight | null> {
     return flight;
   });
   emitState();
+  void markLanded().catch(() => undefined);
   emit(result ? { type: 'saved', flight: result } : { type: 'discarded' });
   return result;
 }

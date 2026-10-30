@@ -8,7 +8,7 @@ import { t, type MessageKey } from './src/i18n';
 import { supabase } from './src/supabase';
 import { onboardingStep, type OnboardingStep } from './src/onboarding';
 import { uploadPending } from './src/upload';
-import { PILOT_NAME_KEY } from './src/tracker/recorder';
+import { PILOT_NAME_KEY, subscribeRecorder } from './src/tracker/recorder';
 import { FlyScreen } from './src/screens/FlyScreen';
 import { FlightsScreen } from './src/screens/FlightsScreen';
 import { AccountScreen, SignIn } from './src/screens/AccountScreen';
@@ -36,6 +36,15 @@ function Main() {
   const [session, setSession] = useState<Session | null>(null);
   const [step, setStep] = useState<OnboardingStep | null>(null);
   const [name, setName] = useState<string | null>(null);
+  const [recording, setRecording] = useState(false);
+
+  useEffect(
+    () =>
+      subscribeRecorder((event) => {
+        if (event.type === 'state') setRecording(event.recording);
+      }),
+    [],
+  );
 
   const refresh = useCallback(async (s: Session | null) => {
     if (!s) {
@@ -111,6 +120,7 @@ function Main() {
       >
         {TABS.map((item) => {
           const active = tab === item.id;
+          const flying = item.id === 'fly' && recording;
           return (
             <Pressable
               key={item.id}

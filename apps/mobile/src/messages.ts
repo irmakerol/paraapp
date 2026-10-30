@@ -2,7 +2,7 @@
 // Keep both in sync (the `Messages` type makes a missing Turkish key a type error).
 
 const en = {
-  tabs: { fly: 'Fly', flights: 'Flights', account: 'Account' },
+  tabs: { fly: 'Fly', flying: 'Flying', flights: 'Flights', account: 'Account' },
   common: {
     cancel: 'Cancel',
     ok: 'OK',
@@ -120,7 +120,7 @@ export type Messages = typeof en;
 type DeepStrings<T> = { [K in keyof T]: T[K] extends string ? string : DeepStrings<T[K]> };
 
 const tr: DeepStrings<Messages> = {
-  tabs: { fly: 'Uç', flights: 'Uçuşlar', account: 'Hesap' },
+  tabs: { fly: 'Uç', flying: 'Uçuşta', flights: 'Uçuşlar', account: 'Hesap' },
   common: {
     cancel: 'Vazgeç',
     ok: 'Tamam',

@@ -6,6 +6,7 @@ import { Card, PageTitle } from '@/components/ui';
 import { SitesMap } from '@/components/sites-map';
 import { ratingTone } from '@/components/weather-panel';
 import { cachedTodayRatings } from '@/lib/weather';
+import { sampleLabel } from '@/lib/sample';
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,16 @@ export default async function SitesPage({ params }: { params: Promise<{ locale: 
     <div className="space-y-6">
       <PageTitle lead={t('lead')}>{t('title')}</PageTitle>
       {sites.length ? (
-        <SitesMap sites={sites.map(({ slug, name, lat, lng }) => ({ slug, name, lat, lng }))} />
+        <SitesMap
+          sites={sites.map(({ slug, name, lat, lng, kind, elevation_m }) => ({
+            slug,
+            name,
+            lat,
+            lng,
+            kind,
+            elevation_m,
+          }))}
+        />
       ) : (
         <Card>
           <p className="text-muted">{t('empty')}</p>
@@ -52,10 +62,11 @@ export default async function SitesPage({ params }: { params: Promise<{ locale: 
                     href={`/sites/${s.slug}`}
                     className="block h-full rounded-2xl border border-border bg-card p-4 hover:shadow-md"
                   >
-                    <p className="font-bold">{s.name}</p>
+                    <p className="font-bold">{sampleLabel(s.name, locale)}</p>
                     <p className="text-sm text-muted">
                       {t(`kinds.${s.kind}`)}
                       {s.elevation_m != null ? ` · ${s.elevation_m} m` : ''}
+                      {` · ${s.lat.toFixed(4)}, ${s.lng.toFixed(4)}`}
                       {s.wind_directions.length
                         ? ` · ${s.wind_directions.map((d) => t(`wind.${d}`)).join(', ')}`
                         : ''}

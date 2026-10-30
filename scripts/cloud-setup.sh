@@ -24,15 +24,18 @@ echo "== Database: migrations"
 npx supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
 npx supabase db push --password "$SUPABASE_DB_PASSWORD" --include-all
 
-echo "== Database: legal texts and example sites (only on a fresh database)"
+echo "== Database: legal texts (fresh database only) and example content"
 count=$(sql 'select count(*)::int as n from public.legal_documents' | jq -r '.[0].n')
 if [ "$count" = "0" ]; then
   sql "$(cat supabase/seed.sql)" > /dev/null
-  sql "$(cat supabase/seeds/demo_sites.sql)" > /dev/null
-  echo "seeded"
-else
-  echo "already there"
+  echo "legal texts loaded"
 fi
+# Example content (news, tips, sites, trips, sample people and events, all marked as examples).
+# Every file is safe to run again, so new samples reach the test server on the next deploy.
+for f in supabase/seeds/*.sql; do
+  sql "$(cat "$f")" > /dev/null
+  echo "seed: $(basename "$f")"
+done
 
 echo "== Supabase keys"
 keys=$(sb "$SB_API/api-keys?reveal=true")

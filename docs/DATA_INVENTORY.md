@@ -93,6 +93,16 @@ organisers record payment status by hand.
 - Replaying flights together uses the same visibility rules: other pilots' flights come from
   `/api/flights/[id]/track`, which returns the trimmed public track unless the viewer is the owner.
 
+## 1g. Phase 7a (iPhone app)
+
+- Recorded flights stay on the phone (IGC files) until the pilot is signed in and online; then they
+  are uploaded and analysed like a web import (`/api/mobile/flights`).
+- `active_flights`: one row per pilot **while the phone records** (start time and last refresh, no
+  position). Owner-only (RLS); deleted when recording stops and with the account. Used only to show
+  the website's Fly button as "Flying".
+- Sample records (`supabase/seeds/sample_data.sql`, marked "(Ö)"/"(S)") are invented people with
+  `@example.invalid` addresses: no personal data. Delete them before launch.
+
 ### Special category data
 
 **Incident reports** may contain health data (injuries): explicit consent in the form

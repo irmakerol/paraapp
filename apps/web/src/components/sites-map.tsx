@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { Map as MapLibreMap } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { addAirspaceControl, MAP_STYLE } from '@/lib/map';
+import { sampleLabel } from '@/lib/sample';
 import { MapGate } from './map-gate';
 
 export interface SiteMarker {
@@ -11,6 +12,8 @@ export interface SiteMarker {
   name: string;
   lat: number;
   lng: number;
+  kind?: 'launch' | 'landing' | 'both';
+  elevation_m?: number | null;
 }
 
 /** Sites as markers; each links to its page. Loads only after the user agrees (MapGate). */
@@ -54,13 +57,25 @@ function SitesMapInner({ sites, zoom }: { sites: SiteMarker[]; zoom?: number }) 
       instance.addControl(new maplibregl.NavigationControl(), 'top-right');
       addAirspaceControl(instance, { show: maps('airspace'), attribution: maps('airspaceCredit') });
       for (const site of sites) {
+        const popup = document.createElement('div');
         const link = document.createElement('a');
         link.href = `/${locale}/sites/${site.slug}`;
-        link.textContent = site.name;
+        link.textContent = sampleLabel(site.name, locale);
         link.className = 'font-semibold text-brand-navy underline';
-        new maplibregl.Marker({ color: '#de4750' })
+        const detail = document.createElement('p');
+        detail.className = 'mt-1 text-xs text-slate-700';
+        detail.textContent = [
+          site.kind ? t(`kinds.${site.kind}`) : null,
+          site.elevation_m != null ? `${site.elevation_m} m` : null,
+          `${site.lat.toFixed(4)}, ${site.lng.toFixed(4)}`,
+        ]
+          .filter(Boolean)
+          .join(' · ');
+        popup.append(link, detail);
+        // Launches red, landings blue.
+        new maplibregl.Marker({ color: site.kind === 'landing' ? '#2563eb' : '#de4750' })
           .setLngLat([site.lng, site.lat])
-          .setPopup(new maplibregl.Popup({ offset: 24 }).setDOMContent(link))
+          .setPopup(new maplibregl.Popup({ offset: 24 }).setDOMContent(popup))
           .addTo(instance);
       }
       map.current = instance;

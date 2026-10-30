@@ -212,6 +212,17 @@ export type Database = {
         Relationships: [];
       };
 
+      active_flights: {
+        Row: {
+          user_id: string;
+          started_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: { user_id: string; started_at?: Timestamp; updated_at?: Timestamp };
+        Update: { started_at?: Timestamp; updated_at?: Timestamp };
+        Relationships: [];
+      };
+
       news: {
         Row: {
           id: string;

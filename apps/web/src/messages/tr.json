@@ -27,7 +27,9 @@
     "safety": "Güvenlik",
     "rides": "Yolculuklar",
     "sosLabel": "SOS: acil yardım ve konumunuz",
-    "trips": "Geziler"
+    "trips": "Geziler",
+    "flyNow": "Şimdi Uç",
+    "flying": "Uçuşta"
   },
   "footer": {
     "privacyNotice": "Aydınlatma metni",
@@ -1527,5 +1529,18 @@
       "noParticipants": "Henüz eklenecek kabul edilmiş pilot yok.",
       "groupFailed": "Grup sohbeti oluşturulamadı."
     }
+  },
+  "fly": {
+    "title": "Şimdi uç",
+    "lead": "Uçuşunu telefonundaki Fly Anatolia uygulamasıyla kaydet: GPS, vario sesi, irtifa ve hız.",
+    "flyingNow": "Şu an uçuştasın",
+    "flyingSince": "Kayıt başladı: {time}",
+    "flyingHelp": "Kaydı telefonundaki uygulamadan durdur. İndikten sonra uçuş defterine otomatik yüklenir.",
+    "openApp": "Uygulamayı aç",
+    "noAppTitle": "Uygulama telefonunda yok mu?",
+    "noAppBody": "Fly Anatolia iPhone uygulaması şu an kulüp üyeleri için TestFlight ile deneniyor. Katılmak için kulübe yazın.",
+    "afterTitle": "Başka bir aletle mi uçtun?",
+    "afterBody": "Uçuşunu sonradan IGC veya GPX dosyası olarak uçuş defterine ekleyebilirsin.",
+    "import": "Uçuş dosyası yükle"
   }
 }

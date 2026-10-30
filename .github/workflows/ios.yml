@@ -1,8 +1,8 @@
 name: iOS app
 
-# Builds the phone app (apps/mobile) on a GitHub Mac. With the App Store Connect secrets set
-# (docs/MOBILE.md) it signs the build and uploads it to TestFlight; without them it only checks
-# that the app compiles.
+# Builds the phone app (apps/mobile) on a GitHub Mac. Pushes and PRs only check that it compiles.
+# A TestFlight upload happens only when someone runs this workflow by hand ("Run workflow"), with
+# the App Store Connect secrets set (docs/MOBILE.md).
 on:
   workflow_dispatch:
     inputs:
@@ -39,7 +39,7 @@ jobs:
       - run: npm test
 
   build:
-    name: Build${{ github.event_name != 'pull_request' && ' and upload' || '' }}
+    name: Build${{ github.event_name == 'workflow_dispatch' && ' and upload' || '' }}
     needs: check
     runs-on: macos-26
     timeout-minutes: 60
@@ -80,7 +80,7 @@ jobs:
         id: signing
         run: |
           if [ -n "$ASC_KEY_ID" ] && [ -n "$ASC_ISSUER_ID" ] && [ -n "$ASC_KEY_P8" ] && [ -n "$APPLE_TEAM_ID" ] \
-             && [ "${{ github.event_name }}" != pull_request ] && [ "${{ inputs.upload }}" != false ]; then
+             && [ "${{ github.event_name }}" = workflow_dispatch ] && [ "${{ inputs.upload }}" != false ]; then
             key="$RUNNER_TEMP/AuthKey_$ASC_KEY_ID.p8"
             printf '%s\n' "$ASC_KEY_P8" > "$key"
             echo "key=$key" >> "$GITHUB_OUTPUT"

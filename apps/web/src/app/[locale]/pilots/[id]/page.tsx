@@ -13,6 +13,7 @@ import { ReportButton } from '@/components/report-button';
 import { BlockButton } from '@/components/block-button';
 import { createClient } from '@/lib/supabase/server';
 import { FollowButton, MessageButton } from '../pilot-actions';
+import { sampleLabel } from '@/lib/sample';
 
 export async function generateMetadata({
   params,
@@ -24,7 +25,7 @@ export async function generateMetadata({
   if (!card) return { robots: { index: false } };
   const t = await getTranslations({ locale, namespace: 'pilots' });
   return {
-    title: card.display_name ?? t('pilot'),
+    title: sampleLabel(card.display_name, locale) ?? t('pilot'),
     description: card.bio?.slice(0, 160) ?? t('metaDescription', { name: card.display_name ?? '' }),
   };
 }
@@ -60,7 +61,7 @@ export default async function PilotPage({
       .maybeSingle();
     blocked = Boolean(data);
   }
-  const name = card?.display_name ?? t('pilot');
+  const name = sampleLabel(card?.display_name, locale) ?? t('pilot');
   const facts = [
     card?.pilot_level ? account(`levels.${card.pilot_level}`) : null,
     card?.flying_since != null

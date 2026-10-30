@@ -27,7 +27,9 @@
     "safety": "Safety",
     "rides": "Rides",
     "sosLabel": "SOS: emergency help and your position",
-    "trips": "Trips"
+    "trips": "Trips",
+    "flyNow": "Fly now",
+    "flying": "Flying"
   },
   "footer": {
     "privacyNotice": "Privacy notice",
@@ -1527,5 +1529,18 @@
       "noParticipants": "There are no accepted pilots to add yet.",
       "groupFailed": "The group chat could not be created."
     }
+  },
+  "fly": {
+    "title": "Fly now",
+    "lead": "Record your flight with the Fly Anatolia app on your phone: GPS, vario sound, altitude and speed.",
+    "flyingNow": "You are flying right now",
+    "flyingSince": "Recording since {time}",
+    "flyingHelp": "Stop the recording in the app on your phone. After landing the flight goes to your logbook automatically.",
+    "openApp": "Open the app",
+    "noAppTitle": "No app on your phone?",
+    "noAppBody": "The Fly Anatolia iPhone app is being tested by club members through TestFlight. Write to the club to join.",
+    "afterTitle": "Flew with another instrument?",
+    "afterBody": "You can add the flight to your logbook later as an IGC or GPX file.",
+    "import": "Upload a flight file"
   }
 }
