@@ -1277,6 +1277,7 @@ export type Database = {
           total_flights: number | null;
           roles: string[];
           is_instructor: boolean;
+          training_level: Database["public"]["Enums"]["pilot_level"] | null;
         };
         Relationships: [];
       };

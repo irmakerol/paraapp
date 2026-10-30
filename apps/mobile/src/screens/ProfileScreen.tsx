@@ -29,8 +29,9 @@ import {
 import { VarioAudio } from '../tracker/vario-audio';
 import { VOLUME_LEVEL } from '../tracker/vario-settings';
 import { useVarioSettings } from '../tracker/vario-settings-store';
-import { Badge, Body, Button, Card, Chips, Field, Link, Segmented, Title, Toggle } from '../ui/kit';
+import { Body, Button, Card, Chips, Field, Link, Segmented, Title, Toggle } from '../ui/kit';
 import { useTheme } from '../ui/theme';
+import { ProfileBadges } from '../ui/badges';
 import { VarioSettingsScreen } from './VarioSettingsScreen';
 
 export function levelLabel(level: string) {
@@ -114,10 +115,6 @@ export function ProfileScreen({
     );
   }
 
-  const strongest = profile.roles.filter(
-    (r) => r !== 'member' || !profile.roles.some((x) => x === 'pilot' || x === 'student_pilot'),
-  );
-  const showInstructor = profile.isInstructor && !profile.roles.includes('instructor');
   const years =
     profile.flyingSince != null
       ? Math.max(0, new Date().getFullYear() - profile.flyingSince)
@@ -149,11 +146,12 @@ export function ProfileScreen({
         </View>
       </Card>
       <View style={s.badges}>
-        {profile.pilotLevel ? <Badge label={levelLabel(profile.pilotLevel)} tone="strong" /> : null}
-        {showInstructor ? <Badge label={t('profile.roles.instructor')} tone="strong" /> : null}
-        {strongest.map((r) => (
-          <Badge key={r} label={t(`profile.roles.${r}` as MessageKey)} />
-        ))}
+        <ProfileBadges
+          roles={profile.roles}
+          level={profile.pilotLevel}
+          trainingLevel={profile.trainingLevel}
+          instructor={profile.isInstructor}
+        />
       </View>
 
       <View style={s.tiles}>

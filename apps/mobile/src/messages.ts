@@ -227,6 +227,12 @@ const en = {
     retry: 'Try again',
     pilotLevel: 'Pilot {level}',
     tandemLevel: 'Tandem pilot {level}',
+    badge: {
+      pilot: 'Pilot ({level})',
+      pilotNoLevel: 'Pilot',
+      training: 'Training for {level}',
+      trainingNoLevel: 'Student pilot',
+    },
     levels: { student: 'Student', tandem: 'Tandem pilot', instructor: 'Instructor' },
     roles: {
       super_admin: 'Super admin',
@@ -518,6 +524,12 @@ const tr: DeepStrings<Messages> = {
     retry: 'Tekrar dene',
     pilotLevel: 'Pilot {level}',
     tandemLevel: 'Tandem pilotu {level}',
+    badge: {
+      pilot: 'Pilot ({level})',
+      pilotNoLevel: 'Pilot',
+      training: '{level} eğitiminde',
+      trainingNoLevel: 'Öğrenci pilot',
+    },
     levels: { student: 'Öğrenci', tandem: 'Tandem pilotu', instructor: 'Eğitmen' },
     roles: {
       super_admin: 'Süper yönetici',

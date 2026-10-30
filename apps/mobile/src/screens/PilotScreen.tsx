@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { t, type MessageKey } from '../i18n';
+import { t } from '../i18n';
 import { loadPilot, setFollowing, type PilotCard } from '../pilots';
-import { Badge, Body, Button, Card } from '../ui/kit';
+import { Body, Button, Card } from '../ui/kit';
 import { BackBar, Fact, screenStyles } from '../ui/screen';
 import { useTheme } from '../ui/theme';
-import { levelLabel } from './ProfileScreen';
+import { ProfileBadges } from '../ui/badges';
 
 /** Another pilot's public profile with follow, as on the website's pilot page (the app has no chat). */
 export function PilotScreen({
@@ -54,9 +54,6 @@ export function PilotScreen({
       setPilot({ ...pilot, isFollowing: next, followers: pilot.followers + (next ? 1 : -1) });
     setBusy(false);
   };
-  const shownRoles = pilot.roles.filter(
-    (r) => r !== 'member' || !pilot.roles.some((x) => x === 'pilot' || x === 'student_pilot'),
-  );
   return (
     <ScrollView contentContainerStyle={screenStyles.page}>
       <BackBar onBack={onBack} />
@@ -82,13 +79,12 @@ export function PilotScreen({
         </View>
       </View>
       <View style={s.badges}>
-        {pilot.pilotLevel ? <Badge label={levelLabel(pilot.pilotLevel)} tone="strong" /> : null}
-        {pilot.isInstructor && !pilot.roles.includes('instructor') ? (
-          <Badge label={t('profile.roles.instructor')} tone="strong" />
-        ) : null}
-        {shownRoles.map((r) => (
-          <Badge key={r} label={t(`profile.roles.${r}` as MessageKey)} />
-        ))}
+        <ProfileBadges
+          roles={pilot.roles}
+          level={pilot.pilotLevel}
+          trainingLevel={pilot.trainingLevel}
+          instructor={pilot.isInstructor}
+        />
       </View>
       {viewerId && !self ? (
         <View style={s.actions}>

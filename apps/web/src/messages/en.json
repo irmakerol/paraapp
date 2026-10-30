@@ -1305,10 +1305,6 @@
     "flyingSince": "Flying since {year}",
     "totals": "{hours} h in {flights, plural, one {# flight} other {# flights}}",
     "weight": "{kg} kg",
-    "levelBadge": {
-      "pilot": "Pilot {level}",
-      "tandem": "Tandem pilot {level}"
-    },
     "viewPublic": "View my public profile",
     "totalHours": "Total flight hours",
     "totalFlights": "Total flights",
@@ -1316,7 +1312,13 @@
     "sinceStat": "since {year}",
     "memberSince": "Member since {date}",
     "levelStat": "Level",
-    "noLevel": "Not set"
+    "noLevel": "Not set",
+    "badge": {
+      "pilot": "Pilot ({level})",
+      "pilotNoLevel": "Pilot",
+      "training": "Training for {level}",
+      "trainingNoLevel": "Student pilot"
+    }
   },
   "weather": {
     "today": "Today",

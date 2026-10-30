@@ -14,3 +14,4 @@ export * from './events';
 export * from './weather';
 export * from './trips';
 export * from './notices';
+export * from './badges';

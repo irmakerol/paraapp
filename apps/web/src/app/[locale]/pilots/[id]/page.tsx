@@ -100,6 +100,7 @@ export default async function PilotPage({
             <RoleBadges
               roles={card.roles ?? []}
               level={card.pilot_level}
+              trainingLevel={card.training_level}
               instructor={card.is_instructor}
             />
           ) : null}

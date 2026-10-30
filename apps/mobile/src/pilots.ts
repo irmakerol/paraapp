@@ -17,6 +17,7 @@ export interface PilotCard {
   totalHours: number | null;
   totalFlights: number | null;
   roles: string[];
+  trainingLevel: string | null;
   followers: number;
   isFollowing: boolean;
   blocked: boolean;
@@ -42,6 +43,7 @@ export async function loadPilot(id: string, viewerId: string | null): Promise<Pi
     total_flight_hours: number | null;
     total_flights: number | null;
     roles: string[] | null;
+    training_level: string | null;
   };
   const [{ data: counts }, follow, block, avatar] = await Promise.all([
     supabase.rpc('follow_counts', { p_user: id }),
@@ -81,6 +83,7 @@ export async function loadPilot(id: string, viewerId: string | null): Promise<Pi
     totalHours: c.total_flight_hours,
     totalFlights: c.total_flights,
     roles: c.roles ?? [],
+    trainingLevel: c.training_level ?? null,
     followers: Number(((counts ?? []) as { followers: number }[])[0]?.followers ?? 0),
     isFollowing: Boolean(follow.data),
     blocked: Boolean(block.data),

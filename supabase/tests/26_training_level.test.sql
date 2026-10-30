@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(8);
+select plan(10);
 
 insert into auth.users (id, email, raw_user_meta_data) values
   ('c2222222-2222-2222-2222-222222222222', 'admin@example.com', '{"birth_date":"1980-01-01"}'),
@@ -35,6 +35,22 @@ select lives_ok($$ select public.admin_set_training_level('c3333333-3333-3333-33
 reset role;
 select is((select training_level::text from public.profiles where id = 'c3333333-3333-3333-3333-333333333333'), 'p5',
   'the target is saved');
+
+-- Others see it on the profile card only when the pilot level is visible to them.
+update public.profiles set field_privacy = field_privacy || '{"pilot_level":"members"}'
+  where id = 'c3333333-3333-3333-3333-333333333333';
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"c4444444-4444-4444-4444-444444444444","role":"authenticated"}', true);
+select is((select training_level::text from public.profile_cards where id = 'c3333333-3333-3333-3333-333333333333'), 'p5',
+  'members see the training level when the pilot level is shown to members');
+reset role;
+update public.profiles set field_privacy = field_privacy || '{"pilot_level":"private"}'
+  where id = 'c3333333-3333-3333-3333-333333333333';
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"c4444444-4444-4444-4444-444444444444","role":"authenticated"}', true);
+select is((select training_level::text from public.profile_cards where id = 'c3333333-3333-3333-3333-333333333333'), null,
+  'and not when the pilot level is private');
+reset role;
 
 select * from finish();
 rollback;
