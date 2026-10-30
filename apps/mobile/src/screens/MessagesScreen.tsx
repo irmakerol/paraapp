@@ -28,6 +28,7 @@ import {
   sendMessage,
   setMuted,
   signImages,
+  uploadChatPhoto,
   subscribeRoom,
   unsubscribe,
   type ChatRoom,
@@ -39,6 +40,7 @@ import { Body, Title } from '../ui/kit';
 import { Markdown } from '../ui/markdown';
 import { BackBar, Meta, screenStyles } from '../ui/screen';
 import { useTheme } from '../ui/theme';
+import { pickImage } from '../images';
 import { PilotScreen } from './PilotScreen';
 
 type Open =
@@ -328,7 +330,33 @@ function Room({
       </View>
     );
 
-  const send = async (input: { body?: string; lat?: number; lng?: number }) => {
+  const sendPhoto = async (source: 'library' | 'camera') => {
+    try {
+      const photo = await pickImage(source);
+      if (!photo) return;
+      setSending(true);
+      const path = await uploadChatPhoto(chatId, photo);
+      setSending(false);
+      if (!path) {
+        setError(true);
+        return;
+      }
+      await send({ imagePath: path });
+    } catch (e) {
+      setSending(false);
+      if (e instanceof Error && e.message === 'permission') Alert.alert(t('chat.permission'));
+      else setError(true);
+    }
+  };
+
+  const choosePhoto = () =>
+    Alert.alert(t('chat.image'), undefined, [
+      { text: t('chat.image'), onPress: () => void sendPhoto('library') },
+      { text: t('chat.takePhoto'), onPress: () => void sendPhoto('camera') },
+      { text: t('common.cancel'), style: 'cancel' },
+    ]);
+
+  const send = async (input: { body?: string; imagePath?: string; lat?: number; lng?: number }) => {
     setSending(true);
     setError(false);
     const m = await sendMessage({ chatId, ...input });
@@ -488,6 +516,15 @@ function Room({
         <View style={[s.composer, { borderColor: c.border, backgroundColor: c.bg }]}>
           {error ? <Text style={{ color: c.danger }}>{t('chat.error')}</Text> : null}
           <View style={s.composeRow}>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel={t('chat.image')}
+              onPress={choosePhoto}
+              disabled={sending}
+              style={[s.iconButton, { borderColor: c.border }]}
+            >
+              <Text style={{ fontSize: 20 }}>📷</Text>
+            </Pressable>
             <Pressable
               accessibilityRole="button"
               accessibilityLabel={t('chat.location')}

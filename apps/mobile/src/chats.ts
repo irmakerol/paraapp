@@ -1,4 +1,6 @@
 import type { RealtimeChannel } from '@supabase/supabase-js';
+import * as Crypto from 'expo-crypto';
+import type { PreparedImage } from './images';
 import { CONFIG } from './config';
 import { supabase } from './supabase';
 import { displayNames, sample } from './content';
@@ -256,9 +258,22 @@ export async function setMuted(chatId: string, userId: string, muted: boolean): 
   await supabase.from('chat_members').update({ muted }).eq('chat_id', chatId).eq('user_id', userId);
 }
 
+/** Uploads a re-encoded photo into the chat's folder (members only) and returns its path. */
+export async function uploadChatPhoto(
+  chatId: string,
+  photo: PreparedImage,
+): Promise<string | null> {
+  const path = `${chatId}/${Crypto.randomUUID()}.jpg`;
+  const { error } = await supabase.storage
+    .from('chat-media')
+    .upload(path, photo.bytes, { contentType: photo.contentType });
+  return error ? null : path;
+}
+
 export async function sendMessage(input: {
   chatId: string;
   body?: string;
+  imagePath?: string;
   lat?: number;
   lng?: number;
 }): Promise<Message | null> {

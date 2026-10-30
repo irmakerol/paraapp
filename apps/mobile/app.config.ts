@@ -57,6 +57,14 @@ const config: ExpoConfig = {
       'expo-sensors',
       { motionPermission: 'Fly Anatolia uses the barometer for an accurate climb rate (vario).' },
     ],
+    [
+      'expo-image-picker',
+      {
+        photosPermission: 'Fly Anatolia lets you add a photo to a notice or a chat message.',
+        cameraPermission: 'Fly Anatolia lets you take a photo for a notice or a chat message.',
+        microphonePermission: false,
+      },
+    ],
     ['expo-build-properties', { ios: { deploymentTarget: '15.1' } }],
     ['@react-native-google-signin/google-signin', { iosUrlScheme: googleUrlScheme }],
   ],

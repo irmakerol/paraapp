@@ -1,3 +1,5 @@
+import * as Crypto from 'expo-crypto';
+import type { PreparedImage } from './images';
 import { supabase } from './supabase';
 
 export interface Notice {
@@ -192,14 +194,28 @@ export interface NoticeInput {
 }
 
 /** Posts a notice as the signed-in adult (RLS checks age and owner; same rules as noticeSchema). */
-export async function postNotice(userId: string, n: NoticeInput): Promise<void> {
+export async function postNotice(
+  userId: string,
+  n: NoticeInput,
+  photo: PreparedImage | null = null,
+): Promise<void> {
   const blank = (v: string) => (v.trim() === '' ? null : v.trim());
   const price = blank(n.price.replace(',', '.'));
   const priceValue = price == null ? null : Number(price);
   if (priceValue != null && (!Number.isFinite(priceValue) || priceValue < 0))
     throw new Error('validation');
+  // Own folder only (storage policy); the photo was re-encoded on the phone (no EXIF/GPS).
+  let photoPath: string | null = null;
+  if (photo) {
+    photoPath = `${userId}/${Crypto.randomUUID()}.jpg`;
+    const { error: uploadError } = await supabase.storage
+      .from('notice-photos')
+      .upload(photoPath, photo.bytes, { contentType: photo.contentType });
+    if (uploadError) throw new Error('photo');
+  }
   const { error } = await supabase.from('notices').insert({
     user_id: userId,
+    photo_path: photoPath,
     kind: n.kind,
     category: n.category,
     title: n.title.trim(),
@@ -211,7 +227,10 @@ export async function postNotice(userId: string, n: NoticeInput): Promise<void> 
     price: priceValue,
     currency: priceValue == null ? null : 'TRY',
   });
-  if (error) throw error;
+  if (error) {
+    if (photoPath) await supabase.storage.from('notice-photos').remove([photoPath]);
+    throw error;
+  }
 }
 
 export async function closeNotice(userId: string, id: string): Promise<void> {

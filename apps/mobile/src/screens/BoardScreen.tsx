@@ -27,6 +27,7 @@ import {
 } from '../board';
 import { listSites, type Site } from '../sites';
 import { startDirectChat } from '../chats';
+import { pickImage, type PreparedImage } from '../images';
 import { Badge, Body, Button, Chips, Field, Segmented, Stepper, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
 import { BackBar } from '../ui/screen';
@@ -372,6 +373,8 @@ const s = StyleSheet.create({
   price: { fontSize: 17, fontWeight: '800' },
   bigPrice: { fontSize: 26, fontWeight: '800' },
   photo: { width: '100%', height: 220, borderRadius: 14 },
+  label: { fontSize: 16, fontWeight: '600', marginTop: 8 },
+  photoButtons: { flexDirection: 'row', gap: 10 },
   photoPage: { width: 340, height: 240, borderRadius: 14, marginRight: 8 },
   facts: { borderTopWidth: StyleSheet.hairlineWidth, paddingTop: 8, gap: 4 },
   fact: { flexDirection: 'row', justifyContent: 'space-between', gap: 12, paddingVertical: 4 },
@@ -388,7 +391,17 @@ function NoticeForm({
   onBack: () => void;
   onPosted: () => void;
 }) {
+  const c = useTheme();
   const [sites, setSites] = useState<Site[]>([]);
+  const [photo, setPhoto] = useState<PreparedImage | null>(null);
+  const choose = async (source: 'library' | 'camera') => {
+    try {
+      const picked = await pickImage(source);
+      if (picked) setPhoto(picked);
+    } catch {
+      Alert.alert(t('noticeForm.photoError'));
+    }
+  };
   const [form, setForm] = useState<NoticeInput>({
     kind: 'offer',
     category: 'transport',
@@ -421,11 +434,17 @@ function NoticeForm({
     setBusy(true);
     setMessage(null);
     try {
-      await postNotice(userId, form);
+      await postNotice(userId, form, photo);
       onPosted();
     } catch (e) {
       const code = (e as { code?: string }).code;
-      setMessage(code === '42501' ? t('noticeForm.adultsOnly') : t('common.error'));
+      setMessage(
+        code === '42501'
+          ? t('noticeForm.adultsOnly')
+          : e instanceof Error && e.message === 'photo'
+            ? t('noticeForm.photoError')
+            : t('common.error'),
+      );
     } finally {
       setBusy(false);
     }
@@ -504,7 +523,33 @@ function NoticeForm({
         keyboardType="decimal-pad"
         maxLength={12}
       />
-      <Body muted>{t('noticeForm.photoOnWeb')}</Body>
+      <Text style={[s.label, { color: c.text }]}>{t('noticeForm.photo')}</Text>
+      {photo ? (
+        <>
+          <Image source={{ uri: photo.uri }} style={s.photo} resizeMode="cover" />
+          <Button
+            label={t('noticeForm.removePhoto')}
+            kind="secondary"
+            onPress={() => setPhoto(null)}
+          />
+        </>
+      ) : (
+        <View style={s.photoButtons}>
+          <Button
+            label={t('noticeForm.addPhoto')}
+            kind="secondary"
+            onPress={() => void choose('library')}
+            style={{ flex: 1 }}
+          />
+          <Button
+            label={t('noticeForm.takePhoto')}
+            kind="secondary"
+            onPress={() => void choose('camera')}
+            style={{ flex: 1 }}
+          />
+        </View>
+      )}
+      <Body muted>{t('noticeForm.photoNote')}</Body>
       <Button label={t('noticeForm.submit')} busy={busy} onPress={() => void submit()} />
       {message ? <Body>{message}</Body> : null}
     </ScrollView>
