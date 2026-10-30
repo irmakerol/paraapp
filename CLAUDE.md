@@ -115,6 +115,8 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - The phone app mirrors the whole website except admin (Irmak, 2026-10-30): tabs Home, Fly, Flights,
   Messages, Profile; every club section is a tile on Home. Server-only steps use Bearer routes under
   `/api/mobile/*` that share code with the website (`lib/incidents.ts`, `lib/send-message.ts`).
+- The phone app has no chat (Irmak, 2026-10-30): its Messages tab is the read-only "Kulüp Mesajları"
+  (club messages the person received); no direct/group chats or "message the seller" in the app.
 - Phone app (`apps/mobile`, docs/MOBILE.md): its strings live in `src/messages.ts` (TR default, EN
   fallback, typed so both stay in sync). It talks to the website with a Bearer token
   (`lib/supabase/bearer.ts`, `/api/mobile/*`). Built and uploaded to TestFlight by

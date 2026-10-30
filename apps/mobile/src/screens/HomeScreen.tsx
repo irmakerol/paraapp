@@ -42,21 +42,21 @@ const SECTIONS: { id: Section; label: MessageKey; icon: string; members?: boolea
 
 /**
  * The app's home: what the website's home page and menu offer, with every club section one tap
- * away. Sections open inside this tab and "Back" returns here.
+ * away. Sections open inside this tab; "Back" or the Home tab returns here.
  */
 export function HomeScreen({
   userId,
   name,
   onFly,
   onSignIn,
-  onChat,
+  homeTaps = 0,
 }: {
   userId: string | null;
   name: string | null;
   onFly: () => void;
   onSignIn: () => void;
-  /** Opens a conversation in the Messages tab. */
-  onChat: (chatId: string) => void;
+  /** Goes up by one each time the Home tab is tapped: close any open section. */
+  homeTaps?: number;
 }) {
   const c = useTheme();
   const [route, setRoute] = useState<Route>(null);
@@ -82,6 +82,10 @@ export function HomeScreen({
   useEffect(() => {
     void load();
   }, [load, userId]);
+
+  useEffect(() => {
+    setRoute(null);
+  }, [homeTaps]);
 
   const back = () => setRoute(null);
   if (route) {
@@ -111,7 +115,6 @@ export function HomeScreen({
             onBack={back}
             initial={route.section}
             onPilot={userId ? (id) => setRoute({ section: 'pilot', id }) : undefined}
-            onChat={onChat}
           />
         );
       case 'pilot':
@@ -120,7 +123,6 @@ export function HomeScreen({
             id={route.id ?? ''}
             viewerId={userId}
             onBack={() => setRoute({ section: 'notices' })}
-            onChat={onChat}
           />
         );
     }

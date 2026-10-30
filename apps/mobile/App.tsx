@@ -1,5 +1,14 @@
-import { useCallback, useEffect, useState } from 'react';
-import { AppState, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  AppState,
+  Easing,
+  Linking,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -24,7 +33,7 @@ const TABS: { id: Tab; label: MessageKey; icon: string }[] = [
   { id: 'home', label: 'tabs.home', icon: '🏠' },
   { id: 'fly', label: 'tabs.fly', icon: '🪂' },
   { id: 'flights', label: 'tabs.flights', icon: '📒' },
-  { id: 'messages', label: 'tabs.messages', icon: '💬' },
+  { id: 'messages', label: 'tabs.messages', icon: '📣' },
   { id: 'account', label: 'tabs.account', icon: '👤' },
 ];
 
@@ -40,7 +49,7 @@ function Main() {
   const c = useTheme();
   const [tab, setTab] = useState<Tab>('home');
   const [name, setName] = useState<string | null>(null);
-  const [openChat, setOpenChat] = useState<string | null>(null);
+  const [homeTaps, setHomeTaps] = useState(0);
   const [unread, setUnread] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [step, setStep] = useState<OnboardingStep | null>(null);
@@ -109,7 +118,6 @@ function Main() {
   }, [refresh]);
 
   const signedIn = Boolean(session) && !step;
-  const clearOpenChat = useCallback(() => setOpenChat(null), []);
 
   return (
     <SafeAreaView style={[s.root, { backgroundColor: c.bg }]} edges={['top', 'left', 'right']}>
@@ -121,17 +129,12 @@ function Main() {
           name={signedIn ? name : null}
           onFly={() => setTab('fly')}
           onSignIn={() => setTab('account')}
-          onChat={(id) => {
-            setOpenChat(id);
-            setTab('messages');
-          }}
+          homeTaps={homeTaps}
         />
       </View>
       <View style={[s.screen, tab !== 'messages' && s.hidden]}>
         <MessagesScreen
           userId={signedIn && session ? session.user.id : null}
-          openChat={openChat}
-          onOpened={clearOpenChat}
           onUnread={setUnread}
           active={tab === 'messages'}
         />
@@ -173,16 +176,19 @@ function Main() {
               key={item.id}
               accessibilityRole="tab"
               accessibilityState={{ selected: active }}
-              onPress={() => setTab(item.id)}
+              onPress={() => {
+                // Home always goes back to the home page, whatever section is open.
+                if (item.id === 'home') setHomeTaps((n) => n + 1);
+                setTab(item.id);
+              }}
               style={s.tab}
             >
-              <Text style={s.tabIcon} accessibilityElementsHidden importantForAccessibility="no">
-                {flying ? '🔴' : item.icon}
-              </Text>
+              <TabIcon icon={flying ? '🔴' : item.icon} bounce={item.id === 'messages' && unread} />
               {item.id === 'messages' && unread ? (
                 <View style={[s.badge, { backgroundColor: c.danger }]} />
               ) : null}
               <Text
+                numberOfLines={2}
                 style={[s.tabText, { color: flying ? c.danger : active ? c.primary : c.muted }]}
               >
                 {t(flying ? 'tabs.flying' : item.label)}
@@ -195,6 +201,40 @@ function Main() {
   );
 }
 
+/** A tab icon; `bounce` hops it once every two seconds (new club messages). */
+function TabIcon({ icon, bounce }: { icon: string; bounce: boolean }) {
+  const y = useRef(new Animated.Value(0)).current;
+  useEffect(() => {
+    if (!bounce) return;
+    const hop = Animated.loop(
+      Animated.sequence([
+        Animated.timing(y, { toValue: -8, duration: 180, useNativeDriver: true }),
+        Animated.timing(y, {
+          toValue: 0,
+          duration: 420,
+          easing: Easing.bounce,
+          useNativeDriver: true,
+        }),
+        Animated.delay(1400),
+      ]),
+    );
+    hop.start();
+    return () => {
+      hop.stop();
+      y.setValue(0);
+    };
+  }, [bounce, y]);
+  return (
+    <Animated.Text
+      style={[s.tabIcon, { transform: [{ translateY: y }] }]}
+      accessibilityElementsHidden
+      importantForAccessibility="no"
+    >
+      {icon}
+    </Animated.Text>
+  );
+}
+
 const s = StyleSheet.create({
   root: { flex: 1 },
   screen: { flex: 1 },
@@ -203,5 +243,5 @@ const s = StyleSheet.create({
   tab: { flex: 1, minHeight: 56, alignItems: 'center', justifyContent: 'center' },
   tabIcon: { fontSize: 20 },
   badge: { position: 'absolute', top: 8, right: '30%', width: 10, height: 10, borderRadius: 5 },
-  tabText: { fontSize: 13, fontWeight: '700' },
+  tabText: { fontSize: 12, fontWeight: '700', textAlign: 'center' },
 });

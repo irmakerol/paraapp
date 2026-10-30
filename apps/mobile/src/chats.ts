@@ -98,34 +98,30 @@ export async function listChats(userId: string): Promise<ChatSummary[]> {
     .sort((a, b) => b.lastMessageAt.localeCompare(a.lastMessageAt));
 }
 
+/** Club messages this person received (RLS: only their own), newest first. */
 export async function listClubMessages(userId: string): Promise<ClubMessage[]> {
   const { data, error } = await supabase
-    .from('club_message_recipients')
-    .select('read_at, club_messages(id, title, body, created_at)')
-    .eq('user_id', userId)
-    .order('message_id', { ascending: false })
-    .limit(30);
+    .from('club_messages')
+    .select('id, title, body, created_at, club_message_recipients!inner(read_at, user_id)')
+    .eq('club_message_recipients.user_id', userId)
+    .order('created_at', { ascending: false })
+    .limit(50);
   if (error) throw error;
   return (
     (data ?? []) as unknown as {
-      read_at: string | null;
-      club_messages: { id: string; title: string; body: string | null; created_at: string } | null;
+      id: string;
+      title: string;
+      body: string | null;
+      created_at: string;
+      club_message_recipients: { read_at: string | null }[];
     }[]
-  )
-    .flatMap((r) =>
-      r.club_messages
-        ? [
-            {
-              id: r.club_messages.id,
-              title: r.club_messages.title,
-              body: r.club_messages.body,
-              createdAt: r.club_messages.created_at,
-              unread: r.read_at === null,
-            },
-          ]
-        : [],
-    )
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  ).map((m) => ({
+    id: m.id,
+    title: m.title,
+    body: m.body,
+    createdAt: m.created_at,
+    unread: m.club_message_recipients.some((r) => r.read_at === null),
+  }));
 }
 
 export async function markClubMessageRead(userId: string, id: string): Promise<void> {
@@ -137,10 +133,15 @@ export async function markClubMessageRead(userId: string, id: string): Promise<v
     .is('read_at', null);
 }
 
-/** True when anything is unread (for the dot on the Messages tab). */
+/** True when a club message is unread (the Club Messages tab icon bounces). */
 export async function hasUnread(userId: string): Promise<boolean> {
-  const [chats, club] = await Promise.all([listChats(userId), listClubMessages(userId)]);
-  return chats.some((c) => c.unread && !c.muted) || club.some((m) => m.unread);
+  const { count, error } = await supabase
+    .from('club_message_recipients')
+    .select('message_id', { count: 'exact', head: true })
+    .eq('user_id', userId)
+    .is('read_at', null);
+  if (error) throw error;
+  return (count ?? 0) > 0;
 }
 
 export interface ChatRoom {

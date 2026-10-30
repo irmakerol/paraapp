@@ -34,7 +34,6 @@ import {
   type NoticeInput,
 } from '../board';
 import { listSites, type Site } from '../sites';
-import { startDirectChat } from '../chats';
 import { pickImage, type PreparedImage } from '../images';
 import { Badge, Body, Button, Chips, Field, Segmented, Stepper, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
@@ -54,17 +53,14 @@ export function BoardScreen({
   userId = null,
   onBack,
   onPilot,
-  onChat,
   initial = 'notices',
 }: {
   signedIn: boolean;
   /** The signed-in person (to post and manage their own notices). */
   userId?: string | null;
   onBack?: () => void;
-  /** Opens the poster's profile (to follow or message them). */
+  /** Opens the poster's profile (to follow them). */
   onPilot?: (id: string) => void;
-  /** Opens a conversation in the Messages tab. */
-  onChat?: (chatId: string) => void;
   initial?: Section;
 }) {
   const c = useTheme();
@@ -144,7 +140,6 @@ export function BoardScreen({
           setOpenAd(null);
           void load();
         }}
-        onChat={onChat}
       />
     );
 
@@ -322,39 +317,17 @@ function AdDetail({
   userId,
   onBack,
   onChanged,
-  onChat,
 }: {
   ad: Ad;
   userId: string | null;
   onBack: () => void;
   onChanged: () => void;
-  onChat?: (chatId: string) => void;
 }) {
   const mine = Boolean(userId && userId === a.ownerId);
   const status = (next: 'active' | 'reserved' | 'sold') =>
     userId &&
     void setAdStatus(userId, a.id, next).then(onChanged, () => Alert.alert(t('common.error')));
   const c = useTheme();
-  const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
-  const contact = async () => {
-    setBusy(true);
-    setMessage(null);
-    try {
-      onChat?.(await startDirectChat(a.ownerId, a.id));
-    } catch (e) {
-      const key = e instanceof Error ? e.message : 'unavailable';
-      setMessage(
-        key === 'minor'
-          ? t('chat.minorProtected')
-          : key === 'blocked'
-            ? t('chat.blockedNotice')
-            : t('chat.unavailable'),
-      );
-    } finally {
-      setBusy(false);
-    }
-  };
   return (
     <ScrollView contentContainerStyle={s.page}>
       <BackBar label={t('board.title')} onBack={onBack} />
@@ -421,10 +394,7 @@ function AdDetail({
             }
           />
         </>
-      ) : userId && onChat ? (
-        <Button label={t('board.contactSeller')} busy={busy} onPress={() => void contact()} />
       ) : null}
-      {message ? <Body muted>{message}</Body> : null}
     </ScrollView>
   );
 }

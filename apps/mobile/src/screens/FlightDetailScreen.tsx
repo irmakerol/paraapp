@@ -22,7 +22,7 @@ import { AltitudeScrubber } from '../ui/altitude-scrubber';
 import { Body, Button, Card, Segmented, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
 
-const SPEEDS = ['10', '30', '60', '120'] as const;
+const SPEEDS = ['1', '5', '10', '20', '50'] as const;
 type Speed = (typeof SPEEDS)[number];
 const TICK_MS = 200;
 const MAX_LINE_POINTS = 1_500;
@@ -53,7 +53,7 @@ export function FlightDetailScreen({
   const [failed, setFailed] = useState(false);
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [speed, setSpeed] = useState<Speed>('30');
+  const [speed, setSpeed] = useState<Speed>('10');
   const [view3d, setView3d] = useState(true);
   const [busy, setBusy] = useState(false);
   const [counted, setCounted] = useState(flight.countedInTotals);

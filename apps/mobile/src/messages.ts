@@ -8,12 +8,12 @@ const en = {
   ...clubEn,
   tabs: {
     home: 'Home',
-    messages: 'Messages',
+    messages: 'Club Messages',
     fly: 'Fly',
     flying: 'Flying',
     flights: 'Flights',
     sites: 'Sites',
-    board: 'Notices',
+    board: 'Notice Board',
     account: 'Profile',
   },
   common: {
@@ -159,7 +159,7 @@ const en = {
     totalFlights: 'Flights',
   },
   board: {
-    title: 'Notices',
+    title: 'Notice Board',
     show: 'Show',
     notices: 'Notice board',
     market: 'Gear market',
@@ -297,12 +297,12 @@ const tr: DeepStrings<Messages> = {
   ...clubTr,
   tabs: {
     home: 'Ana sayfa',
-    messages: 'Mesajlar',
+    messages: 'Kulüp Mesajları',
     fly: 'Uç',
     flying: 'Uçuşta',
     flights: 'Uçuşlar',
     sites: 'Alanlar',
-    board: 'Duyurular',
+    board: 'Duyuru Panosu',
     account: 'Profil',
   },
   common: {
@@ -450,7 +450,7 @@ const tr: DeepStrings<Messages> = {
     totalFlights: 'Uçuş',
   },
   board: {
-    title: 'Duyurular',
+    title: 'Duyuru Panosu',
     show: 'Göster',
     notices: 'Duyuru panosu',
     market: 'Ekipman pazarı',

@@ -2,28 +2,24 @@ import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { t, type MessageKey } from '../i18n';
 import { loadPilot, setFollowing, type PilotCard } from '../pilots';
-import { startDirectChat } from '../chats';
 import { Badge, Body, Button, Card } from '../ui/kit';
 import { BackBar, Fact, screenStyles } from '../ui/screen';
 import { useTheme } from '../ui/theme';
 import { levelLabel } from './ProfileScreen';
 
-/** Another pilot's public profile with follow and message, as on the website's pilot page. */
+/** Another pilot's public profile with follow, as on the website's pilot page (the app has no chat). */
 export function PilotScreen({
   id,
   viewerId,
   onBack,
-  onChat,
 }: {
   id: string;
   viewerId: string | null;
   onBack: () => void;
-  onChat: (chatId: string) => void;
 }) {
   const c = useTheme();
   const [pilot, setPilot] = useState<PilotCard | null | undefined>(undefined);
   const [busy, setBusy] = useState(false);
-  const [message, setMessage] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     try {
@@ -58,25 +54,6 @@ export function PilotScreen({
       setPilot({ ...pilot, isFollowing: next, followers: pilot.followers + (next ? 1 : -1) });
     setBusy(false);
   };
-  const chat = async () => {
-    setBusy(true);
-    setMessage(null);
-    try {
-      onChat(await startDirectChat(pilot.id));
-    } catch (e) {
-      const key = e instanceof Error ? e.message : 'unavailable';
-      setMessage(
-        key === 'minor'
-          ? t('chat.minorProtected')
-          : key === 'blocked'
-            ? t('chat.blockedNotice')
-            : t('chat.unavailable'),
-      );
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const shownRoles = pilot.roles.filter(
     (r) => r !== 'member' || !pilot.roles.some((x) => x === 'pilot' || x === 'student_pilot'),
   );
@@ -122,15 +99,8 @@ export function PilotScreen({
             onPress={() => void follow()}
             style={{ flex: 1 }}
           />
-          <Button
-            label={t('pilots.message')}
-            disabled={busy || pilot.blocked}
-            onPress={() => void chat()}
-            style={{ flex: 1 }}
-          />
         </View>
       ) : null}
-      {message ? <Body muted>{message}</Body> : null}
       {pilot.bio ? <Body>{pilot.bio}</Body> : null}
       <Card>
         {pilot.totalHours != null ? (
