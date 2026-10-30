@@ -7,6 +7,8 @@ import { createAdminClient } from '@/lib/supabase/admin';
 import { requireStaff } from '@/lib/staff';
 import { formatDate } from '@/lib/format';
 import { sampleLabel } from '@/lib/sample';
+import { Button } from '@/components/ui';
+import { setGroupMember } from '../../groups/actions';
 import { UserForm } from './user-form';
 
 export default async function EditUserPage({
@@ -21,16 +23,21 @@ export default async function EditUserPage({
   const t = await getTranslations('admin.usersAdmin');
   const roleNames = await getTranslations('roles');
   const supabase = await createClient();
-  const [{ data: profile }, { data: roles }] = await Promise.all([
-    supabase
-      .from('profiles')
-      .select(
-        'id, display_name, full_name, city, home_site, pilot_level, bio, avatar_path, status, created_at',
-      )
-      .eq('id', id)
-      .maybeSingle(),
-    supabase.from('user_roles').select('role').eq('user_id', id),
-  ]);
+  const g = await getTranslations('admin.groupsAdmin');
+  const [{ data: profile }, { data: roles }, { data: groups }, { data: memberships }] =
+    await Promise.all([
+      supabase
+        .from('profiles')
+        .select(
+          'id, display_name, full_name, city, home_site, pilot_level, bio, avatar_path, status, created_at',
+        )
+        .eq('id', id)
+        .maybeSingle(),
+      supabase.from('user_roles').select('role').eq('user_id', id),
+      supabase.from('user_groups').select('id, name').order('name'),
+      supabase.from('user_group_members').select('group_id').eq('user_id', id),
+    ]);
+  const inGroup = new Set((memberships ?? []).map((m) => m.group_id));
   if (!profile || profile.status === 'deletion_requested') notFound();
 
   // Email and the photo are only reachable with the service role (the photo may be private).
@@ -66,6 +73,31 @@ export default async function EditUserPage({
           bio: profile.bio ?? '',
         }}
       />
+      {groups?.length ? (
+        <section className="space-y-3 rounded-2xl border border-border bg-card p-4">
+          <h3 className="text-lg font-semibold">{g('title')}</h3>
+          <div className="flex flex-wrap gap-2">
+            {groups.map((group) => {
+              const has = inGroup.has(group.id);
+              return (
+                <form key={group.id} action={setGroupMember}>
+                  <input type="hidden" name="group_id" value={group.id} />
+                  <input type="hidden" name="user_id" value={profile.id} />
+                  <input type="hidden" name="add" value={has ? '0' : '1'} />
+                  <Button
+                    variant={has ? 'primary' : 'secondary'}
+                    aria-pressed={has}
+                    className="rounded-full"
+                  >
+                    {has ? '✓ ' : '+ '}
+                    {group.name}
+                  </Button>
+                </form>
+              );
+            })}
+          </div>
+        </section>
+      ) : null}
     </div>
   );
 }

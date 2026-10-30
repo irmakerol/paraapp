@@ -90,3 +90,17 @@ export async function setMuted(chatId: string, muted: boolean): Promise<void> {
     .eq('user_id', viewer.user.id);
   revalidatePath(`/[locale]/messages/${chatId}`, 'page');
 }
+
+/** Marks a club message as read for the signed-in person (RLS: own receipt only). */
+export async function markClubMessageRead(messageId: string): Promise<void> {
+  const viewer = await getViewer();
+  if (!viewer || !z.string().uuid().safeParse(messageId).success) return;
+  const supabase = await createClient();
+  await supabase
+    .from('club_message_recipients')
+    .update({ read_at: new Date().toISOString() })
+    .eq('message_id', messageId)
+    .eq('user_id', viewer.user.id)
+    .is('read_at', null);
+  revalidatePath('/[locale]/messages', 'page');
+}

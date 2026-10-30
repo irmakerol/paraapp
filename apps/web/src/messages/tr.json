@@ -852,6 +852,49 @@
       "announceHelp": "Bu geziye bağlantı veren taslak bir haber oluşturur. Yayınlamadan önce düzenleyebilirsiniz.",
       "announcedHelp": "Bu gezinin zaten bir haberi var.",
       "openAnnouncement": "Haberi aç"
+    },
+    "groups": "Gruplar",
+    "broadcast": "Toplu mesaj",
+    "groupsAdmin": {
+      "title": "Gruplar",
+      "lead": "Kişileri gruplara ayır (ör. \"Öğrenciler 2026\", \"Tandem ekibi\"). Toplu mesajları bir gruba gönderebilirsin.",
+      "new": "Yeni grup",
+      "name": "Grup adı",
+      "namePlaceholder": "ör. Öğrenciler 2026",
+      "description": "Açıklama (isteğe bağlı)",
+      "create": "Grubu oluştur",
+      "nameTaken": "Bu isimde bir grup zaten var.",
+      "memberCount": "{count, plural, =0 {üye yok} other {# kişi}}",
+      "empty": "Henüz grup yok.",
+      "back": "Gruplara dön",
+      "members": "Üyeler",
+      "addPerson": "Kişi ekle",
+      "choosePerson": "Bir kişi seç",
+      "add": "Ekle",
+      "remove": "Çıkar",
+      "noMembers": "Bu grupta henüz kimse yok.",
+      "delete": "Grubu sil"
+    },
+    "broadcastAdmin": {
+      "lead": "Herkese, bir role ya da bir gruba mesaj gönder. Mesaj kişilerin Mesajlar sayfasında görünür; bildirimlere izin verenlere telefon bildirimi de gider.",
+      "audience": "Kime",
+      "audiences": {
+        "all": "Herkes",
+        "role": "Bir rol",
+        "group": "Bir grup"
+      },
+      "role": "Rol",
+      "group": "Grup",
+      "choose": "Seç",
+      "noGroups": "Önce Gruplar bölümünde bir grup oluştur.",
+      "title": "Başlık",
+      "body": "Mesaj",
+      "bodyHelp": "Düz metin. En fazla 4000 karakter.",
+      "send": "Gönder",
+      "sent": "Gönderildi: {count} kişi.",
+      "history": "Gönderilen mesajlar",
+      "noHistory": "Henüz mesaj gönderilmedi.",
+      "readStats": "{read}/{total} okundu"
     }
   },
   "roles": {
@@ -1563,5 +1606,11 @@
     "afterTitle": "Başka bir aletle mi uçtun?",
     "afterBody": "Uçuşunu sonradan IGC veya GPX dosyası olarak uçuş defterine ekleyebilirsin.",
     "import": "Uçuş dosyası yükle"
+  },
+  "clubMessages": {
+    "title": "Kulüpten",
+    "unread": "okunmadı",
+    "back": "Mesajlara dön",
+    "from": "Fly Anatolia"
   }
 }

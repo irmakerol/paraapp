@@ -223,6 +223,63 @@ export type Database = {
         Update: { started_at?: Timestamp; updated_at?: Timestamp };
         Relationships: [];
       };
+      user_groups: {
+        Row: {
+          id: string;
+          name: string;
+          description: string | null;
+          created_by: string | null;
+          created_at: Timestamp;
+        };
+        Insert: { name: string; description?: string | null; created_by: string };
+        Update: { name?: string; description?: string | null };
+        Relationships: [];
+      };
+      user_group_members: {
+        Row: { group_id: string; user_id: string; added_by: string | null; added_at: Timestamp };
+        Insert: { group_id: string; user_id: string; added_by: string };
+        Update: never;
+        Relationships: [
+          {
+            foreignKeyName: 'user_group_members_group_id_fkey';
+            columns: ['group_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      club_messages: {
+        Row: {
+          id: string;
+          sender_id: string | null;
+          audience: 'all' | 'role' | 'group';
+          audience_role: Database['public']['Enums']['app_role'] | null;
+          audience_group: string | null;
+          audience_label: string | null;
+          title: string;
+          body: string;
+          recipient_count: number;
+          created_at: Timestamp;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      club_message_recipients: {
+        Row: { message_id: string; user_id: string; read_at: Timestamp | null };
+        Insert: never;
+        Update: { read_at?: Timestamp | null };
+        Relationships: [
+          {
+            foreignKeyName: 'club_message_recipients_message_id_fkey';
+            columns: ['message_id'];
+            isOneToOne: false;
+            referencedRelation: 'club_messages';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
 
       news: {
         Row: {
@@ -1261,6 +1318,16 @@ export type Database = {
         Returns: Database['public']['Tables']['messages']['Row'][];
       };
       ban_user: { Args: { p_user: string; p_until: Timestamp | null; p_reason: string }; Returns: undefined };
+      send_club_message: {
+        Args: {
+          p_audience: 'all' | 'role' | 'group';
+          p_role: Database['public']['Enums']['app_role'] | null;
+          p_group: string | null;
+          p_title: string;
+          p_body: string;
+        };
+        Returns: string;
+      };
       admin_update_profile: {
         Args: {
           p_user: string;

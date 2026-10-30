@@ -852,6 +852,49 @@
       "announceHelp": "Creates a draft news post that links to this trip. You can edit it before publishing.",
       "announcedHelp": "This trip already has a news post.",
       "openAnnouncement": "Open the news post"
+    },
+    "groups": "Groups",
+    "broadcast": "Club messages",
+    "groupsAdmin": {
+      "title": "Groups",
+      "lead": "Sort people into groups (e.g. \"Students 2026\", \"Tandem team\"). You can send club messages to a group.",
+      "new": "New group",
+      "name": "Group name",
+      "namePlaceholder": "e.g. Students 2026",
+      "description": "Description (optional)",
+      "create": "Create group",
+      "nameTaken": "A group with this name already exists.",
+      "memberCount": "{count, plural, =0 {no members} one {# person} other {# people}}",
+      "empty": "No groups yet.",
+      "back": "Back to groups",
+      "members": "Members",
+      "addPerson": "Add a person",
+      "choosePerson": "Choose a person",
+      "add": "Add",
+      "remove": "Remove",
+      "noMembers": "Nobody in this group yet.",
+      "delete": "Delete group"
+    },
+    "broadcastAdmin": {
+      "lead": "Send a message to everyone, one role or one group. It shows on their Messages page, and people who allow notifications also get a phone notification.",
+      "audience": "To",
+      "audiences": {
+        "all": "Everyone",
+        "role": "A role",
+        "group": "A group"
+      },
+      "role": "Role",
+      "group": "Group",
+      "choose": "Choose",
+      "noGroups": "Create a group in Groups first.",
+      "title": "Title",
+      "body": "Message",
+      "bodyHelp": "Plain text, up to 4000 characters.",
+      "send": "Send",
+      "sent": "Sent to {count} people.",
+      "history": "Sent messages",
+      "noHistory": "No messages sent yet.",
+      "readStats": "{read}/{total} read"
     }
   },
   "roles": {
@@ -1563,5 +1606,11 @@
     "afterTitle": "Flew with another instrument?",
     "afterBody": "You can add the flight to your logbook later as an IGC or GPX file.",
     "import": "Upload a flight file"
+  },
+  "clubMessages": {
+    "title": "From the club",
+    "unread": "unread",
+    "back": "Back to messages",
+    "from": "Fly Anatolia"
   }
 }

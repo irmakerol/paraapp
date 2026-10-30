@@ -4,7 +4,17 @@ import type { Role } from '@paraapp/core';
 import { requireActiveViewer, type Viewer } from '@/lib/session';
 
 export type StaffArea =
-  'news' | 'tips' | 'events' | 'trips' | 'reports' | 'safety' | 'sites' | 'users' | 'requests';
+  | 'news'
+  | 'tips'
+  | 'events'
+  | 'trips'
+  | 'reports'
+  | 'safety'
+  | 'sites'
+  | 'users'
+  | 'groups'
+  | 'broadcast'
+  | 'requests';
 
 /** Which roles may use each admin area. RLS enforces the same rules in the database. */
 export const AREA_ROLES: Record<StaffArea, readonly Role[]> = {
@@ -18,6 +28,9 @@ export const AREA_ROLES: Record<StaffArea, readonly Role[]> = {
   // Irmak (2026-10-30): only the super admin keeps the sites list.
   sites: ['super_admin'],
   users: ['admin'],
+  groups: ['admin'],
+  // Club messages to everyone, a role or a group: the super admin only (Irmak, 2026-10-30).
+  broadcast: ['super_admin'],
   requests: ['admin'],
 };
 

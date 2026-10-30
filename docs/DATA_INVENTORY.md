@@ -103,6 +103,17 @@ organisers record payment status by hand.
 - Sample records (`supabase/samples/sample_data.sql`, marked "(Ö)"/"(S)") are invented people with
   `@example.invalid` addresses: no personal data. Delete them before launch.
 
+## 1h. Club administration (2026-10-30)
+
+- `user_groups`, `user_group_members`: which groups a person is in (e.g. "Students 2026"). Kept by
+  admins; a person sees their own groups. Removed with the account; included in the data export.
+- `club_messages`, `club_message_recipients`: messages the super admin sends to everyone, a role or
+  a group, and who received and read them. A person sees only messages they received. Recipient
+  rows go with the account; the message text stays (it is the club's own text). Included in the
+  export. Sending is audited.
+- `profile_private.licence_body`: which body issued the licence (THK, APPI, …). Owner-only.
+- Admin profile edits (`admin_update_profile`) and photo removals are written to `audit_log`.
+
 ### Special category data
 
 **Incident reports** may contain health data (injuries): explicit consent in the form

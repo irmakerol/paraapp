@@ -21,11 +21,12 @@ describe('staff areas', () => {
       'trips',
       'reports',
       'users',
+      'groups',
       'requests',
     ]);
   });
   it('gives the super admin (who is also admin) Ground School and sites too', () => {
-    expect(staffAreas(viewer(['admin', 'super_admin']))).toHaveLength(8);
+    expect(staffAreas(viewer(['admin', 'super_admin']))).toHaveLength(10);
   });
   it('keeps incident reports for safety officers only', () => {
     expect(canUse(viewer(['admin']), 'safety')).toBe(false);
