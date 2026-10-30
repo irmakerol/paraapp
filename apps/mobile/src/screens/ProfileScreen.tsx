@@ -64,7 +64,7 @@ export function ProfileScreen({
   const c = useTheme();
   const userId = session.user.id;
   const [profile, setProfile] = useState<MyProfile | null>(null);
-  const [failed, setFailed] = useState(false);
+  const [failed, setFailed] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState<EditSection | null>(null);
   const [licence, setLicence] = useState('');
@@ -77,15 +77,20 @@ export function ProfileScreen({
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [p, l] = await Promise.all([loadMyProfile(userId), loadLicence()]);
-      setProfile(p);
-      if (l !== null) setLicence(l);
-      setFailed(false);
-    } catch {
-      setFailed(true);
+      setProfile(await loadMyProfile(userId));
+      setFailed(null);
+    } catch (e) {
+      // Shown in small print so a tester can tell us what went wrong.
+      setFailed(
+        e instanceof Error ? e.message : String((e as { message?: unknown })?.message ?? e),
+      );
     } finally {
       setLoading(false);
     }
+    // The licence number comes from the website; the profile never waits for it.
+    void loadLicence().then((l) => {
+      if (l !== null) setLicence(l);
+    });
   }, [userId]);
 
   useEffect(() => {
@@ -118,9 +123,10 @@ export function ProfileScreen({
   if (!profile) {
     return (
       <View style={s.center}>
-        {failed ? (
+        {failed !== null ? (
           <>
             <Body muted>{t('common.offline')}</Body>
+            <Text style={[s.errorDetail, { color: c.muted }]}>{failed}</Text>
             <Button label={t('profile.retry')} kind="secondary" onPress={() => void load()} />
           </>
         ) : (
@@ -779,6 +785,7 @@ const s = StyleSheet.create({
   barText: { fontSize: 17 },
   barTitle: { fontSize: 17, fontWeight: '700', flex: 1, textAlign: 'center' },
   pair: { flexDirection: 'row', gap: 10 },
+  errorDetail: { fontSize: 12, textAlign: 'center' },
   initials: { alignItems: 'center', justifyContent: 'center' },
   initialsText: { fontSize: 30, fontWeight: '800' },
   badges: { flexDirection: 'row', flexWrap: 'wrap', gap: 6, marginVertical: 4 },

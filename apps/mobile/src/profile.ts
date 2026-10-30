@@ -267,10 +267,16 @@ async function licenceRequest(init?: RequestInit): Promise<Response | null> {
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
   if (!token) return null;
+  // Never hang the profile on a slow network.
+  const abort = new AbortController();
+  const timer = setTimeout(() => abort.abort(), 10_000);
   return fetch(`${CONFIG.webUrl}/api/mobile/licence`, {
     ...init,
+    signal: abort.signal,
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-  }).catch(() => null);
+  })
+    .catch(() => null)
+    .finally(() => clearTimeout(timer));
 }
 
 /** The licence number is encrypted on the server, so it is read and written through the website. */
