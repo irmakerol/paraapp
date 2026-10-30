@@ -18,7 +18,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
   const supabase = await createClient();
   const { data: priv } = await supabase
     .from('profile_private')
-    .select('licence_number_enc')
+    .select('licence_number_enc, licence_body')
     .eq('user_id', profile.id)
     .maybeSingle();
 
@@ -63,6 +63,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
       privacy={privacy}
       units={units}
       licence={licence}
+      licenceBody={priv?.licence_body ?? ''}
       avatarUrl={avatarUrl}
       isMinor={profile.age_group === 'minor'}
       isMember={isMemberLevel(roles)}

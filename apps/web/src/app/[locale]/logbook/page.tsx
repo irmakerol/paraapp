@@ -29,9 +29,6 @@ export default async function LogbookPage({ params }: { params: Promise<{ locale
         <Link href="/logbook/new" className={buttonClass('secondary')}>
           {t('addManual')}
         </Link>
-        <Link href="/logbook/equipment" className={buttonClass('secondary')}>
-          {t('equipmentButton')}
-        </Link>
         <Link href={`/pilots/${viewer.user.id}`} className={buttonClass('ghost')}>
           {t('myPilotPage')}
         </Link>

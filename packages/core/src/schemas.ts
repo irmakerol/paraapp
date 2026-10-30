@@ -102,3 +102,50 @@ export const guardianSchema = z.object({
   guardian_name: z.string().trim().min(2).max(100),
   guardian_email: emailSchema,
 });
+
+/** Bodies that issue paragliding licences, offered next to the licence number. Must match SQL. */
+export const LICENCE_BODIES = ['thk', 'appi', 'ushpa', 'bhpa', 'ffvl', 'dhv', 'other'] as const;
+export type LicenceBody = (typeof LICENCE_BODIES)[number];
+
+/** Countries offered in the profile (ISO 3166-1 alpha-2); names come from Intl.DisplayNames. */
+export const PROFILE_COUNTRIES = [
+  'TR',
+  'DE',
+  'GB',
+  'NL',
+  'FR',
+  'CH',
+  'AT',
+  'IT',
+  'ES',
+  'GR',
+  'BG',
+  'CY',
+  'BE',
+  'SE',
+  'NO',
+  'DK',
+  'FI',
+  'PL',
+  'CZ',
+  'RO',
+  'HU',
+  'PT',
+  'IE',
+  'AZ',
+  'GE',
+  'UA',
+  'RU',
+  'IR',
+  'IL',
+  'AE',
+  'US',
+  'CA',
+  'AU',
+  'NZ',
+  'BR',
+  'JP',
+  'KR',
+  'IN',
+  'ZA',
+] as const;

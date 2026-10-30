@@ -108,7 +108,7 @@ test('logbook pages require sign-in', async ({ page }) => {
     '/en/logbook',
     '/en/logbook/import',
     '/en/logbook/new',
-    '/en/logbook/equipment',
+    '/en/account/equipment',
   ]) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);

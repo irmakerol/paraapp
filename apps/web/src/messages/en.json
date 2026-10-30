@@ -207,8 +207,7 @@
       "photoHelp": "JPEG, PNG or WebP. We shrink it and remove location data before upload.",
       "displayName": "Display name",
       "fullName": "Full name",
-      "country": "Country code",
-      "countryHelp": "Two letters, e.g. TR",
+      "country": "Country",
       "city": "City",
       "homeSite": "Home site",
       "pilotLevel": "Pilot level",
@@ -254,7 +253,17 @@
       "weightHelp": "Your own weight without gear. Private unless you choose otherwise.",
       "totalHours": "Total flight hours",
       "totalFlights": "Number of flights",
-      "totalsHelp": "Your totals so far, including flights you did not log here. Flights you import or add can be added on top."
+      "totalsHelp": "Your totals so far, including flights you did not log here. Flights you import or add can be added on top.",
+      "licenceBody": "Issued by",
+      "licenceBodies": {
+        "thk": "THK / THSF",
+        "appi": "APPI",
+        "ushpa": "USHPA",
+        "bhpa": "BHPA",
+        "ffvl": "FFVL",
+        "dhv": "DHV",
+        "other": "Other"
+      }
     },
     "privacy": {
       "consentsTitle": "Consents",
@@ -895,7 +904,6 @@
     "lead": "Your flights, records and equipment in one place.",
     "importButton": "Import IGC/GPX",
     "addManual": "Add a flight by hand",
-    "equipmentButton": "My equipment",
     "myPilotPage": "My pilot page",
     "exportCsv": "Download logbook (CSV)",
     "empty": "No flights yet. Import IGC or GPX files from your instrument or phone app, or add a flight by hand.",

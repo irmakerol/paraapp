@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { requireActiveViewer } from '@/lib/session';
-import { Button, PageTitle } from '@/components/ui';
+import { Button } from '@/components/ui';
 import { EquipmentForm } from '../equipment-form';
 import { deleteEquipment } from '../actions';
 
@@ -32,8 +32,8 @@ export default async function EditEquipmentPage({
   const s = (v: string | number | null) => (v === null ? '' : String(v));
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <PageTitle>{t('edit')}</PageTitle>
+    <div className="space-y-6">
+      <h2 className="text-xl font-bold">{t('edit')}</h2>
       <EquipmentForm
         id={item.id}
         today={today}

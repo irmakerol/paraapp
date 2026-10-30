@@ -149,7 +149,11 @@ export async function GET() {
       providers: user.app_metadata.providers ?? [],
     },
     profile: profile.data,
-    private: { birth_date: priv.data?.birth_date ?? null, licence_number: licence },
+    private: {
+      birth_date: priv.data?.birth_date ?? null,
+      licence_number: licence,
+      licence_body: priv.data?.licence_body ?? null,
+    },
     roles: roles.data ?? [],
     consents: consents.data ?? [],
     legal_acceptances: acceptances.data ?? [],

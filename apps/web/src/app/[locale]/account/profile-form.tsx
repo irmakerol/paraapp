@@ -2,7 +2,9 @@
 import { useActionState, useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import {
+  LICENCE_BODIES,
   PILOT_LEVEL_CHOICES,
+  PROFILE_COUNTRIES,
   VISIBILITIES,
   type FieldPrivacy,
   type PrivacyField,
@@ -34,6 +36,8 @@ interface ProfileValues {
 }
 
 const localeNames: Record<string, string> = { tr: 'Türkçe', en: 'English' };
+// The photo's visibility select sits outside the form (next to the photo) but must be sent with it.
+const FORM_ID = 'profile-form';
 
 export function ProfileForm(props: {
   userId: string;
@@ -41,6 +45,7 @@ export function ProfileForm(props: {
   privacy: FieldPrivacy;
   units: UnitPreferences;
   licence: string;
+  licenceBody: string;
   avatarUrl: string | null;
   isMinor: boolean;
   isMember: boolean;
@@ -50,12 +55,24 @@ export function ProfileForm(props: {
   const [state, action] = useActionState(saveProfile, initialState);
   const [licenceChanged, setLicenceChanged] = useState(false);
   const { profile, privacy } = props;
+  const root = useTranslations();
+  const err = (name: string) =>
+    state.fieldErrors?.[name] ? root('auth.errors.validation') : undefined;
+  const countryName = new Intl.DisplayNames([locale], { type: 'region' });
+  const countries = [
+    ...(profile.country && !(PROFILE_COUNTRIES as readonly string[]).includes(profile.country)
+      ? [profile.country]
+      : []),
+    ...PROFILE_COUNTRIES,
+  ];
 
   const visibility = (field: PrivacyField) => (
     <Select
       name={`privacy_${field}`}
+      form={FORM_ID}
       defaultValue={privacy[field]}
       aria-label={`${t('visibility')}`}
+      aria-invalid={state.fieldErrors?.[`privacy_${field}`] ? true : undefined}
       className="sm:w-44"
     >
       {VISIBILITIES.map((v) => (
@@ -84,10 +101,10 @@ export function ProfileForm(props: {
 
       <Card>{row('photo', <AvatarEditor userId={props.userId} url={props.avatarUrl} />)}</Card>
 
-      <form action={action} className="space-y-6" noValidate>
+      <form id={FORM_ID} action={action} className="space-y-6" noValidate>
         <input type="hidden" name="locale" value={locale} />
         <Card className="space-y-5">
-          <Field id="display_name" label={t('displayName')}>
+          <Field id="display_name" label={t('displayName')} error={err('display_name')}>
             <Input
               id="display_name"
               name="display_name"
@@ -99,7 +116,7 @@ export function ProfileForm(props: {
           </Field>
           {row(
             'full_name',
-            <Field id="full_name" label={t('fullName')}>
+            <Field id="full_name" label={t('fullName')} error={err('full_name')}>
               <Input
                 id="full_name"
                 name="full_name"
@@ -111,24 +128,25 @@ export function ProfileForm(props: {
           )}
           {row(
             'location',
-            <div className="grid gap-3 sm:grid-cols-[8rem_1fr]">
-              <Field id="country" label={t('country')} help={t('countryHelp')}>
-                <Input
-                  id="country"
-                  name="country"
-                  defaultValue={profile.country}
-                  maxLength={2}
-                  autoComplete="country"
-                />
+            <div className="grid gap-3 sm:grid-cols-[12rem_1fr]">
+              <Field id="country" label={t('country')} error={err('country')}>
+                <Select id="country" name="country" defaultValue={profile.country}>
+                  <option value="">{t('levelNone')}</option>
+                  {countries.map((c) => (
+                    <option key={c} value={c}>
+                      {countryName.of(c) ?? c}
+                    </option>
+                  ))}
+                </Select>
               </Field>
-              <Field id="city" label={t('city')}>
+              <Field id="city" label={t('city')} error={err('city')}>
                 <Input id="city" name="city" defaultValue={profile.city} maxLength={80} />
               </Field>
             </div>,
           )}
           {row(
             'home_site',
-            <Field id="home_site" label={t('homeSite')}>
+            <Field id="home_site" label={t('homeSite')} error={err('home_site')}>
               <Input
                 id="home_site"
                 name="home_site"
@@ -139,7 +157,7 @@ export function ProfileForm(props: {
           )}
           {row(
             'pilot_level',
-            <Field id="pilot_level" label={t('pilotLevel')}>
+            <Field id="pilot_level" label={t('pilotLevel')} error={err('pilot_level')}>
               <Select id="pilot_level" name="pilot_level" defaultValue={profile.pilot_level}>
                 <option value="">{t('levelNone')}</option>
                 {/* An older level (student, P1, tandem) stays selectable until changed. */}
@@ -159,7 +177,12 @@ export function ProfileForm(props: {
           )}
           {row(
             'years_flying',
-            <Field id="flying_since" label={t('flyingSince')} help={t('flyingSinceHelp')}>
+            <Field
+              id="flying_since"
+              label={t('flyingSince')}
+              error={err('flying_since')}
+              help={t('flyingSinceHelp')}
+            >
               <Input
                 id="flying_since"
                 name="flying_since"
@@ -173,13 +196,18 @@ export function ProfileForm(props: {
           )}
           {row(
             'wings',
-            <Field id="wings" label={t('wings')} help={t('wingsHelp')}>
+            <Field id="wings" label={t('wings')} error={err('wings')} help={t('wingsHelp')}>
               <Input id="wings" name="wings" defaultValue={profile.wings} maxLength={200} />
             </Field>,
           )}
           {row(
             'weight',
-            <Field id="weight_kg" label={t('weight')} help={t('weightHelp')}>
+            <Field
+              id="weight_kg"
+              label={t('weight')}
+              error={err('weight_kg')}
+              help={t('weightHelp')}
+            >
               <Input
                 id="weight_kg"
                 name="weight_kg"
@@ -195,7 +223,11 @@ export function ProfileForm(props: {
             'flight_totals',
             <div className="space-y-1.5">
               <div className="grid gap-3 sm:grid-cols-2">
-                <Field id="total_flight_hours" label={t('totalHours')}>
+                <Field
+                  id="total_flight_hours"
+                  label={t('totalHours')}
+                  error={err('total_flight_hours')}
+                >
                   <Input
                     id="total_flight_hours"
                     name="total_flight_hours"
@@ -207,7 +239,7 @@ export function ProfileForm(props: {
                     defaultValue={profile.total_flight_hours}
                   />
                 </Field>
-                <Field id="total_flights" label={t('totalFlights')}>
+                <Field id="total_flights" label={t('totalFlights')} error={err('total_flights')}>
                   <Input
                     id="total_flights"
                     name="total_flights"
@@ -224,20 +256,32 @@ export function ProfileForm(props: {
           )}
           {row(
             'bio',
-            <Field id="bio" label={t('bio')}>
+            <Field id="bio" label={t('bio')} error={err('bio')}>
               <Textarea id="bio" name="bio" defaultValue={profile.bio} maxLength={500} />
             </Field>,
           )}
-          <Field id="licence" label={t('licence')} help={t('licenceHelp')}>
-            <Input
-              id="licence"
-              name="licence"
-              defaultValue={props.licence}
-              maxLength={40}
-              autoComplete="off"
-              onChange={() => setLicenceChanged(true)}
-            />
-          </Field>
+          <div className="grid gap-3 sm:grid-cols-[12rem_1fr]">
+            <Field id="licence_body" label={t('licenceBody')} error={err('licence_body')}>
+              <Select id="licence_body" name="licence_body" defaultValue={props.licenceBody}>
+                <option value="">{t('levelNone')}</option>
+                {LICENCE_BODIES.map((b) => (
+                  <option key={b} value={b}>
+                    {t(`licenceBodies.${b}`)}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field id="licence" label={t('licence')} help={t('licenceHelp')} error={err('licence')}>
+              <Input
+                id="licence"
+                name="licence"
+                defaultValue={props.licence}
+                maxLength={40}
+                autoComplete="off"
+                onChange={() => setLicenceChanged(true)}
+              />
+            </Field>
+          </div>
           <input type="hidden" name="licence_changed" value={licenceChanged ? '1' : '0'} />
         </Card>
 

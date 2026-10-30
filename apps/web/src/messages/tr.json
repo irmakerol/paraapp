@@ -207,8 +207,7 @@
       "photoHelp": "JPEG, PNG veya WebP. Yüklemeden önce küçültür ve konum bilgisini sileriz.",
       "displayName": "Görünen ad",
       "fullName": "Ad soyad",
-      "country": "Ülke kodu",
-      "countryHelp": "İki harf, ör. TR",
+      "country": "Ülke",
       "city": "Şehir",
       "homeSite": "Ana uçuş alanı",
       "pilotLevel": "Pilot seviyesi",
@@ -254,7 +253,17 @@
       "weightHelp": "Ekipmansız kendi kilonuz. Siz değiştirmedikçe gizli kalır.",
       "totalHours": "Toplam uçuş saati",
       "totalFlights": "Uçuş sayısı",
-      "totalsHelp": "Burada kaydetmediğiniz uçuşlar dahil bugüne kadarki toplamlarınız. İçe aktardığınız ya da eklediğiniz uçuşlar bunun üstüne eklenebilir."
+      "totalsHelp": "Burada kaydetmediğiniz uçuşlar dahil bugüne kadarki toplamlarınız. İçe aktardığınız ya da eklediğiniz uçuşlar bunun üstüne eklenebilir.",
+      "licenceBody": "Lisansı veren kurum",
+      "licenceBodies": {
+        "thk": "THK / THSF",
+        "appi": "APPI",
+        "ushpa": "USHPA",
+        "bhpa": "BHPA",
+        "ffvl": "FFVL",
+        "dhv": "DHV",
+        "other": "Diğer"
+      }
     },
     "privacy": {
       "consentsTitle": "Onaylar",
@@ -895,7 +904,6 @@
     "lead": "Uçuşlarınız, rekorlarınız ve ekipmanınız tek yerde.",
     "importButton": "IGC/GPX içe aktar",
     "addManual": "Elle uçuş ekle",
-    "equipmentButton": "Ekipmanım",
     "myPilotPage": "Pilot sayfam",
     "exportCsv": "Uçuş defterini indir (CSV)",
     "empty": "Henüz uçuş yok. Cihazınızdan ya da telefon uygulamanızdan IGC veya GPX dosyalarını içe aktarın ya da elle uçuş ekleyin.",

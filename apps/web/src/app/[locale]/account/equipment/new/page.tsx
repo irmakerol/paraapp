@@ -1,6 +1,5 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { requireActiveViewer } from '@/lib/session';
-import { PageTitle } from '@/components/ui';
 import { EquipmentForm } from '../equipment-form';
 
 export default async function NewEquipmentPage({
@@ -17,7 +16,7 @@ export default async function NewEquipmentPage({
   );
   return (
     <div className="mx-auto max-w-3xl">
-      <PageTitle>{t('add')}</PageTitle>
+      <h2 className="text-xl font-bold">{t('add')}</h2>
       <EquipmentForm
         id={null}
         today={today}

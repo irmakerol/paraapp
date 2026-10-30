@@ -92,10 +92,11 @@ export type Database = {
           user_id: string;
           birth_date: string | null;
           licence_number_enc: string | null;
+          licence_body: string | null;
           updated_at: Timestamp;
         };
         Insert: never;
-        Update: { licence_number_enc?: string | null };
+        Update: { licence_number_enc?: string | null; licence_body?: string | null };
         Relationships: [];
       };
       legal_documents: {

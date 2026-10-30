@@ -40,7 +40,7 @@ export async function saveEquipment(
         .single();
   if (result.error) return { error: 'generic' };
   revalidatePath('/[locale]/logbook', 'layout');
-  redirect(`/${localeFrom(formData)}/logbook/equipment`);
+  redirect(`/${localeFrom(formData)}/account/equipment`);
 }
 
 export async function setRetired(formData: FormData): Promise<void> {
@@ -82,5 +82,5 @@ export async function deleteEquipment(formData: FormData): Promise<void> {
   // Flights that used this wing keep their glider text; the link becomes empty.
   await supabase.from('equipment').delete().eq('id', id).eq('user_id', viewer.user.id);
   revalidatePath('/[locale]/logbook', 'layout');
-  redirect(`/${localeFrom(formData)}/logbook/equipment`);
+  redirect(`/${localeFrom(formData)}/account/equipment`);
 }
