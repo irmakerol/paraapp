@@ -278,7 +278,8 @@ const en = {
     removePhoto: 'Remove photo',
     photoError: 'The photo could not be saved.',
     minorNote: 'Because you are under 18, your profile is private by default.',
-    privacyLead: 'Choose who sees each part of your profile. Your name and badges are always shown.',
+    privacyLead:
+      'Choose who sees each part of your profile. Your name and badges are always shown.',
     visibility: { public: 'Everyone', members: 'Members', private: 'Only me' },
     privacyFields: {
       full_name: 'Full name',
@@ -613,7 +614,8 @@ const tr: DeepStrings<Messages> = {
     removePhoto: 'Fotoğrafı kaldır',
     photoError: 'Fotoğraf kaydedilemedi.',
     minorNote: '18 yaşından küçük olduğun için profilin varsayılan olarak gizlidir.',
-    privacyLead: 'Profilinin her bölümünü kimlerin göreceğini seç. Adın ve rozetlerin her zaman görünür.',
+    privacyLead:
+      'Profilinin her bölümünü kimlerin göreceğini seç. Adın ve rozetlerin her zaman görünür.',
     visibility: { public: 'Herkes', members: 'Üyeler', private: 'Yalnızca ben' },
     privacyFields: {
       full_name: 'Tam ad',
