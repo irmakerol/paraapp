@@ -1,17 +1,15 @@
-import { useEffect, useState } from 'react';
-import { Alert, FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
-import * as Sharing from 'expo-sharing';
-import * as WebBrowser from 'expo-web-browser';
-import { CONFIG } from '../config';
-import { locale, t, type MessageKey } from '../i18n';
-import { dateTime, duration, km, signed } from '../format';
-import { removeFlight, subscribeFlights, type LocalFlight } from '../tracker/flights';
+import { useCallback, useEffect, useState } from 'react';
+import { FlatList, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { t, type MessageKey } from '../i18n';
+import { dateTime, duration, km } from '../format';
+import { loadLogbook, type LogbookFlight, type Totals } from '../logbook';
+import { subscribeFlights, type LocalFlight } from '../tracker/flights';
 import { uploadPending } from '../upload';
 import { Body, Button, Card, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
+import { FlightDetailScreen } from './FlightDetailScreen';
 
 function status(f: LocalFlight, signedIn: boolean): MessageKey {
-  if (f.remoteId) return 'flights.uploaded';
   if (!signedIn) return 'flights.pending';
   if (f.uploadError === 'onboarding') return 'flights.onboarding';
   if (f.uploadError === 'noFlight') return 'flights.noFlight';
@@ -19,98 +17,86 @@ function status(f: LocalFlight, signedIn: boolean): MessageKey {
   return f.uploadError ? 'flights.failed' : 'flights.pending';
 }
 
-export function FlightsScreen({ signedIn }: { signedIn: boolean }) {
+/** The logbook: every flight in the pilot's logbook plus those still only on this phone. */
+export function FlightsScreen({ userId }: { userId: string | null }) {
   const c = useTheme();
-  const [flights, setFlights] = useState<LocalFlight[]>([]);
-  const [open, setOpen] = useState<string | null>(null);
+  const signedIn = userId !== null;
+  const [local, setLocal] = useState<LocalFlight[]>([]);
+  const [flights, setFlights] = useState<LogbookFlight[]>([]);
+  const [totals, setTotals] = useState<Totals | null>(null);
+  const [open, setOpen] = useState<LogbookFlight | null>(null);
   const [busy, setBusy] = useState(false);
+  const [offline, setOffline] = useState(false);
 
-  useEffect(() => subscribeFlights((list) => setFlights([...list])), []);
+  useEffect(() => subscribeFlights((list) => setLocal([...list])), []);
 
-  async function upload() {
+  const reload = useCallback(async () => {
+    try {
+      const result = await loadLogbook(userId, local);
+      setFlights(result.flights);
+      setTotals(result.totals);
+      setOffline(false);
+    } catch {
+      // Offline: still show what is on the phone.
+      const result = await loadLogbook(null, local);
+      setFlights(result.flights);
+      setOffline(true);
+    }
+  }, [userId, local]);
+
+  useEffect(() => {
+    void reload();
+  }, [reload]);
+
+  async function refresh() {
     setBusy(true);
-    await uploadPending().finally(() => setBusy(false));
+    if (signedIn) await uploadPending().catch(() => undefined);
+    await reload().finally(() => setBusy(false));
   }
 
-  const selected = flights.find((f) => f.id === open);
-  if (selected) {
+  if (open) {
     return (
-      <View style={s.page}>
-        <Button label={t('flights.back')} kind="secondary" onPress={() => setOpen(null)} />
-        <Title>{dateTime(selected.startedAt)}</Title>
-        <Card>
-          <Row label={t('flights.duration')} value={duration(selected.durationS)} />
-          <Row label={t('flights.maxAlt')} value={`${selected.maxAltM} m`} />
-          <Row label={t('flights.distance')} value={km(selected.distanceM)} />
-          <Row label={t('flights.maxClimb')} value={`${signed(selected.maxClimbMs)} m/s`} />
-        </Card>
-        <Body muted>{t(status(selected, signedIn))}</Body>
-        <Button
-          label={t('flights.share')}
-          onPress={() =>
-            void Sharing.shareAsync(selected.igcUri, {
-              mimeType: 'application/octet-stream',
-              UTI: 'public.data',
-              dialogTitle: t('flights.share'),
-            })
-          }
-        />
-        {selected.remoteId ? (
-          <Button
-            label={t('flights.openLogbook')}
-            kind="secondary"
-            onPress={() =>
-              void WebBrowser.openBrowserAsync(
-                `${CONFIG.webUrl}/${locale}/flights/${selected.remoteId}`,
-              )
-            }
-          />
-        ) : signedIn ? (
-          <Button
-            label={t('flights.uploadAll')}
-            kind="secondary"
-            busy={busy}
-            onPress={() => void upload()}
-          />
-        ) : null}
-        <Button
-          label={t('flights.delete')}
-          kind="danger"
-          onPress={() =>
-            Alert.alert(t('flights.deleteConfirm'), undefined, [
-              { text: t('common.cancel'), style: 'cancel' },
-              {
-                text: t('flights.delete'),
-                style: 'destructive',
-                onPress: () => {
-                  setOpen(null);
-                  void removeFlight(selected.id);
-                },
-              },
-            ])
-          }
-        />
-      </View>
+      <FlightDetailScreen
+        flight={open}
+        signedIn={signedIn}
+        onBack={() => setOpen(null)}
+        onChanged={() => void reload()}
+      />
     );
   }
 
-  const waiting = signedIn && flights.some((f) => !f.remoteId);
+  const waiting = signedIn && flights.some((f) => !f.id);
   return (
     <FlatList
       contentContainerStyle={s.page}
       data={flights}
-      keyExtractor={(f) => f.id}
-      refreshControl={<RefreshControl refreshing={busy} onRefresh={() => void upload()} />}
+      keyExtractor={(f) => f.id ?? `local-${f.local?.id ?? f.startedAt}`}
+      refreshControl={<RefreshControl refreshing={busy} onRefresh={() => void refresh()} />}
       ListHeaderComponent={
         <View>
           <Title>{t('flights.title')}</Title>
+          {totals ? (
+            <View style={s.totals}>
+              <Card style={s.total}>
+                <Text style={[s.totalValue, { color: c.text }]}>
+                  {totals.hours.toLocaleString(undefined, { maximumFractionDigits: 1 })}
+                </Text>
+                <Text style={[s.totalLabel, { color: c.muted }]}>{t('flights.totalHours')}</Text>
+              </Card>
+              <Card style={s.total}>
+                <Text style={[s.totalValue, { color: c.text }]}>{totals.flights}</Text>
+                <Text style={[s.totalLabel, { color: c.muted }]}>{t('flights.totalFlights')}</Text>
+              </Card>
+            </View>
+          ) : null}
           {!signedIn ? <Body muted>{t('flights.signInToUpload')}</Body> : null}
+          {offline ? <Body muted>{t('common.offline')}</Body> : null}
           {waiting ? (
             <Button
               label={t('flights.uploadAll')}
               kind="secondary"
               busy={busy}
-              onPress={() => void upload()}
+              onPress={() => void refresh()}
             />
           ) : null}
         </View>
@@ -119,37 +105,46 @@ export function FlightsScreen({ signedIn }: { signedIn: boolean }) {
       renderItem={({ item }) => (
         <Pressable
           accessibilityRole="button"
-          onPress={() => setOpen(item.id)}
+          onPress={() => setOpen(item)}
           style={({ pressed }) => [
             s.item,
             { borderColor: c.border, backgroundColor: c.card, opacity: pressed ? 0.8 : 1 },
           ]}
         >
           <Text style={[s.itemTitle, { color: c.text }]}>{dateTime(item.startedAt)}</Text>
+          {item.site ? (
+            <Text style={[s.itemMeta, { color: c.text }]} numberOfLines={1}>
+              {item.site}
+            </Text>
+          ) : null}
           <Text style={[s.itemMeta, { color: c.muted }]}>
-            {duration(item.durationS)} · {item.maxAltM} m · {km(item.distanceM)}
+            {[
+              duration(item.durationS),
+              item.maxAltM != null ? `${item.maxAltM} m` : null,
+              item.xcDistanceM != null
+                ? `XC ${km(item.xcDistanceM)}`
+                : item.distanceM != null
+                  ? km(item.distanceM)
+                  : null,
+            ]
+              .filter(Boolean)
+              .join(' · ')}
           </Text>
-          <Text style={[s.itemMeta, { color: item.remoteId ? c.climb : c.muted }]}>
-            {t(status(item, signedIn))}
-          </Text>
+          {item.id === null && item.local ? (
+            <Text style={[s.itemMeta, { color: c.muted }]}>{t(status(item.local, signedIn))}</Text>
+          ) : null}
         </Pressable>
       )}
     />
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
-  const c = useTheme();
-  return (
-    <View style={s.row}>
-      <Text style={[s.rowLabel, { color: c.muted }]}>{label}</Text>
-      <Text style={[s.rowValue, { color: c.text }]}>{value}</Text>
-    </View>
-  );
-}
-
 const s = StyleSheet.create({
   page: { padding: 16, gap: 8 },
+  totals: { flexDirection: 'row', gap: 8 },
+  total: { flex: 1, alignItems: 'center' },
+  totalValue: { fontSize: 28, fontWeight: '800', fontVariant: ['tabular-nums'] },
+  totalLabel: { fontSize: 14, fontWeight: '600' },
   item: {
     borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 14,
@@ -159,7 +154,4 @@ const s = StyleSheet.create({
   },
   itemTitle: { fontSize: 17, fontWeight: '600' },
   itemMeta: { fontSize: 15 },
-  row: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6 },
-  rowLabel: { fontSize: 16 },
-  rowValue: { fontSize: 16, fontWeight: '600', fontVariant: ['tabular-nums'] },
 });

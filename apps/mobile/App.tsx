@@ -99,7 +99,7 @@ function Main() {
         <FlyScreen />
       </View>
       <View style={[s.screen, tab !== 'flights' && s.hidden]}>
-        <FlightsScreen signedIn={signedIn} />
+        <FlightsScreen userId={signedIn && session ? session.user.id : null} />
       </View>
       <View style={[s.screen, tab !== 'account' && s.hidden]}>
         {!session ? (
