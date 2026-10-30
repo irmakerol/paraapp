@@ -10,6 +10,8 @@ update public.profiles set status = 'active';
 select is((select field_privacy ->> 'weight' from public.profiles where id = '11111111-1111-1111-1111-111111111111'),
   'private', 'weight is private by default');
 
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}', true);
 select lives_ok($$ update public.profiles set pilot_level = 't2', flying_since = extract(year from now())::smallint - 6,

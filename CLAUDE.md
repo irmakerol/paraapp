@@ -67,6 +67,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - Admin pages call `requireStaff(locale, area)` (`lib/staff.ts`); RLS enforces the same roles.
   `super_admin` (the club owner, `ADMIN_EMAIL` on the test server) always also holds `admin` and is
   the only one who can grant or revoke `admin`/`super_admin`. `guide` (rehber) counts as a member.
+- Every new account gets `member` (shown as "Misafir üye" / guest member), so members-only means
+  signed in. `pilot` means licensed, `student_pilot` is in training (2026-10-30). Ground School
+  (`tips`) is written by instructors, moderators and the super admin; sites by the super admin only.
 - Push goes through `sendPush()` (`lib/push.ts`): it checks topic settings and, for club news, marketing consent.
 - Third-party embeds are click-to-load (`components/video-embed.tsx`). No third-party request before the user acts.
 - In render, use `currentTime()` from `lib/format.ts` instead of `Date.now()` (the React purity lint rule).

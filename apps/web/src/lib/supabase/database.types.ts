@@ -1277,6 +1277,7 @@ export type Database = {
     };
     Enums: {
       app_role:
+        | 'student_pilot'
         | 'pilot'
         | 'member'
         | 'instructor'

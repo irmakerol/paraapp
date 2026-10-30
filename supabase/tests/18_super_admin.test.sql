@@ -1,11 +1,16 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(11);
+select plan(13);
 
 insert into auth.users (id, email, raw_user_meta_data) values
   ('51111111-1111-1111-1111-111111111111', 'owner@example.com', '{"birth_date":"1980-01-01"}'),
   ('52222222-2222-2222-2222-222222222222', 'admin@example.com', '{"birth_date":"1980-01-01"}'),
   ('53333333-3333-3333-3333-333333333333', 'pilot@example.com', '{"birth_date":"1990-01-01"}');
+select ok(exists (select 1 from public.user_roles
+  where user_id = '53333333-3333-3333-3333-333333333333' and role = 'member'), 'new accounts are guest members');
+select ok(private.is_member_level('53333333-3333-3333-3333-333333333333'), 'guest members count as members');
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 insert into public.user_roles (user_id, role) values
   ('51111111-1111-1111-1111-111111111111', 'super_admin'),
   ('52222222-2222-2222-2222-222222222222', 'admin');

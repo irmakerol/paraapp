@@ -1,5 +1,6 @@
 /** Must match the `app_role` enum in SQL. "guest" is anyone not signed in and has no row. */
 export const ROLES = [
+  'student_pilot',
   'pilot',
   'member',
   'instructor',
@@ -12,9 +13,14 @@ export const ROLES = [
 ] as const;
 export type Role = (typeof ROLES)[number];
 
-/** Roles that count as "members" for members-only content and field privacy. */
+/**
+ * Roles that count as "members" for members-only content and field privacy. Every new account
+ * gets "member" (shown as guest member), so in practice this is everyone signed in.
+ */
 export const MEMBER_LEVEL_ROLES: readonly Role[] = [
   'member',
+  'student_pilot',
+  'pilot',
   'instructor',
   'guide',
   'moderator',

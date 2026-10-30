@@ -55,13 +55,18 @@ from (values
   ('a0000000-0000-4000-8000-000000000005', 'member'), ('a0000000-0000-4000-8000-000000000005', 'trip_organiser'),
   ('a0000000-0000-4000-8000-000000000006', 'member'), ('a0000000-0000-4000-8000-000000000006', 'guide'),
   ('a0000000-0000-4000-8000-000000000007', 'member'), ('a0000000-0000-4000-8000-000000000007', 'moderator'),
-  ('a0000000-0000-4000-8000-000000000008', 'pilot')
+  ('a0000000-0000-4000-8000-000000000008', 'member'), ('a0000000-0000-4000-8000-000000000008', 'student_pilot'),
+  -- Licensed pilots (everyone except Selin, who is still in training).
+  ('a0000000-0000-4000-8000-000000000001', 'pilot'), ('a0000000-0000-4000-8000-000000000002', 'pilot'),
+  ('a0000000-0000-4000-8000-000000000003', 'pilot'), ('a0000000-0000-4000-8000-000000000004', 'pilot'),
+  ('a0000000-0000-4000-8000-000000000005', 'pilot'), ('a0000000-0000-4000-8000-000000000006', 'pilot'),
+  ('a0000000-0000-4000-8000-000000000007', 'pilot')
 ) as r(id, role)
 join auth.users u on u.id = r.id::uuid
 on conflict do nothing;
--- Selin is a pilot who is not (yet) a club member; earlier versions of this file made her one.
+-- Earlier versions made Selin a licensed pilot.
 delete from public.user_roles
-where user_id = 'a0000000-0000-4000-8000-000000000008' and role = 'member';
+where user_id = 'a0000000-0000-4000-8000-000000000008' and role = 'pilot';
 
 -- Sample pilots agreed to a public profile so guests can see them too.
 insert into public.consents (user_id, consent_type, granted, method)

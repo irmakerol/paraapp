@@ -6,6 +6,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('11111111-1111-1111-1111-111111111111', 'pilot@example.com', '{"birth_date":"1990-01-01"}'),
   ('33333333-3333-3333-3333-333333333333', 'other@example.com', '{"birth_date":"1990-01-01"}');
 
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}', true);
 select lives_ok($$ insert into public.active_flights (user_id) values ('11111111-1111-1111-1111-111111111111') $$,

@@ -855,15 +855,16 @@
     }
   },
   "roles": {
-    "pilot": "Pilot",
-    "member": "Üye",
+    "pilot": "Pilot (lisanslı)",
+    "member": "Misafir üye",
     "instructor": "Eğitmen",
     "moderator": "Moderatör",
     "safety_officer": "Güvenlik sorumlusu",
     "admin": "Yönetici",
     "trip_organiser": "Gezi organizatörü",
     "guide": "Rehber",
-    "super_admin": "Süper yönetici"
+    "super_admin": "Süper yönetici",
+    "student_pilot": "Öğrenci pilot"
   },
   "push": {
     "newMessage": "{name} size mesaj gönderdi",

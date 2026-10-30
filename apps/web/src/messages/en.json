@@ -855,15 +855,16 @@
     }
   },
   "roles": {
-    "pilot": "Pilot",
-    "member": "Member",
+    "pilot": "Pilot (licensed)",
+    "member": "Guest member",
     "instructor": "Instructor",
     "moderator": "Moderator",
     "safety_officer": "Safety officer",
     "admin": "Admin",
     "trip_organiser": "Trip organiser",
     "guide": "Guide",
-    "super_admin": "Super admin"
+    "super_admin": "Super admin",
+    "student_pilot": "Student pilot"
   },
   "push": {
     "newMessage": "New message from {name}",

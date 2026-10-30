@@ -5,6 +5,8 @@ select plan(11);
 insert into auth.users (id, email, raw_user_meta_data) values
   ('11111111-1111-1111-1111-111111111111', 'ayse@example.com', '{"birth_date":"1990-05-01"}'),
   ('99999999-9999-9999-9999-999999999999', 'admin@example.com', '{"birth_date":"1980-01-01"}');
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 insert into public.user_roles (user_id, role) values ('99999999-9999-9999-9999-999999999999', 'admin');
 
 set local role authenticated;
@@ -36,9 +38,9 @@ select lives_ok($$ insert into public.user_roles (user_id, role, granted_by)
   values ('11111111-1111-1111-1111-111111111111', 'member', '99999999-9999-9999-9999-999999999999') $$,
   'an admin can grant the member role');
 select is((select action from public.audit_log where target_id = '11111111-1111-1111-1111-111111111111'
-           and details ->> 'role' = 'member'),
+           and details ->> 'role' = 'member' and actor_id is not null),
   'role.grant', 'role grants are audited with the acting admin');
-select is((select actor_id from public.audit_log where details ->> 'role' = 'member'),
+select is((select actor_id from public.audit_log where details ->> 'role' = 'member' and action = 'role.grant' and actor_id is not null),
   '99999999-9999-9999-9999-999999999999'::uuid, 'audit records who acted');
 
 select * from finish();
