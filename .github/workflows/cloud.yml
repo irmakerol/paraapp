@@ -9,6 +9,7 @@ on:
       [
         'supabase/migrations/**',
         'supabase/seeds/**',
+        'supabase/samples/**',
         'apps/web/**',
         'packages/core/**',
         'scripts/cloud-setup.sh',

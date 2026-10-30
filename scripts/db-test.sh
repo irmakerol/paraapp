@@ -39,8 +39,6 @@ if [ "${SKIP_SEED:-0}" != "1" ] && [ -f "$ROOT/supabase/seed.sql" ]; then
   echo "seed: seed.sql"
   "${PSQL[@]}" -f "$ROOT/supabase/seed.sql"
   for f in "$ROOT"/supabase/seeds/*.sql; do
-    # Sample people/events would change the counts some tests check; it is applied after them.
-    [ "$(basename "$f")" = sample_data.sql ] && continue
     echo "seed: seeds/$(basename "$f")"
     "${PSQL[@]}" -f "$f"
   done
@@ -50,9 +48,9 @@ pg_prove -d postgres --ext .sql -r "$ROOT/supabase/tests"
 
 if [ "${SKIP_SEED:-0}" != "1" ]; then
   # The sample data must load cleanly, and twice (the test server re-applies it on every deploy).
-  echo "seed: seeds/sample_data.sql (twice)"
-  "${PSQL[@]}" -f "$ROOT/supabase/seeds/sample_data.sql"
-  "${PSQL[@]}" -f "$ROOT/supabase/seeds/sample_data.sql"
+  echo "seed: samples/sample_data.sql (twice)"
+  "${PSQL[@]}" -f "$ROOT/supabase/samples/sample_data.sql"
+  "${PSQL[@]}" -f "$ROOT/supabase/samples/sample_data.sql"
   "${PSQL[@]}" -tA -c "select 'sample: ' || (select count(*) from public.profiles where display_name like '%(Ö)') || ' people, '
     || (select count(*) from public.events where title like '%(Ö)') || ' events, '
     || (select count(*) from public.sites where name like '%(Ö)') || ' sites, '

@@ -32,7 +32,7 @@ if [ "$count" = "0" ]; then
 fi
 # Example content (news, tips, sites, trips, sample people and events, all marked as examples).
 # Every file is safe to run again, so new samples reach the test server on the next deploy.
-for f in supabase/seeds/*.sql; do
+for f in supabase/seeds/*.sql supabase/samples/*.sql; do
   sql "$(cat "$f")" > /dev/null
   echo "seed: $(basename "$f")"
 done

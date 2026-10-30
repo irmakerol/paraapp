@@ -100,7 +100,7 @@ organisers record payment status by hand.
 - `active_flights`: one row per pilot **while the phone records** (start time and last refresh, no
   position). Owner-only (RLS); deleted when recording stops and with the account. Used only to show
   the website's Fly button as "Flying".
-- Sample records (`supabase/seeds/sample_data.sql`, marked "(Ö)"/"(S)") are invented people with
+- Sample records (`supabase/samples/sample_data.sql`, marked "(Ö)"/"(S)") are invented people with
   `@example.invalid` addresses: no personal data. Delete them before launch.
 
 ### Special category data
