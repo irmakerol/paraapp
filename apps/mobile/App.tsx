@@ -13,13 +13,15 @@ import { FlyScreen } from './src/screens/FlyScreen';
 import { FlightsScreen } from './src/screens/FlightsScreen';
 import { SignIn } from './src/screens/AccountScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
+import { SitesScreen } from './src/screens/SitesScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { useTheme } from './src/ui/theme';
 
-type Tab = 'fly' | 'flights' | 'account';
+type Tab = 'fly' | 'flights' | 'sites' | 'account';
 const TABS: { id: Tab; label: MessageKey }[] = [
   { id: 'fly', label: 'tabs.fly' },
   { id: 'flights', label: 'tabs.flights' },
+  { id: 'sites', label: 'tabs.sites' },
   { id: 'account', label: 'tabs.account' },
 ];
 
@@ -107,6 +109,9 @@ function Main() {
       </View>
       <View style={[s.screen, tab !== 'flights' && s.hidden]}>
         <FlightsScreen userId={signedIn && session ? session.user.id : null} />
+      </View>
+      <View style={[s.screen, tab !== 'sites' && s.hidden]}>
+        <SitesScreen />
       </View>
       <View style={[s.screen, tab !== 'account' && s.hidden]}>
         {!session ? (

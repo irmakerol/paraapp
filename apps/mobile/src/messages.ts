@@ -2,7 +2,7 @@
 // Keep both in sync (the `Messages` type makes a missing Turkish key a type error).
 
 const en = {
-  tabs: { fly: 'Fly', flying: 'Flying', flights: 'Flights', account: 'Profile' },
+  tabs: { fly: 'Fly', flying: 'Flying', flights: 'Flights', sites: 'Sites', account: 'Profile' },
   common: {
     cancel: 'Cancel',
     ok: 'OK',
@@ -145,6 +145,23 @@ const en = {
     totalHours: 'Flight hours',
     totalFlights: 'Flights',
   },
+  sites: {
+    title: 'Flying sites',
+    kinds: { launch: 'Takeoff', landing: 'Landing', both: 'Takeoff and landing' },
+    windFrom: 'Wind from',
+    compass: { N: 'N', NE: 'NE', E: 'E', SE: 'SE', S: 'S', SW: 'SW', W: 'W', NW: 'NW' },
+    mapLabel: 'Satellite map of {name}',
+    weather: 'Weather',
+    weatherUnavailable: 'The forecast cannot be loaded right now.',
+    gusts: 'Gusts',
+    rain: 'Rain',
+    hourly: 'Hour by hour',
+    columns: { hour: 'Time', wind: 'Wind', gusts: 'Gusts', direction: 'From', rain: 'Rain mm' },
+    weatherNote:
+      'Wind and gusts in km/h, flying hours 09–18. Forecast from Open-Meteo; always check on site.',
+    about: 'About this site',
+    rules: 'Rules',
+  },
   profile: {
     photo: 'Profile photo',
     retry: 'Try again',
@@ -217,7 +234,7 @@ export type Messages = typeof en;
 type DeepStrings<T> = { [K in keyof T]: T[K] extends string ? string : DeepStrings<T[K]> };
 
 const tr: DeepStrings<Messages> = {
-  tabs: { fly: 'Uç', flying: 'Uçuşta', flights: 'Uçuşlar', account: 'Profil' },
+  tabs: { fly: 'Uç', flying: 'Uçuşta', flights: 'Uçuşlar', sites: 'Alanlar', account: 'Profil' },
   common: {
     cancel: 'Vazgeç',
     ok: 'Tamam',
@@ -361,6 +378,23 @@ const tr: DeepStrings<Messages> = {
     signInToUpload: 'Uçuşlarınızı uçuş defterine yüklemek için giriş yapın.',
     totalHours: 'Uçuş saati',
     totalFlights: 'Uçuş',
+  },
+  sites: {
+    title: 'Uçuş alanları',
+    kinds: { launch: 'Kalkış', landing: 'İniş', both: 'Kalkış ve iniş' },
+    windFrom: 'Rüzgâr yönü',
+    compass: { N: 'K', NE: 'KD', E: 'D', SE: 'GD', S: 'G', SW: 'GB', W: 'B', NW: 'KB' },
+    mapLabel: '{name} uydu haritası',
+    weather: 'Hava durumu',
+    weatherUnavailable: 'Tahmin şu anda yüklenemiyor.',
+    gusts: 'Hamle',
+    rain: 'Yağış',
+    hourly: 'Saat saat',
+    columns: { hour: 'Saat', wind: 'Rüzgâr', gusts: 'Hamle', direction: 'Yön', rain: 'Yağış mm' },
+    weatherNote:
+      'Rüzgâr ve hamle km/sa, uçuş saatleri 09–18. Tahmin Open-Meteo’dan; alanda mutlaka kontrol edin.',
+    about: 'Alan hakkında',
+    rules: 'Kurallar',
   },
   profile: {
     photo: 'Profil fotoğrafı',
