@@ -111,6 +111,7 @@ export function HomeScreen({
             onBack={back}
             initial={route.section}
             onPilot={userId ? (id) => setRoute({ section: 'pilot', id }) : undefined}
+            onChat={onChat}
           />
         );
       case 'pilot':

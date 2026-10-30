@@ -285,8 +285,11 @@ export async function deleteMessage(id: string, userId: string): Promise<boolean
 }
 
 /** Opens (or finds) the 1-to-1 chat with another member. Throws 'minor' | 'blocked' | 'unavailable'. */
-export async function startDirectChat(other: string): Promise<string> {
-  const { data, error } = await supabase.rpc('start_direct_chat', { p_other: other });
+export async function startDirectChat(other: string, adId?: string): Promise<string> {
+  const { data, error } = await supabase.rpc(
+    'start_direct_chat',
+    adId ? { p_other: other, p_ad: adId } : { p_other: other },
+  );
   if (error || !data) {
     if (error?.message.includes('minor')) throw new Error('minor');
     if (error?.message.includes('blocked')) throw new Error('blocked');

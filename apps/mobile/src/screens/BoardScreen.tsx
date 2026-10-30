@@ -26,6 +26,7 @@ import {
   type NoticeInput,
 } from '../board';
 import { listSites, type Site } from '../sites';
+import { startDirectChat } from '../chats';
 import { Badge, Body, Button, Chips, Field, Segmented, Stepper, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
 import { BackBar } from '../ui/screen';
@@ -44,6 +45,7 @@ export function BoardScreen({
   userId = null,
   onBack,
   onPilot,
+  onChat,
   initial = 'notices',
 }: {
   signedIn: boolean;
@@ -52,6 +54,8 @@ export function BoardScreen({
   onBack?: () => void;
   /** Opens the poster's profile (to follow or message them). */
   onPilot?: (id: string) => void;
+  /** Opens a conversation in the Messages tab. */
+  onChat?: (chatId: string) => void;
   initial?: Section;
 }) {
   const c = useTheme();
@@ -108,7 +112,8 @@ export function BoardScreen({
         onPilot={onPilot}
       />
     );
-  if (openAd) return <AdDetail ad={openAd} onBack={() => setOpenAd(null)} />;
+  if (openAd)
+    return <AdDetail ad={openAd} userId={userId} onBack={() => setOpenAd(null)} onChat={onChat} />;
 
   const header = (
     <View>
@@ -240,7 +245,7 @@ function NoticeDetail({
   const c = useTheme();
   return (
     <ScrollView contentContainerStyle={s.page}>
-      <Button label={t('flights.back')} kind="secondary" onPress={onBack} />
+      <BackBar label={t('board.title')} onBack={onBack} />
       <View style={s.badges}>
         <Badge
           label={t(`board.kinds.${n.kind}`)}
@@ -275,11 +280,41 @@ function NoticeDetail({
   );
 }
 
-function AdDetail({ ad: a, onBack }: { ad: Ad; onBack: () => void }) {
+function AdDetail({
+  ad: a,
+  userId,
+  onBack,
+  onChat,
+}: {
+  ad: Ad;
+  userId: string | null;
+  onBack: () => void;
+  onChat?: (chatId: string) => void;
+}) {
   const c = useTheme();
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const contact = async () => {
+    setBusy(true);
+    setMessage(null);
+    try {
+      onChat?.(await startDirectChat(a.ownerId, a.id));
+    } catch (e) {
+      const key = e instanceof Error ? e.message : 'unavailable';
+      setMessage(
+        key === 'minor'
+          ? t('chat.minorProtected')
+          : key === 'blocked'
+            ? t('chat.blockedNotice')
+            : t('chat.unavailable'),
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
   return (
     <ScrollView contentContainerStyle={s.page}>
-      <Button label={t('flights.back')} kind="secondary" onPress={onBack} />
+      <BackBar label={t('board.title')} onBack={onBack} />
       <Title>{a.title}</Title>
       <Text style={[s.bigPrice, { color: c.text }]}>{money(a.price, a.currency, locale)}</Text>
       {a.photos.length ? (
@@ -308,6 +343,10 @@ function AdDetail({ ad: a, onBack }: { ad: Ad; onBack: () => void }) {
         <Fact label={t('board.posted')} value={day(a.createdAt)} />
       </View>
       {a.description ? <Body>{a.description}</Body> : null}
+      {userId && onChat && userId !== a.ownerId ? (
+        <Button label={t('board.contactSeller')} busy={busy} onPress={() => void contact()} />
+      ) : null}
+      {message ? <Body muted>{message}</Body> : null}
     </ScrollView>
   );
 }

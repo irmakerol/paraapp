@@ -20,6 +20,7 @@ export interface Notice {
 
 export interface Ad {
   id: string;
+  ownerId: string;
   title: string;
   category: string;
   brand: string | null;
@@ -104,6 +105,7 @@ export async function listNotices(): Promise<Notice[]> {
 
 interface AdRow {
   id: string;
+  owner_id: string;
   title: string;
   category: string;
   brand: string | null;
@@ -125,7 +127,7 @@ export async function listAds(): Promise<Ad[]> {
   const { data, error } = await supabase
     .from('ads')
     .select(
-      'id, title, category, brand, model, size, condition, price, currency, city, status, is_club, description, created_at, ad_photos(path, position)',
+      'id, owner_id, title, category, brand, model, size, condition, price, currency, city, status, is_club, description, created_at, ad_photos(path, position)',
     )
     .in('status', ['active', 'reserved'])
     .is('removed_at', null)
@@ -134,6 +136,7 @@ export async function listAds(): Promise<Ad[]> {
   if (error) throw error;
   return ((data ?? []) as AdRow[]).map((r) => ({
     id: r.id,
+    ownerId: r.owner_id,
     title: r.title,
     category: r.category,
     brand: r.brand,
