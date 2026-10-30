@@ -28,10 +28,13 @@ const day = (iso: string) =>
 export function BoardScreen({
   signedIn,
   onBack,
+  onPilot,
   initial = 'notices',
 }: {
   signedIn: boolean;
   onBack?: () => void;
+  /** Opens the poster's profile (to follow or message them). */
+  onPilot?: (id: string) => void;
   initial?: Section;
 }) {
   const c = useTheme();
@@ -61,7 +64,10 @@ export function BoardScreen({
     void load();
   }, [load]);
 
-  if (openNotice) return <NoticeDetail notice={openNotice} onBack={() => setOpenNotice(null)} />;
+  if (openNotice)
+    return (
+      <NoticeDetail notice={openNotice} onBack={() => setOpenNotice(null)} onPilot={onPilot} />
+    );
   if (openAd) return <AdDetail ad={openAd} onBack={() => setOpenAd(null)} />;
 
   const header = (
@@ -173,7 +179,15 @@ export function BoardScreen({
   );
 }
 
-function NoticeDetail({ notice: n, onBack }: { notice: Notice; onBack: () => void }) {
+function NoticeDetail({
+  notice: n,
+  onBack,
+  onPilot,
+}: {
+  notice: Notice;
+  onBack: () => void;
+  onPilot?: (id: string) => void;
+}) {
   const c = useTheme();
   return (
     <ScrollView contentContainerStyle={s.page}>
@@ -202,6 +216,12 @@ function NoticeDetail({ notice: n, onBack }: { notice: Notice; onBack: () => voi
         {n.author ? <Fact label={t('board.postedBy')} value={n.author} /> : null}
         <Fact label={t('board.posted')} value={day(n.createdAt)} />
       </View>
+      {onPilot ? (
+        <Button
+          label={`${t('pilots.message')} · ${n.author ?? ''}`}
+          onPress={() => onPilot(n.userId)}
+        />
+      ) : null}
     </ScrollView>
   );
 }

@@ -33,7 +33,7 @@ import { Badge, Body, Button, Card, Chips, Field, Link, Segmented, Title, Toggle
 import { useTheme } from '../ui/theme';
 import { VarioSettingsScreen } from './VarioSettingsScreen';
 
-function levelLabel(level: string) {
+export function levelLabel(level: string) {
   if (level === 'student' || level === 'tandem' || level === 'instructor')
     return t(`profile.levels.${level}`);
   return /^t\d$/.test(level)

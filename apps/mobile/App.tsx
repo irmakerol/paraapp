@@ -14,15 +14,17 @@ import { FlightsScreen } from './src/screens/FlightsScreen';
 import { SignIn } from './src/screens/AccountScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { HomeScreen } from './src/screens/HomeScreen';
+import { MessagesScreen } from './src/screens/MessagesScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { useTheme } from './src/ui/theme';
 
 // Home holds every club section of the website (news, Ground School, sites, notices, …).
-type Tab = 'home' | 'fly' | 'flights' | 'account';
+type Tab = 'home' | 'fly' | 'flights' | 'messages' | 'account';
 const TABS: { id: Tab; label: MessageKey; icon: string }[] = [
   { id: 'home', label: 'tabs.home', icon: '🏠' },
   { id: 'fly', label: 'tabs.fly', icon: '🪂' },
   { id: 'flights', label: 'tabs.flights', icon: '📒' },
+  { id: 'messages', label: 'tabs.messages', icon: '💬' },
   { id: 'account', label: 'tabs.account', icon: '👤' },
 ];
 
@@ -38,6 +40,8 @@ function Main() {
   const c = useTheme();
   const [tab, setTab] = useState<Tab>('home');
   const [name, setName] = useState<string | null>(null);
+  const [openChat, setOpenChat] = useState<string | null>(null);
+  const [unread, setUnread] = useState(false);
   const [session, setSession] = useState<Session | null>(null);
   const [step, setStep] = useState<OnboardingStep | null>(null);
   const [recording, setRecording] = useState(false);
@@ -105,6 +109,7 @@ function Main() {
   }, [refresh]);
 
   const signedIn = Boolean(session) && !step;
+  const clearOpenChat = useCallback(() => setOpenChat(null), []);
 
   return (
     <SafeAreaView style={[s.root, { backgroundColor: c.bg }]} edges={['top', 'left', 'right']}>
@@ -116,6 +121,19 @@ function Main() {
           name={signedIn ? name : null}
           onFly={() => setTab('fly')}
           onSignIn={() => setTab('account')}
+          onChat={(id) => {
+            setOpenChat(id);
+            setTab('messages');
+          }}
+        />
+      </View>
+      <View style={[s.screen, tab !== 'messages' && s.hidden]}>
+        <MessagesScreen
+          userId={signedIn && session ? session.user.id : null}
+          openChat={openChat}
+          onOpened={clearOpenChat}
+          onUnread={setUnread}
+          active={tab === 'messages'}
         />
       </View>
       <View style={[s.screen, tab !== 'fly' && s.hidden]}>
@@ -161,6 +179,9 @@ function Main() {
               <Text style={s.tabIcon} accessibilityElementsHidden importantForAccessibility="no">
                 {flying ? '🔴' : item.icon}
               </Text>
+              {item.id === 'messages' && unread ? (
+                <View style={[s.badge, { backgroundColor: c.danger }]} />
+              ) : null}
               <Text
                 style={[s.tabText, { color: flying ? c.danger : active ? c.primary : c.muted }]}
               >
@@ -181,5 +202,6 @@ const s = StyleSheet.create({
   tabs: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth },
   tab: { flex: 1, minHeight: 56, alignItems: 'center', justifyContent: 'center' },
   tabIcon: { fontSize: 20 },
+  badge: { position: 'absolute', top: 8, right: '30%', width: 10, height: 10, borderRadius: 5 },
   tabText: { fontSize: 13, fontWeight: '700' },
 });

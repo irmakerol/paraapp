@@ -8,6 +8,7 @@ import { useTheme } from '../ui/theme';
 import { BoardScreen } from './BoardScreen';
 import { EventRow, EventsScreen } from './EventsScreen';
 import { NewsScreen } from './NewsScreen';
+import { PilotScreen } from './PilotScreen';
 import { SafetyScreen } from './SafetyScreen';
 import { SitesScreen } from './SitesScreen';
 import { SosScreen } from './SosScreen';
@@ -15,7 +16,16 @@ import { TipsScreen } from './TipsScreen';
 import { TripsScreen } from './TripsScreen';
 
 export type Section =
-  'news' | 'tips' | 'notices' | 'market' | 'sites' | 'events' | 'trips' | 'safety' | 'sos';
+  | 'news'
+  | 'tips'
+  | 'notices'
+  | 'market'
+  | 'sites'
+  | 'events'
+  | 'trips'
+  | 'safety'
+  | 'sos'
+  | 'pilot';
 
 type Route = { section: Section; id?: string | null } | null;
 
@@ -39,11 +49,14 @@ export function HomeScreen({
   name,
   onFly,
   onSignIn,
+  onChat,
 }: {
   userId: string | null;
   name: string | null;
   onFly: () => void;
   onSignIn: () => void;
+  /** Opens a conversation in the Messages tab. */
+  onChat: (chatId: string) => void;
 }) {
   const c = useTheme();
   const [route, setRoute] = useState<Route>(null);
@@ -91,7 +104,23 @@ export function HomeScreen({
         return <SitesScreen onBack={back} />;
       case 'notices':
       case 'market':
-        return <BoardScreen signedIn={Boolean(userId)} onBack={back} initial={route.section} />;
+        return (
+          <BoardScreen
+            signedIn={Boolean(userId)}
+            onBack={back}
+            initial={route.section}
+            onPilot={userId ? (id) => setRoute({ section: 'pilot', id }) : undefined}
+          />
+        );
+      case 'pilot':
+        return (
+          <PilotScreen
+            id={route.id ?? ''}
+            viewerId={userId}
+            onBack={() => setRoute({ section: 'notices' })}
+            onChat={onChat}
+          />
+        );
     }
   }
 

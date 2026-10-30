@@ -8,6 +8,7 @@ const en = {
   ...clubEn,
   tabs: {
     home: 'Home',
+    messages: 'Messages',
     fly: 'Fly',
     flying: 'Flying',
     flights: 'Flights',
@@ -295,6 +296,7 @@ const tr: DeepStrings<Messages> = {
   ...clubTr,
   tabs: {
     home: 'Ana sayfa',
+    messages: 'Mesajlar',
     fly: 'Uç',
     flying: 'Uçuşta',
     flights: 'Uçuşlar',
