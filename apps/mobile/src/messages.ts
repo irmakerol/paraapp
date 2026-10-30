@@ -1,8 +1,13 @@
 // Every user-facing string of the phone app. Turkish is the default, English the fallback.
 // Keep both in sync (the `Messages` type makes a missing Turkish key a type error).
 
+import { clubEn, clubTr } from './messages-club';
+import type { DeepStrings } from './messages-types';
+
 const en = {
+  ...clubEn,
   tabs: {
+    home: 'Home',
     fly: 'Fly',
     flying: 'Flying',
     flights: 'Flights',
@@ -245,6 +250,8 @@ const en = {
     yearsFlying: 'Years flying',
     level: 'Pilot level',
     levelNone: 'None',
+    trainingLevel: 'Training for',
+    trainingLevelTop: 'There is no higher level to train for.',
     isInstructor: 'I am an instructor',
     licenceBody: 'Licence issued by',
     homeSite: 'Home site',
@@ -284,10 +291,10 @@ const en = {
 
 export type Messages = typeof en;
 
-type DeepStrings<T> = { [K in keyof T]: T[K] extends string ? string : DeepStrings<T[K]> };
-
 const tr: DeepStrings<Messages> = {
+  ...clubTr,
   tabs: {
+    home: 'Ana sayfa',
     fly: 'Uç',
     flying: 'Uçuşta',
     flights: 'Uçuşlar',
@@ -532,6 +539,8 @@ const tr: DeepStrings<Messages> = {
     yearsFlying: 'Uçuş yılı',
     level: 'Pilot seviyesi',
     levelNone: 'Yok',
+    trainingLevel: 'Hedef seviye (eğitim)',
+    trainingLevelTop: 'Eğitim alınacak daha yüksek bir seviye yok.',
     isInstructor: 'Eğitmenim',
     licenceBody: 'Lisansı veren kurum',
     homeSite: 'Ana uçuş alanı',

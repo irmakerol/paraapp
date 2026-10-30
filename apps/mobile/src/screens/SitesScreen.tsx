@@ -14,6 +14,7 @@ import { locale, t, type MessageKey } from '../i18n';
 import { compass, listSites, siteForecast, type Forecast, type Site } from '../sites';
 import { Badge, Body, Button, Card, Segmented, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
+import { BackBar } from '../ui/screen';
 
 const PIN: Record<Site['kind'], string> = {
   launch: '#16a34a',
@@ -25,7 +26,7 @@ const dirLabel = (d: string) => t(`sites.compass.${d}` as MessageKey);
 const kmh = (v: number | null) => (v == null ? '—' : `${Math.round(v)}`);
 
 /** Flying sites with real weather numbers (wind, gusts, direction, rain); pilots judge for themselves. */
-export function SitesScreen() {
+export function SitesScreen({ onBack }: { onBack?: () => void }) {
   const c = useTheme();
   const [sites, setSites] = useState<Site[] | null>(null);
   const [failed, setFailed] = useState(false);
@@ -58,6 +59,7 @@ export function SitesScreen() {
       refreshControl={<RefreshControl refreshing={busy} onRefresh={() => void load()} />}
       ListHeaderComponent={
         <View>
+          {onBack ? <BackBar onBack={onBack} /> : null}
           <Title>{t('sites.title')}</Title>
           {failed ? <Body muted>{t('common.offline')}</Body> : null}
           {!sites && !failed ? <ActivityIndicator /> : null}

@@ -14,6 +14,7 @@ import { locale, t, type MessageKey } from '../i18n';
 import { listAds, listNotices, money, type Ad, type Notice } from '../board';
 import { Badge, Body, Button, Segmented, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
+import { BackBar } from '../ui/screen';
 
 type Section = 'notices' | 'market';
 
@@ -24,9 +25,17 @@ const day = (iso: string) =>
   });
 
 /** "Duyurular": the notice board and the gear market, as on the website's notices page. */
-export function BoardScreen({ signedIn }: { signedIn: boolean }) {
+export function BoardScreen({
+  signedIn,
+  onBack,
+  initial = 'notices',
+}: {
+  signedIn: boolean;
+  onBack?: () => void;
+  initial?: Section;
+}) {
   const c = useTheme();
-  const [section, setSection] = useState<Section>('notices');
+  const [section, setSection] = useState<Section>(initial);
   const [notices, setNotices] = useState<Notice[] | null>(null);
   const [ads, setAds] = useState<Ad[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -57,6 +66,7 @@ export function BoardScreen({ signedIn }: { signedIn: boolean }) {
 
   const header = (
     <View>
+      {onBack ? <BackBar onBack={onBack} /> : null}
       <Title>{t('board.title')}</Title>
       <Segmented
         label={t('board.show')}

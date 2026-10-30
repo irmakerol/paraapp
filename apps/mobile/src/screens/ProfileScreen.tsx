@@ -22,6 +22,7 @@ import {
   loadMyProfile,
   saveLocale,
   saveMyProfile,
+  trainingLevelOptions,
   type MyProfile,
   type ProfileEdit,
 } from '../profile';
@@ -169,6 +170,9 @@ export function ProfileScreen({
           label={t('profile.level')}
           value={profile.pilotLevel ? levelLabel(profile.pilotLevel) : '—'}
         />
+        {profile.roles.includes('student_pilot') && profile.trainingLevel ? (
+          <Row label={t('profile.trainingLevel')} value={levelLabel(profile.trainingLevel)} />
+        ) : null}
         <Row
           label={t('profile.licenceBody')}
           value={
@@ -256,6 +260,7 @@ function EditProfile({
   onSave: (edit: ProfileEdit) => Promise<void>;
 }) {
   const c = useTheme();
+  const isStudent = profile.roles.includes('student_pilot');
   const initial = (): ProfileEdit => ({
     displayName: profile.displayName,
     fullName: profile.fullName,
@@ -266,6 +271,7 @@ function EditProfile({
     flyingSince: profile.flyingSince,
     bio: profile.bio,
     licenceBody: profile.licenceBody,
+    ...(isStudent ? { trainingLevel: profile.trainingLevel } : {}),
   });
   const [edit, setEdit] = useState<ProfileEdit>(initial);
   const [since, setSince] = useState(profile.flyingSince?.toString() ?? '');
@@ -345,8 +351,35 @@ function EditProfile({
               ...levels.map((l) => ({ value: l, label: l.toUpperCase() })),
             ]}
             value={edit.pilotLevel}
-            onChange={(v) => set('pilotLevel', v)}
+            onChange={(v) =>
+              setEdit((e) => ({
+                ...e,
+                pilotLevel: v,
+                // A target that is no longer above the new level is dropped.
+                ...(e.trainingLevel && !trainingLevelOptions(v).includes(e.trainingLevel)
+                  ? { trainingLevel: null }
+                  : {}),
+              }))
+            }
           />
+          {isStudent ? (
+            trainingLevelOptions(edit.pilotLevel).length ? (
+              <Chips
+                label={t('profile.trainingLevel')}
+                options={[
+                  { value: null, label: t('profile.levelNone') },
+                  ...trainingLevelOptions(edit.pilotLevel).map((l) => ({
+                    value: l,
+                    label: l.toUpperCase(),
+                  })),
+                ]}
+                value={edit.trainingLevel ?? null}
+                onChange={(v) => set('trainingLevel', v)}
+              />
+            ) : (
+              <Body muted>{t('profile.trainingLevelTop')}</Body>
+            )
+          ) : null}
           <Toggle
             label={t('profile.isInstructor')}
             value={edit.isInstructor}

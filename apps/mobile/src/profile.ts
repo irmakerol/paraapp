@@ -3,6 +3,27 @@ import { supabase } from './supabase';
 
 // Must match packages/core (PILOT_LEVEL_CHOICES, LICENCE_BODIES) and the database enums.
 export const PILOT_LEVELS = ['p2', 'p3', 'p4', 'p5', 't1', 't2', 't3'] as const;
+
+/** Forms' order P2 < … < P5 < T1 < T2 < T3. Must match trainingLevelOptions() in packages/core. */
+const LEVEL_ORDER: Record<string, number> = {
+  student: 0,
+  p1: 1,
+  p2: 2,
+  p3: 3,
+  p4: 4,
+  p5: 5,
+  t1: 6,
+  tandem: 6,
+  t2: 7,
+  t3: 8,
+  instructor: 9,
+};
+
+/** Levels a student pilot can train for: only those above the current level. */
+export function trainingLevelOptions(current: string | null): string[] {
+  const floor = current ? (LEVEL_ORDER[current] ?? -1) : -1;
+  return PILOT_LEVELS.filter((l) => (LEVEL_ORDER[l] ?? 0) > floor);
+}
 export const LICENCE_BODIES = ['thk', 'appi', 'ushpa', 'bhpa', 'ffvl', 'dhv', 'other'] as const;
 /** Most notable first, as on the website's profile badges. */
 export const ROLE_ORDER = [
@@ -25,6 +46,7 @@ export interface MyProfile {
   city: string;
   homeSite: string;
   pilotLevel: string | null;
+  trainingLevel: string | null;
   isInstructor: boolean;
   flyingSince: number | null;
   bio: string;
@@ -43,6 +65,7 @@ interface ProfileRow {
   city: string | null;
   home_site: string | null;
   pilot_level: string | null;
+  training_level: string | null;
   is_instructor: boolean;
   flying_since: number | null;
   bio: string | null;
@@ -58,7 +81,7 @@ export async function loadMyProfile(userId: string): Promise<MyProfile> {
     supabase
       .from('profiles')
       .select(
-        'display_name, full_name, city, home_site, pilot_level, is_instructor, flying_since, bio, total_flight_hours, total_flights, created_at, locale, avatar_path',
+        'display_name, full_name, city, home_site, pilot_level, training_level, is_instructor, flying_since, bio, total_flight_hours, total_flights, created_at, locale, avatar_path',
       )
       .eq('id', userId)
       .single(),
@@ -79,6 +102,7 @@ export async function loadMyProfile(userId: string): Promise<MyProfile> {
     city: p.city ?? '',
     homeSite: p.home_site ?? '',
     pilotLevel: p.pilot_level,
+    trainingLevel: p.training_level,
     isInstructor: p.is_instructor,
     flyingSince: p.flying_since,
     bio: p.bio ?? '',
@@ -98,6 +122,8 @@ export interface ProfileEdit {
   city: string;
   homeSite: string;
   pilotLevel: string | null;
+  /** Only saved for student pilots (null otherwise means "leave as is"). */
+  trainingLevel?: string | null;
   isInstructor: boolean;
   flyingSince: number | null;
   bio: string;
@@ -116,6 +142,7 @@ export async function saveMyProfile(userId: string, edit: ProfileEdit): Promise<
       home_site: blank(edit.homeSite),
       pilot_level: edit.pilotLevel,
       is_instructor: edit.isInstructor,
+      ...(edit.trainingLevel !== undefined ? { training_level: edit.trainingLevel } : {}),
       flying_since: edit.flyingSince,
       bio: blank(edit.bio),
     })
