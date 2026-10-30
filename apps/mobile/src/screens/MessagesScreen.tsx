@@ -35,8 +35,11 @@ import {
   type ChatSummary,
   type ClubMessage,
   type Message,
+  createGroup,
+  leaveGroup,
+  listFollowing,
 } from '../chats';
-import { Body, Title } from '../ui/kit';
+import { Body, Button, Field, Title, Toggle } from '../ui/kit';
 import { Markdown } from '../ui/markdown';
 import { BackBar, Meta, screenStyles } from '../ui/screen';
 import { useTheme } from '../ui/theme';
@@ -47,6 +50,7 @@ type Open =
   | { kind: 'chat'; id: string }
   | { kind: 'club'; message: ClubMessage }
   | { kind: 'pilot'; id: string; from: string }
+  | { kind: 'newGroup' }
   | null;
 
 /** "Mesajlar": conversations and messages from the club, as on the website. */
@@ -111,6 +115,10 @@ export function MessagesScreen({
     setOpen(null);
     void load();
   };
+  if (open?.kind === 'newGroup')
+    return (
+      <NewGroup userId={userId} onBack={back} onCreated={(id) => setOpen({ kind: 'chat', id })} />
+    );
   if (open?.kind === 'pilot')
     return (
       <PilotScreen
@@ -164,7 +172,13 @@ export function MessagesScreen({
           {chats?.length === 0 ? <Body muted>{t('chat.empty')}</Body> : null}
         </View>
       }
-      ListFooterComponent={<Meta>{t('chat.startGroupOnWeb')}</Meta>}
+      ListFooterComponent={
+        <Button
+          label={`👥 ${t('groups.new')}`}
+          kind="secondary"
+          onPress={() => setOpen({ kind: 'newGroup' })}
+        />
+      }
       renderItem={({ item }) => (
         <ListRow
           icon={item.groupTitle !== null ? '👥' : (item.peerName ?? '?').slice(0, 1).toUpperCase()}
@@ -416,6 +430,27 @@ function Room({
             {room.title ?? t('chat.deletedUser')}
           </Text>
         </Pressable>
+        {room.group ? (
+          <Pressable
+            accessibilityRole="button"
+            onPress={() =>
+              Alert.alert(t('groups.leaveConfirm'), undefined, [
+                { text: t('common.cancel'), style: 'cancel' },
+                {
+                  text: t('groups.leave'),
+                  style: 'destructive',
+                  onPress: () =>
+                    void leaveGroup(chatId, userId).then((ok) => (ok ? onBack() : setError(true))),
+                },
+              ])
+            }
+            style={s.mute}
+          >
+            <Text style={{ color: c.danger, fontSize: 15, fontWeight: '600' }}>
+              {t('groups.leave')}
+            </Text>
+          </Pressable>
+        ) : null}
         <Pressable
           accessibilityRole="button"
           onPress={() => {
@@ -642,3 +677,86 @@ const s = StyleSheet.create({
     paddingHorizontal: 14,
   },
 });
+
+function NewGroup({
+  userId,
+  onBack,
+  onCreated,
+}: {
+  userId: string;
+  onBack: () => void;
+  onCreated: (chatId: string) => void;
+}) {
+  const c = useTheme();
+  const [people, setPeople] = useState<{ id: string; name: string }[] | null>(null);
+  const [title, setTitle] = useState('');
+  const [picked, setPicked] = useState<Set<string>>(new Set());
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    listFollowing(userId).then(setPeople, () => setPeople([]));
+  }, [userId]);
+
+  const toggle = (id: string, on: boolean) =>
+    setPicked((cur) => {
+      const next = new Set(cur);
+      if (on) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+
+  const create = async () => {
+    if (!title.trim()) return;
+    if (!picked.size) {
+      setMessage(t('groups.pickMembers'));
+      return;
+    }
+    setBusy(true);
+    setMessage(null);
+    try {
+      onCreated(await createGroup(title, [...picked]));
+    } catch (e) {
+      const key = e instanceof Error ? e.message : 'generic';
+      setMessage(
+        key === 'memberNotAllowed'
+          ? t('groups.memberNotAllowed')
+          : key === 'full'
+            ? t('groups.full')
+            : t('groups.adultsOnly'),
+      );
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={screenStyles.page} keyboardShouldPersistTaps="handled">
+      <BackBar label={t('chat.title')} onBack={onBack} />
+      <Title>{t('groups.new')}</Title>
+      <Body muted>{t('groups.newLead')}</Body>
+      <Field label={t('groups.name')} value={title} onChangeText={setTitle} maxLength={80} />
+      <Text style={{ fontSize: 16, fontWeight: '600', marginTop: 8, color: c.text }}>
+        {t('groups.members')}
+      </Text>
+      <Meta>{t('groups.membersHelp')}</Meta>
+      {people === null ? <ActivityIndicator /> : null}
+      {people?.length === 0 ? <Body muted>{t('groups.followFirst')}</Body> : null}
+      {people?.map((p) => (
+        <Toggle
+          key={p.id}
+          label={p.name}
+          value={picked.has(p.id)}
+          onChange={(on) => toggle(p.id, on)}
+        />
+      ))}
+      <Button
+        label={t('groups.create')}
+        busy={busy}
+        disabled={!title.trim() || !people?.length}
+        onPress={() => void create()}
+      />
+      {message ? <Body>{message}</Body> : null}
+    </ScrollView>
+  );
+}

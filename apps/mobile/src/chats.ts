@@ -312,3 +312,39 @@ export async function startDirectChat(other: string, adId?: string): Promise<str
   }
   return data as string;
 }
+
+/** People the user follows (group chats can only include them). */
+export async function listFollowing(userId: string): Promise<{ id: string; name: string }[]> {
+  const { data, error } = await supabase
+    .from('follows')
+    .select('followee_id')
+    .eq('follower_id', userId);
+  if (error) throw error;
+  const ids = ((data ?? []) as { followee_id: string }[]).map((r) => r.followee_id);
+  const names = await displayNames(ids);
+  return ids
+    .flatMap((id) => {
+      const name = names.get(id);
+      return name ? [{ id, name }] : [];
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/** Throws 'memberNotAllowed' | 'full' | 'generic'. The database checks age, blocks and size. */
+export async function createGroup(title: string, members: string[]): Promise<string> {
+  const { data, error } = await supabase.rpc('create_group_chat', {
+    p_title: title.trim(),
+    p_members: members,
+  });
+  if (error || !data) {
+    if (error?.message.includes('member_not_allowed')) throw new Error('memberNotAllowed');
+    if (error?.message.includes('group_full')) throw new Error('full');
+    throw new Error('generic');
+  }
+  return data as string;
+}
+
+export async function leaveGroup(chatId: string, userId: string): Promise<boolean> {
+  const { error } = await supabase.rpc('remove_group_member', { p_chat: chatId, p_user: userId });
+  return !error;
+}

@@ -385,7 +385,6 @@ export const clubEn = {
     minorProtected: 'This member can’t receive new messages from adults.',
     unavailable: 'This member can’t be messaged.',
     deletedUser: 'Deleted user',
-    startGroupOnWeb: 'New group chats are created on the website.',
     takePhoto: 'Take a photo',
     permission: 'Allow access to photos in Settings to send one.',
     photo: 'Photo',
@@ -442,6 +441,23 @@ export const clubEn = {
     close: 'Close notice',
     delete: 'Delete notice',
     deleteConfirm: 'Delete this notice?',
+  },
+  groups: {
+    new: 'New group chat',
+    newLead: 'Chat with several pilots at once. Group chats are for adult members.',
+    name: 'Group name',
+    members: 'Members',
+    membersHelp: 'You can add people you follow.',
+    create: 'Create group',
+    followFirst:
+      'Follow a few pilots first (from their profile), then you can add them to a group.',
+    adultsOnly: 'Group chats are only for adult members.',
+    pickMembers: 'Pick at least one person.',
+    memberNotAllowed:
+      'Someone you picked cannot join group chats (they may be under 18, inactive or blocked).',
+    full: 'The group is full (50 people).',
+    leave: 'Leave group',
+    leaveConfirm: 'Leave this group chat?',
   },
 };
 
@@ -826,7 +842,6 @@ export const clubTr: DeepStrings<typeof clubEn> = {
     minorProtected: 'Bu üye yetişkinlerden yeni mesaj alamaz.',
     unavailable: 'Bu üyeye mesaj gönderilemez.',
     deletedUser: 'Silinmiş kullanıcı',
-    startGroupOnWeb: 'Yeni grup sohbetleri web sitesinden oluşturulur.',
     takePhoto: 'Fotoğraf çek',
     permission: 'Fotoğraf göndermek için Ayarlar’dan fotoğraflara erişim izni verin.',
     photo: 'Fotoğraf',
@@ -883,5 +898,22 @@ export const clubTr: DeepStrings<typeof clubEn> = {
     close: 'Duyuruyu kapat',
     delete: 'Duyuruyu sil',
     deleteConfirm: 'Bu duyuru silinsin mi?',
+  },
+  groups: {
+    new: 'Yeni grup sohbeti',
+    newLead: 'Birkaç pilotla aynı anda yazışın. Grup sohbetleri yetişkin üyeler içindir.',
+    name: 'Grup adı',
+    members: 'Üyeler',
+    membersHelp: 'Takip ettiğiniz kişileri ekleyebilirsiniz.',
+    create: 'Grup oluştur',
+    followFirst:
+      'Önce birkaç pilotu (profillerinden) takip edin, sonra onları gruba ekleyebilirsiniz.',
+    adultsOnly: 'Grup sohbetleri yalnızca yetişkin üyeler içindir.',
+    pickMembers: 'En az bir kişi seçin.',
+    memberNotAllowed:
+      'Seçtiğiniz kişilerden biri grup sohbetine katılamıyor (18 yaşından küçük, pasif veya engellenmiş olabilir).',
+    full: 'Grup dolu (50 kişi).',
+    leave: 'Gruptan ayrıl',
+    leaveConfirm: 'Bu grup sohbetinden ayrılmak istiyor musunuz?',
   },
 };
