@@ -19,6 +19,9 @@ concurrency:
   group: cloud
   cancel-in-progress: false
 
+permissions:
+  contents: write # the screenshots job pushes to the `screenshots` branch
+
 jobs:
   deploy:
     runs-on: ubuntu-24.04
@@ -61,3 +64,29 @@ jobs:
         run: pnpm install --frozen-lockfile
       - if: steps.check.outputs.ready == 'true'
         run: scripts/cloud-setup.sh
+
+  # Screenshots of the deployed site (public pages, signed out) on the `screenshots` branch, so the
+  # design can be reviewed without opening the site.
+  screenshots:
+    needs: deploy
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @paraapp/web exec playwright install --with-deps chromium
+      - run: node apps/web/scripts/screenshots.mjs https://fly-anatolia.vercel.app "$RUNNER_TEMP/shots"
+      - name: Push to the screenshots branch
+        run: |
+          cd "$RUNNER_TEMP/shots"
+          git init -q -b screenshots
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Screenshots of ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}" screenshots
