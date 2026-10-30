@@ -113,6 +113,11 @@ export default async function UserDetailPage({
   const market = await getTranslations('market');
   const noticesT = await getTranslations('notices');
   const supabase = await createClient();
+  // Message keys cannot contain dots, so "flight.added" is stored as "flight_added".
+  const activityLabel = (kind: string) => {
+    const key = `kinds.${kind.replace(/\./g, '_')}`;
+    return activityT.has(key) ? activityT(key) : kind;
+  };
 
   const [
     { data: overviewJson },
@@ -495,9 +500,7 @@ export default async function UserDetailPage({
                 <span className="tabular-nums text-muted">
                   {formatDateTime(a.created_at, locale)}
                 </span>
-                <span>
-                  {activityT.has(`kinds.${a.kind}`) ? activityT(`kinds.${a.kind}`) : a.kind}
-                </span>
+                <span>{activityLabel(a.kind)}</span>
               </li>
             ))}
           </ol>

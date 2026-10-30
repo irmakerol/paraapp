@@ -992,13 +992,13 @@
       "retention": "Kept for 90 days. Message contents and positions are never logged.",
       "kinds": {
         "visit": "Opened the site or app",
-        "flight.added": "Added a flight",
-        "ad.posted": "Posted a market listing",
-        "event.rsvp": "Replied to an event",
-        "trip.registered": "Registered for a trip",
-        "comment.posted": "Commented on news",
-        "ride.posted": "Posted a ride",
-        "notice.posted": "Posted a notice"
+        "flight_added": "Added a flight",
+        "ad_posted": "Posted a market listing",
+        "event_rsvp": "Replied to an event",
+        "trip_registered": "Registered for a trip",
+        "comment_posted": "Commented on news",
+        "ride_posted": "Posted a ride",
+        "notice_posted": "Posted a notice"
       }
     }
   },

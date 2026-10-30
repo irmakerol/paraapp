@@ -992,13 +992,13 @@
       "retention": "Kayıtlar 90 gün saklanır. Mesaj içerikleri ve konumlar kaydedilmez.",
       "kinds": {
         "visit": "Siteye/uygulamaya girdi",
-        "flight.added": "Uçuş ekledi",
-        "ad.posted": "Pazara ilan verdi",
-        "event.rsvp": "Etkinliğe katılım bildirdi",
-        "trip.registered": "Geziye kaydoldu",
-        "comment.posted": "Habere yorum yaptı",
-        "ride.posted": "Yolculuk ilanı verdi",
-        "notice.posted": "Duyuru verdi"
+        "flight_added": "Uçuş ekledi",
+        "ad_posted": "Pazara ilan verdi",
+        "event_rsvp": "Etkinliğe katılım bildirdi",
+        "trip_registered": "Geziye kaydoldu",
+        "comment_posted": "Habere yorum yaptı",
+        "ride_posted": "Yolculuk ilanı verdi",
+        "notice_posted": "Duyuru verdi"
       }
     }
   },
