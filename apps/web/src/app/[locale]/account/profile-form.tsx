@@ -10,6 +10,7 @@ import {
   type PrivacyField,
   type UnitPreferences,
 } from '@paraapp/core';
+import { keepValuesOnSubmit } from '@/lib/keep-form-values';
 import { initialState } from '@/lib/action-state';
 import { createClient } from '@/lib/supabase/client';
 import { resizeImage } from '@/lib/image';
@@ -106,7 +107,13 @@ export function ProfileForm(props: {
 
       <Card>{row('photo', <AvatarEditor userId={props.userId} url={props.avatarUrl} />)}</Card>
 
-      <form id={FORM_ID} action={action} className="space-y-6" noValidate>
+      <form
+        id={FORM_ID}
+        action={action}
+        onSubmit={keepValuesOnSubmit(action)}
+        className="space-y-6"
+        noValidate
+      >
         <input type="hidden" name="locale" value={locale} />
         <Card className="space-y-5">
           <Field id="display_name" label={t('displayName')} error={err('display_name')}>

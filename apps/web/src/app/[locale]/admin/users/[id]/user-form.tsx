@@ -3,6 +3,7 @@ import { useActionState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { LICENCE_BODIES, PILOT_LEVEL_CHOICES, PROFILE_COUNTRIES } from '@paraapp/core';
 import { initialState } from '@/lib/action-state';
+import { keepValuesOnSubmit } from '@/lib/keep-form-values';
 import { Card, Field, Input, Select, Textarea } from '@/components/ui';
 import { SubmitButton } from '@/components/submit-button';
 import { FormMessage } from '@/components/form-message';
@@ -54,7 +55,7 @@ export function UserForm({
   ];
 
   return (
-    <form action={action} className="space-y-5" noValidate>
+    <form action={action} onSubmit={keepValuesOnSubmit(action)} className="space-y-5" noValidate>
       <Card className="space-y-5">
         <div className="flex flex-wrap items-center gap-4">
           {photoUrl ? (
