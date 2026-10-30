@@ -6,7 +6,7 @@
   "nav": {
     "home": "Ana sayfa",
     "news": "Haberler",
-    "tips": "İpuçları",
+    "tips": "Yer Okulu",
     "market": "Ekipman pazarı",
     "sites": "Uçuş alanları",
     "logbook": "Uçuş defteri",
@@ -51,7 +51,7 @@
         "text": "Duyurular, geziler ve güvenlik uyarıları."
       },
       "tips": {
-        "title": "İpuçları",
+        "title": "Yer Okulu",
         "text": "Kalkış, termik, XC, meteoroloji ve SIV; başlangıçtan ileri seviyeye."
       },
       "market": {
@@ -350,7 +350,7 @@
     "noNews": "Henüz haber yok."
   },
   "tips": {
-    "title": "İpuçları",
+    "title": "Yer Okulu",
     "lead": "İlk kalkışından XC'ye kadar eğitmenlerden ve deneyimli pilotlardan bilgiler.",
     "allCategories": "Tüm kategoriler",
     "allLevels": "Tüm seviyeler",
@@ -394,9 +394,10 @@
     },
     "videoInvalid": "Yalnızca YouTube veya Vimeo bağlantıları desteklenir.",
     "noTips": "Burada henüz ipucu yok.",
-    "safety": "İpuçları yetkin bir eğitmenle alınan eğitimin yerini tutmaz.",
+    "safety": "Yer Okulu içerikleri yetkin bir eğitmenle alınan eğitimin yerini tutmaz.",
     "loadVideo": "{host} videosunu oynat",
-    "videoNotice": "Video yalnızca oynat düğmesine bastığınızda {host} üzerinden yüklenir. {host} bu durumda çerez kullanabilir ve IP adresinizi görebilir."
+    "videoNotice": "Video yalnızca oynat düğmesine bastığınızda {host} üzerinden yüklenir. {host} bu durumda çerez kullanabilir ve IP adresinizi görebilir.",
+    "add": "Ders ekle"
   },
   "market": {
     "title": "Ekipman pazarı",
@@ -530,7 +531,7 @@
     "title": "Yönetim",
     "dashboard": "Genel bakış",
     "news": "Haberler",
-    "tips": "İpuçları",
+    "tips": "Yer Okulu",
     "reports": "Şikâyetler",
     "users": "Kullanıcılar",
     "requests": "Veri talepleri",
@@ -1110,7 +1111,8 @@
       "W": "B",
       "NW": "KB"
     },
-    "weather": "Hava durumu ve uçulabilirlik"
+    "weather": "Hava durumu ve uçulabilirlik",
+    "altitudeDiff": "{m} m irtifa farkı"
   },
   "pilots": {
     "pilot": "Pilot",
@@ -1140,31 +1142,31 @@
   },
   "weather": {
     "today": "Bugün",
-    "ratings": {
-      "good": "Uçulabilir",
-      "marginal": "Sınırda",
-      "no": "Uçulamaz"
-    },
-    "reasons": {
-      "rain": "yağmur",
-      "tooWindy": "çok rüzgârlı",
-      "gusty": "hamleli",
-      "crossWind": "rüzgâr yamaca uygun değil",
-      "strongish": "kuvvetli rüzgâr",
-      "overdevelopment": "aşırı gelişme riski",
-      "noData": "veri yok"
-    },
-    "goodHours": "{hours, plural, =0 {iyi saat yok} other {# iyi saat}}",
     "hourly": "Saat saat",
     "time": "Saat",
     "wind": "Rüzgâr (km/sa)",
-    "gusts": "Hamle",
+    "gusts": "Hamle (km/sa)",
     "rain": "Yağış (mm)",
-    "rating": "Değerlendirme",
     "unavailable": "Tahmin şu anda alınamıyor.",
-    "disclaimer": "Bir hava modelinden kaba bir yönlendirme, uçuş kararı değildir. Koşulları her zaman yerinde kontrol edin ve yerel pilotlara danışın.",
+    "disclaimer": "Bir hava modelinin tahmini (09:00–18:00). Koşulları her zaman yerinde kontrol edin ve yerel pilotlara danışın.",
     "updated": "Güncelleme: {time}.",
-    "credit": "Hava verileri: Open-Meteo.com"
+    "credit": "Hava verileri: Open-Meteo.com",
+    "kmh": "km/sa",
+    "windLabel": "Rüzgâr",
+    "from": "{dir} yönünden",
+    "gustsShort": "Hamle",
+    "rainShort": "Yağış",
+    "direction": "Yön",
+    "compass": {
+      "N": "K",
+      "NE": "KD",
+      "E": "D",
+      "SE": "GD",
+      "S": "G",
+      "SW": "GB",
+      "W": "B",
+      "NW": "KB"
+    }
   },
   "safety": {
     "title": "Güvenlik",

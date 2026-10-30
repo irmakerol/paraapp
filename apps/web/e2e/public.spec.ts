@@ -59,7 +59,7 @@ test('community sections render in both languages', async ({ page }) => {
   await page.goto('/en/news');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('News');
   await page.goto('/en/tips');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tips & tricks');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ground School');
   await expect(page.getByRole('link', { name: 'Cross-country' })).toBeVisible();
 });
 

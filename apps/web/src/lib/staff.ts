@@ -9,13 +9,14 @@ export type StaffArea =
 /** Which roles may use each admin area. RLS enforces the same rules in the database. */
 export const AREA_ROLES: Record<StaffArea, readonly Role[]> = {
   news: ['admin'],
-  tips: ['instructor', 'moderator', 'admin'],
+  tips: ['instructor', 'moderator', 'super_admin'],
   events: ['instructor', 'admin'],
   trips: ['instructor', 'trip_organiser', 'admin'],
   reports: ['moderator', 'admin'],
   // Health data: safety officers only, not admins.
   safety: ['safety_officer'],
-  sites: ['moderator', 'admin'],
+  // Irmak (2026-10-30): only the super admin keeps the sites list.
+  sites: ['super_admin'],
   users: ['admin'],
   requests: ['admin'],
 };

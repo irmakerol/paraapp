@@ -6,7 +6,7 @@
   "nav": {
     "home": "Home",
     "news": "News",
-    "tips": "Tips",
+    "tips": "Ground School",
     "market": "Gear market",
     "sites": "Sites",
     "logbook": "Logbook",
@@ -51,7 +51,7 @@
         "text": "Announcements, trips and safety notices."
       },
       "tips": {
-        "title": "Tips & tricks",
+        "title": "Ground School",
         "text": "Launching, thermalling, XC, weather and SIV, from beginner to advanced."
       },
       "market": {
@@ -350,7 +350,7 @@
     "noNews": "No news yet."
   },
   "tips": {
-    "title": "Tips & tricks",
+    "title": "Ground School",
     "lead": "Knowledge from instructors and experienced pilots, from your first launch to XC.",
     "allCategories": "All categories",
     "allLevels": "All levels",
@@ -394,9 +394,10 @@
     },
     "videoInvalid": "Only YouTube or Vimeo links are supported.",
     "noTips": "No tips here yet.",
-    "safety": "Tips do not replace training with a qualified instructor.",
+    "safety": "Ground School content does not replace training with a qualified instructor.",
     "loadVideo": "Play video from {host}",
-    "videoNotice": "The video is loaded from {host} only when you press play. {host} may then set cookies and see your IP address."
+    "videoNotice": "The video is loaded from {host} only when you press play. {host} may then set cookies and see your IP address.",
+    "add": "Add a lesson"
   },
   "market": {
     "title": "Gear market",
@@ -530,7 +531,7 @@
     "title": "Admin",
     "dashboard": "Overview",
     "news": "News",
-    "tips": "Tips",
+    "tips": "Ground School",
     "reports": "Reports",
     "users": "Users",
     "requests": "Data requests",
@@ -1110,7 +1111,8 @@
       "W": "W",
       "NW": "NW"
     },
-    "weather": "Weather and flyability"
+    "weather": "Weather and flyability",
+    "altitudeDiff": "{m} m height difference"
   },
   "pilots": {
     "pilot": "Pilot",
@@ -1140,31 +1142,31 @@
   },
   "weather": {
     "today": "Today",
-    "ratings": {
-      "good": "Flyable",
-      "marginal": "Marginal",
-      "no": "Not flyable"
-    },
-    "reasons": {
-      "rain": "rain",
-      "tooWindy": "too windy",
-      "gusty": "gusty",
-      "crossWind": "wind not on the slope",
-      "strongish": "strong wind",
-      "overdevelopment": "risk of overdevelopment",
-      "noData": "no data"
-    },
-    "goodHours": "{hours, plural, =0 {no good hours} one {# good hour} other {# good hours}}",
     "hourly": "Hour by hour",
     "time": "Time",
     "wind": "Wind (km/h)",
-    "gusts": "Gusts",
+    "gusts": "Gusts (km/h)",
     "rain": "Rain (mm)",
-    "rating": "Rating",
     "unavailable": "The forecast is not available right now.",
-    "disclaimer": "A rough guide from a weather model, not a flying decision. Always check conditions on site and ask local pilots.",
+    "disclaimer": "A weather model forecast (09:00–18:00). Always check conditions on site and ask local pilots.",
     "updated": "Updated {time}.",
-    "credit": "Weather data by Open-Meteo.com"
+    "credit": "Weather data by Open-Meteo.com",
+    "kmh": "km/h",
+    "windLabel": "Wind",
+    "from": "from {dir}",
+    "gustsShort": "Gusts",
+    "rainShort": "Rain",
+    "direction": "Direction",
+    "compass": {
+      "N": "N",
+      "NE": "NE",
+      "E": "E",
+      "SE": "SE",
+      "S": "S",
+      "SW": "SW",
+      "W": "W",
+      "NW": "NW"
+    }
   },
   "safety": {
     "title": "Safety",

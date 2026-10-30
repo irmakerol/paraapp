@@ -72,8 +72,8 @@ function SitesMapInner({ sites, zoom }: { sites: SiteMarker[]; zoom?: number }) 
           .filter(Boolean)
           .join(' · ');
         popup.append(link, detail);
-        // Launches red, landings blue.
-        new maplibregl.Marker({ color: site.kind === 'landing' ? '#2563eb' : '#de4750' })
+        // Launches green, landings red.
+        new maplibregl.Marker({ color: site.kind === 'landing' ? '#de4750' : '#15803d' })
           .setLngLat([site.lng, site.lat])
           .setPopup(new maplibregl.Popup({ offset: 24 }).setDOMContent(popup))
           .addTo(instance);

@@ -47,15 +47,19 @@ select throws_ok($$ insert into public.news_comments (news_id, author_id, body)
 select lives_ok($$ insert into public.news_likes (news_id, user_id)
   values ('a0000000-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111') $$, 'can like');
 
--- Pilot suggests a tip
-select lives_ok($$ insert into public.tips (slug, title, category, status, author_id)
-  values ('my-tip', 'My launching tip', 'launching', 'pending_review', '11111111-1111-1111-1111-111111111111') $$,
-  'pilots can suggest tips');
+-- Pilots cannot write Ground School content (only instructors, moderators, super admin)
+select throws_ok($$ insert into public.tips (slug, title, category, status, author_id)
+  values ('pilot-tip', 'My launching tip', 'launching', 'pending_review', '11111111-1111-1111-1111-111111111111') $$,
+  '42501', null, 'pilots cannot add tips');
 select throws_ok($$ insert into public.tips (slug, title, category, status, author_id, published_at)
   values ('self-published', 'Self published', 'launching', 'published', '11111111-1111-1111-1111-111111111111', now()) $$,
   '42501', null, 'pilots cannot publish tips themselves');
-select throws_ok($$ update public.tips set status = 'published', published_at = now() where slug = 'my-tip' $$,
-  '42501', null, 'pilots cannot approve their own suggestion');
+reset role;
+insert into public.tips (slug, title, category, status, author_id)
+  values ('my-tip', 'My launching tip', 'launching', 'pending_review', '77777777-7777-7777-7777-777777777777');
+set local role authenticated;
+update public.tips set status = 'published', published_at = now() where slug = 'my-tip';
+select is((select count(*)::int from public.tips where status = 'published'), 0, 'pilots cannot publish tips');
 reset role;
 
 -- Member
@@ -63,7 +67,7 @@ set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"22222222-2222-2222-2222-222222222222","role":"authenticated"}', true);
 select set_eq($$ select slug from public.news $$, array['public-news', 'members-news'],
   'members see members-only news');
-select is((select count(*)::int from public.tips), 0, 'others cannot see a pending suggestion');
+select is((select count(*)::int from public.tips), 0, 'members cannot see an unpublished tip');
 
 -- Instructor approves
 select set_config('request.jwt.claims', '{"sub":"77777777-7777-7777-7777-777777777777","role":"authenticated"}', true);
