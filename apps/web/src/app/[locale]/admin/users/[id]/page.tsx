@@ -207,7 +207,7 @@ export default async function UserDetailPage({
           <div className="min-w-0 flex-1 space-y-1">
             <h2 className="text-2xl font-extrabold">
               {name}
-              {profile.full_name ? (
+              {profile.full_name && profile.full_name !== profile.display_name ? (
                 <span className="font-normal text-muted"> · {profile.full_name}</span>
               ) : null}
             </h2>

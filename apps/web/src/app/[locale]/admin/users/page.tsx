@@ -31,7 +31,7 @@ export default async function UsersPage({
   let query = supabase
     .from('profiles')
     .select(
-      'id, display_name, full_name, avatar_path, status, age_group, created_at, last_seen_at, pilot_level, training_level, is_instructor',
+      'id, display_name, avatar_path, status, age_group, created_at, last_seen_at, pilot_level, training_level, is_instructor',
     )
     .order('created_at', { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -105,19 +105,20 @@ export default async function UsersPage({
                   </div>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="font-semibold">
-                    {sampleLabel(u.display_name, locale)}
-                    {u.full_name ? (
-                      <span className="font-normal text-muted"> · {u.full_name}</span>
-                    ) : null}
-                  </p>
+                  <p className="font-semibold">{sampleLabel(u.display_name, locale)}</p>
                   <p className="text-xs text-muted">
-                    {info?.email} · {u.status} · {u.age_group ?? '—'} ·{' '}
-                    {formatDate(u.created_at, locale)} ·{' '}
-                    {u.last_seen_at
-                      ? t('lastSeen', { time: formatDateTime(u.last_seen_at, locale) })
-                      : t('neverSeen')}
-                    {banned ? ` · ${t('banned')}` : ''}
+                    {[
+                      info?.email,
+                      u.status,
+                      u.age_group ?? '—',
+                      formatDate(u.created_at, locale),
+                      u.last_seen_at
+                        ? t('lastSeen', { time: formatDateTime(u.last_seen_at, locale) })
+                        : t('neverSeen'),
+                      banned ? t('banned') : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
                   </p>
                   <RoleBadges
                     roles={mine}
