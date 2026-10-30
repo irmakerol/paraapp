@@ -1260,6 +1260,19 @@ export type Database = {
         Returns: Database['public']['Tables']['messages']['Row'][];
       };
       ban_user: { Args: { p_user: string; p_until: Timestamp | null; p_reason: string }; Returns: undefined };
+      admin_update_profile: {
+        Args: {
+          p_user: string;
+          p_display_name: string;
+          p_full_name: string | null;
+          p_city: string | null;
+          p_home_site: string | null;
+          p_pilot_level: Database['public']['Enums']['pilot_level'] | null;
+          p_bio: string | null;
+          p_remove_photo?: boolean;
+        };
+        Returns: string | null;
+      };
     };
     Enums: {
       app_role:

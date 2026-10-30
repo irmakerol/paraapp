@@ -618,7 +618,15 @@
       "verifyMember": "Verify as member",
       "ban": "Ban",
       "unban": "Unban",
-      "banned": "Banned"
+      "banned": "Banned",
+      "edit": "Edit",
+      "back": "Back to users",
+      "photo": "Profile photo",
+      "noPhoto": "No photo",
+      "removePhoto": "Remove photo",
+      "removePhotoHelp": "Deletes an unsuitable photo. The person can upload a new one.",
+      "auditNote": "Your changes are written to the audit log.",
+      "notAllowed": "Only the super admin can do this."
     },
     "requestsAdmin": {
       "new": "Log an email request",

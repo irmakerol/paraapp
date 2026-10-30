@@ -618,7 +618,15 @@
       "verifyMember": "Üye olarak doğrula",
       "ban": "Engelle",
       "unban": "Engeli kaldır",
-      "banned": "Engelli"
+      "banned": "Engelli",
+      "edit": "Düzenle",
+      "back": "Kullanıcılara dön",
+      "photo": "Profil fotoğrafı",
+      "noPhoto": "Fotoğraf yok",
+      "removePhoto": "Fotoğrafı kaldır",
+      "removePhotoHelp": "Uygunsuz bir fotoğrafı siler. Kişi yenisini yükleyebilir.",
+      "auditNote": "Yaptığın değişiklikler denetim kaydına yazılır.",
+      "notAllowed": "Bunu yalnızca süper yönetici yapabilir."
     },
     "requestsAdmin": {
       "new": "E-postayla gelen talebi kaydet",
