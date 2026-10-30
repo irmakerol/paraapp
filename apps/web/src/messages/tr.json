@@ -1728,7 +1728,8 @@
     "noAppBody": "Fly Anatolia iPhone uygulaması şu an kulüp üyeleri için TestFlight ile deneniyor. Katılmak için kulübe yazın.",
     "afterTitle": "Başka bir aletle mi uçtun?",
     "afterBody": "Uçuşunu sonradan IGC veya GPX dosyası olarak uçuş defterine ekleyebilirsin.",
-    "import": "Uçuş dosyası yükle"
+    "import": "Uçuş dosyası yükle",
+    "notOpened": "Uygulama açılmadı. Ana ekranınızdaki Fly Anatolia uygulamasını (TestFlight ile yüklenen) doğrudan açın. Web sitesini ana ekrana eklediyseniz, o simge uygulama değil web sitesidir; uçuş kaydı yalnızca uygulamada yapılır."
   },
   "clubMessages": {
     "title": "Kulüpten",

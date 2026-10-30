@@ -5,6 +5,7 @@ import { getViewer } from '@/lib/session';
 import { activeFlightStart } from '@/lib/active-flight';
 import { formatDateTime } from '@/lib/format';
 import { Card, PageTitle, buttonClass } from '@/components/ui';
+import { OpenAppButton } from './open-app';
 
 export async function generateMetadata({
   params,
@@ -34,13 +35,7 @@ export default async function FlyPage({ params }: { params: Promise<{ locale: st
           <p className="mt-1 text-sm text-muted">{t('flyingHelp')}</p>
         </Card>
       ) : null}
-      {/* The app registers the flyanatolia:// scheme; without it installed the link does nothing. */}
-      <a
-        href="flyanatolia://"
-        className="flex min-h-20 items-center justify-center rounded-2xl bg-fly px-6 text-2xl font-bold text-white shadow-lg focus-visible:outline-4 focus-visible:outline-offset-2"
-      >
-        {t('openApp')}
-      </a>
+      <OpenAppButton />
       <Card className="space-y-2">
         <h2 className="text-lg font-bold">{t('noAppTitle')}</h2>
         <p>{t('noAppBody')}</p>

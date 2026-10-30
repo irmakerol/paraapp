@@ -1728,7 +1728,8 @@
     "noAppBody": "The Fly Anatolia iPhone app is being tested by club members through TestFlight. Write to the club to join.",
     "afterTitle": "Flew with another instrument?",
     "afterBody": "You can add the flight to your logbook later as an IGC or GPX file.",
-    "import": "Upload a flight file"
+    "import": "Upload a flight file",
+    "notOpened": "The app did not open. Open the Fly Anatolia app on your home screen (the one installed with TestFlight) directly. If you added the website to your home screen, that icon is the website, not the app; flights are recorded only in the app."
   },
   "clubMessages": {
     "title": "From the club",
