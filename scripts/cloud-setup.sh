@@ -105,7 +105,10 @@ fi
 deploy() {
   npx -y vercel@latest pull --yes --environment=production --token "$VERCEL_TOKEN" > /dev/null
   npx -y vercel@latest build --prod --token "$VERCEL_TOKEN"
-  npx -y vercel@latest deploy --prebuilt --prod --token "$VERCEL_TOKEN"
+  if ! npx -y vercel@latest deploy --prebuilt --prod --token "$VERCEL_TOKEN" 2>&1 | tee "$RUNNER_TEMP/deploy.log"; then
+    echo "::error title=Vercel deploy failed::$(grep -v '^\s*$' "$RUNNER_TEMP/deploy.log" | tail -n 5 | tr '\n' ' ' | head -c 900)"
+    return 1
+  fi
 }
 
 STAGE=website
