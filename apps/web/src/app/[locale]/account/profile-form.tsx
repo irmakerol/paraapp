@@ -170,6 +170,7 @@ export function ProfileForm(props: {
                 {/* An older level (student, P1, tandem) stays selectable until changed. */}
                 {[
                   ...(profile.pilot_level &&
+                  profile.pilot_level !== 'instructor' &&
                   !(PILOT_LEVEL_CHOICES as readonly string[]).includes(profile.pilot_level)
                     ? [profile.pilot_level]
                     : []),

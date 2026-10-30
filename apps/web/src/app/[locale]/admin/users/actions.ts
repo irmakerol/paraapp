@@ -135,6 +135,13 @@ export async function updateUserProfile(
   if (detailsError) {
     return { error: detailsError.code === '42501' ? 'admin.usersAdmin.notAllowed' : 'generic' };
   }
+  const { error: instructorError } = await supabase.rpc('admin_set_instructor', {
+    p_user: userId,
+    p_on: bool(formData, 'is_instructor'),
+  });
+  if (instructorError) {
+    return { error: instructorError.code === '42501' ? 'admin.usersAdmin.notAllowed' : 'generic' };
+  }
   if (removedPath) await createAdminClient().storage.from('avatars').remove([removedPath]);
   revalidatePath('/[locale]/admin/users', 'layout');
   revalidatePath('/[locale]/pilots/[id]', 'page');

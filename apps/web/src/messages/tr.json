@@ -726,7 +726,9 @@
       "deleted": "Hesap silindi. Kalan veriler 30 gün içinde tamamen temizlenecek.",
       "selfNote": "Kendi hesabını buradan silemez veya engelleyemezsin.",
       "adminNote": "Yöneticileri yalnızca süper yönetici düzenleyebilir; yöneticiler engellenemez.",
-      "viewAudited": "Bu sayfayı açman denetim kaydına yazılır."
+      "viewAudited": "Bu sayfayı açman denetim kaydına yazılır.",
+      "isInstructor": "Eğitmen",
+      "isInstructorHelp": "Kişinin profilinde eğitmen rozeti gösterir. Düzenleme yetkisi (Yer Okulu, geziler) Roller bölümündeki Eğitmen rolüyle verilir."
     },
     "requestsAdmin": {
       "new": "E-postayla gelen talebi kaydet",

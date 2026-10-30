@@ -19,6 +19,7 @@ export interface UserValues {
   country: string;
   flying_since: string;
   licence_body: string;
+  is_instructor: boolean;
 }
 
 export function UserForm({
@@ -45,9 +46,10 @@ export function UserForm({
   const [state, action] = useActionState(updateUserProfile.bind(null, id), initialState);
   const err = (name: string) =>
     state.fieldErrors?.[name] ? root('auth.errors.validation') : undefined;
-  // An older level (student, P1, tandem) stays selectable until changed.
+  // An older level (student, P1, tandem) stays selectable until changed. Instructor is the tick box.
   const levels = [
     ...(values.pilot_level &&
+    values.pilot_level !== 'instructor' &&
     !(PILOT_LEVEL_CHOICES as readonly string[]).includes(values.pilot_level)
       ? [values.pilot_level]
       : []),
@@ -152,6 +154,18 @@ export function UserForm({
             </Select>
           </Field>
         </div>
+        <label className="flex min-h-11 items-center gap-2">
+          <input
+            type="checkbox"
+            name="is_instructor"
+            defaultChecked={values.is_instructor}
+            className="size-5"
+          />
+          <span>
+            <span className="font-semibold">{t('isInstructor')}</span>
+            <span className="block text-sm text-muted">{t('isInstructorHelp')}</span>
+          </span>
+        </label>
         <Field id="bio" label={p('bio')} error={err('bio')}>
           <Textarea id="bio" name="bio" rows={4} maxLength={500} defaultValue={values.bio} />
         </Field>

@@ -1422,6 +1422,7 @@ export type Database = {
         Returns: undefined;
       };
       admin_request_account_deletion: { Args: { p_user: string; p_reason: string }; Returns: string };
+      admin_set_instructor: { Args: { p_user: string; p_on: boolean }; Returns: undefined };
     };
     Enums: {
       app_role:

@@ -38,6 +38,7 @@ interface Overview {
     last_seen_at: string | null;
     licence_body: string | null;
     has_licence_number: boolean;
+    is_instructor: boolean;
   };
   stats: {
     flights: number;
@@ -328,6 +329,7 @@ export default async function UserDetailPage({
               country: profile.country ?? '',
               flying_since: profile.flying_since?.toString() ?? '',
               licence_body: profile.licence_body ?? '',
+              is_instructor: profile.is_instructor,
             }}
           />
         ) : (

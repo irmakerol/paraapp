@@ -726,7 +726,9 @@
       "deleted": "Account deleted. The remaining data will be purged within 30 days.",
       "selfNote": "You cannot delete or ban your own account here.",
       "adminNote": "Only the super admin can edit admins; admins cannot be banned.",
-      "viewAudited": "Opening this page is written to the audit log."
+      "viewAudited": "Opening this page is written to the audit log.",
+      "isInstructor": "Instructor",
+      "isInstructorHelp": "Shows the instructor badge on their profile. Editing rights (Ground School, trips) come from the Instructor role under Roles."
     },
     "requestsAdmin": {
       "new": "Log an email request",
