@@ -156,9 +156,13 @@ export class FlightDetector {
 export class BaroVario {
   private samples: { t: number; h: number }[] = [];
 
+  /** `windowMs`: how many ms of readings are averaged (longer = steadier, slower). */
+  constructor(public windowMs = 2_000) {}
+
   push(t: number, h: number): number | null {
     this.samples.push({ t, h });
-    while (this.samples.length > 2 && (this.samples[0]?.t ?? 0) < t - 2_000) this.samples.shift();
+    while (this.samples.length > 2 && (this.samples[0]?.t ?? 0) < t - this.windowMs)
+      this.samples.shift();
     const n = this.samples.length;
     if (n < 4) return null;
     const t0 = this.samples[0]?.t ?? t;

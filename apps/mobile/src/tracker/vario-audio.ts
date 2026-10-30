@@ -6,8 +6,6 @@ import * as FileSystem from 'expo-file-system/legacy';
  * continuous-ish tone in strong sink. The tones are tiny WAV files generated on first use.
  */
 const RATE = 16_000;
-const CLIMB_START = 0.2;
-const SINK_ALARM = -2.5;
 const LEVELS = [0.2, 0.5, 1, 1.5, 2, 3, 4, 5];
 const DIR = `${FileSystem.cacheDirectory ?? ''}vario/`;
 
@@ -58,12 +56,52 @@ function base64(bytes: Uint8Array): string {
   return out;
 }
 
+export interface VarioTones {
+  climbStart: number;
+  sinkAlarm: number;
+  /** 0–1 */
+  volume: number;
+}
+
 export class VarioAudio {
   private climbPlayers: { level: number; player: AudioPlayer }[] = [];
   private sinkPlayer: AudioPlayer | null = null;
   private timer: ReturnType<typeof setTimeout> | null = null;
   private climb: number | null = null;
   private running = false;
+  private tones: VarioTones = { climbStart: 0.2, sinkAlarm: -2.5, volume: 0.6 };
+  private builtVolume: number | null = null;
+
+  /** New thresholds apply at once; a new volume rebuilds the tones on the next start. */
+  configure(tones: VarioTones) {
+    const rebuild = tones.volume !== this.tones.volume;
+    this.tones = tones;
+    if (rebuild && this.running) {
+      this.stop();
+      void this.start();
+    }
+  }
+
+  /** A short sample: rising climb tones, then the sink tone, so the pilot hears the settings. */
+  async demo() {
+    const wasRunning = this.running;
+    const saved = this.climb;
+    await this.start();
+    for (const climb of [0.5, 1, 2, 3, 4, this.tones.sinkAlarm - 0.5]) {
+      this.climb = climb;
+      await new Promise((resolve) => setTimeout(resolve, 1_200));
+    }
+    this.climb = saved;
+    if (!wasRunning) this.stop();
+  }
+
+  private release() {
+    for (const p of this.climbPlayers) p.player.remove();
+    this.sinkPlayer?.remove();
+    this.climbPlayers = [];
+    this.sinkPlayer = null;
+    this.builtVolume = null;
+  }
 
   async start() {
     if (this.running) return;
@@ -73,20 +111,24 @@ export class VarioAudio {
       shouldPlayInBackground: true,
       interruptionMode: 'mixWithOthers',
     }).catch(() => undefined);
-    if (!this.climbPlayers.length) {
+    if (!this.climbPlayers.length || this.builtVolume !== this.tones.volume) {
+      this.release();
+      const volume = this.tones.volume;
+      const tag = Math.round(volume * 100);
       await FileSystem.makeDirectoryAsync(DIR, { intermediates: true }).catch(() => undefined);
       for (const level of LEVELS) {
-        const uri = `${DIR}climb-${level}.wav`;
-        await FileSystem.writeAsStringAsync(uri, wav(freqFor(level), 140), {
+        const uri = `${DIR}climb-${level}-${tag}.wav`;
+        await FileSystem.writeAsStringAsync(uri, wav(freqFor(level), 140, volume), {
           encoding: FileSystem.EncodingType.Base64,
         });
         this.climbPlayers.push({ level, player: createAudioPlayer({ uri }) });
       }
-      const sinkUri = `${DIR}sink.wav`;
-      await FileSystem.writeAsStringAsync(sinkUri, wav(320, 500, 0.5), {
+      const sinkUri = `${DIR}sink-${tag}.wav`;
+      await FileSystem.writeAsStringAsync(sinkUri, wav(320, 500, volume * 0.85), {
         encoding: FileSystem.EncodingType.Base64,
       });
       this.sinkPlayer = createAudioPlayer({ uri: sinkUri });
+      this.builtVolume = volume;
     }
     this.tick();
   }
@@ -115,13 +157,14 @@ export class VarioAudio {
     if (!this.running) return;
     const climb = this.climb;
     let next = 250;
-    if (climb !== null && climb >= CLIMB_START) {
+    if (climb !== null && climb >= this.tones.climbStart && climb > 0) {
       let best = this.climbPlayers[0];
+      // Below the first tone level (a 0–0.1 m/s threshold) the lowest tone plays.
       for (const p of this.climbPlayers) if (p.level <= climb) best = p;
       this.play(best?.player);
       // Faster beeps in stronger lift: ~2/s at 0.5 m/s, ~6/s at 4 m/s.
       next = Math.max(160, 600 - climb * 110);
-    } else if (climb !== null && climb <= SINK_ALARM) {
+    } else if (climb !== null && climb <= this.tones.sinkAlarm) {
       this.play(this.sinkPlayer);
       next = 600;
     }

@@ -1,20 +1,34 @@
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Linking, ScrollView, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Linking,
+  ScrollView,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native';
 import { Barometer } from 'expo-sensors';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { t } from '../i18n';
 import { duration, signed } from '../format';
 import { BaroVario, type LiveState } from '../tracker/live';
 import { VarioAudio } from '../tracker/vario-audio';
-import { startRecording, stopRecording, subscribeRecorder } from '../tracker/recorder';
+import {
+  currentTrack,
+  firstFix,
+  startRecording,
+  stopRecording,
+  subscribeRecorder,
+} from '../tracker/recorder';
+import { DAMPING_WINDOW, VOLUME_LEVEL } from '../tracker/vario-settings';
+import { saveVarioSettings, useVarioSettings } from '../tracker/vario-settings-store';
 import { updateFlight } from '../tracker/flights';
 import { uploadPending } from '../upload';
 import { Body, Button, Card, Toggle } from '../ui/kit';
+import { LiveMap, type LatLng } from '../ui/live-map';
 import { useTheme } from '../ui/theme';
-
-const SOUND_KEY = 'settings:sound';
-const AWAKE_KEY = 'settings:awake';
+import { VarioSettingsScreen } from './VarioSettingsScreen';
 
 export function FlyScreen() {
   const c = useTheme();
@@ -22,22 +36,34 @@ export function FlyScreen() {
   const [live, setLive] = useState<LiveState | null>(null);
   const [baroClimb, setBaroClimb] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
-  const [sound, setSound] = useState(true);
-  const [awake, setAwake] = useState(true);
+  const settings = useVarioSettings();
+  const { sound, keepAwake: awake } = settings;
+  const [showSettings, setShowSettings] = useState(false);
+  const [track, setTrack] = useState<LatLng[]>([]);
+  const [takeoff, setTakeoff] = useState<LatLng | null>(null);
+  const { height: screenHeight } = useWindowDimensions();
   const [warning, setWarning] = useState<string | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const audio = useRef(new VarioAudio());
   const baro = useRef(new BaroVario());
 
   useEffect(() => {
-    void AsyncStorage.multiGet([SOUND_KEY, AWAKE_KEY]).then(([s, a]) => {
-      if (s?.[1]) setSound(s[1] === '1');
-      if (a?.[1]) setAwake(a[1] === '1');
+    audio.current.configure({
+      climbStart: settings.climbStart,
+      sinkAlarm: settings.sinkAlarm,
+      volume: VOLUME_LEVEL[settings.volume],
     });
+    baro.current.windowMs = DAMPING_WINDOW[settings.damping];
+  }, [settings]);
+
+  useEffect(() => {
     return subscribeRecorder((event) => {
       if (event.type === 'state') {
         setRecording(event.recording);
         setLive(event.live ? { ...event.live } : null);
+        setTrack(event.recording ? currentTrack() : []);
+        const first = event.recording ? firstFix() : null;
+        setTakeoff(first ? { latitude: first.lat, longitude: first.lng } : null);
       } else if (event.type === 'saved') {
         const id = event.flight.id;
         Alert.alert(t('fly.saved'), t('fly.totalsQuestion'), [
@@ -172,47 +198,44 @@ export function FlyScreen() {
             />
             <Stat label={t('fly.time')} value={flightTime} unit="" wide />
           </View>
+          <LiveMap
+            track={track}
+            takeoff={takeoff}
+            position={last ? { latitude: last.lat, longitude: last.lng } : null}
+            height={Math.round(screenHeight * 0.32)}
+          />
           {warning ? <Body muted>{warning}</Body> : null}
           <Toggle
             label={t('fly.sound')}
             value={sound}
-            onChange={(v) => {
-              setSound(v);
-              void AsyncStorage.setItem(SOUND_KEY, v ? '1' : '0');
-            }}
+            onChange={(v) => void saveVarioSettings({ sound: v })}
           />
-          <Toggle
-            label={t('fly.keepAwake')}
-            value={awake}
-            onChange={(v) => {
-              setAwake(v);
-              void AsyncStorage.setItem(AWAKE_KEY, v ? '1' : '0');
-            }}
-          />
+          <Button label={t('vario.open')} kind="secondary" onPress={() => setShowSettings(true)} />
           <Button label={t('fly.stop')} kind="danger" busy={busy} onPress={stop} />
         </>
       ) : (
         <>
+          <LiveMap
+            track={[]}
+            takeoff={null}
+            position={null}
+            height={Math.round(screenHeight * 0.36)}
+          />
           <Button label={t('fly.start')} busy={busy} onPress={() => void start()} style={s.start} />
           <Body muted>{t('fly.hint')}</Body>
           <Toggle
             label={t('fly.sound')}
             value={sound}
-            onChange={(v) => {
-              setSound(v);
-              void AsyncStorage.setItem(SOUND_KEY, v ? '1' : '0');
-            }}
+            onChange={(v) => void saveVarioSettings({ sound: v })}
           />
-          <Toggle
-            label={t('fly.keepAwake')}
-            value={awake}
-            onChange={(v) => {
-              setAwake(v);
-              void AsyncStorage.setItem(AWAKE_KEY, v ? '1' : '0');
-            }}
-          />
+          <Button label={t('vario.open')} kind="secondary" onPress={() => setShowSettings(true)} />
         </>
       )}
+      <VarioSettingsScreen
+        visible={showSettings}
+        onClose={() => setShowSettings(false)}
+        onTest={() => audio.current.demo()}
+      />
     </ScrollView>
   );
 }
@@ -252,5 +275,5 @@ const s = StyleSheet.create({
   label: { fontSize: 14, fontWeight: '600' },
   value: { fontSize: 34, fontWeight: '700', fontVariant: ['tabular-nums'] },
   unitSmall: { fontSize: 16, fontWeight: '500' },
-  start: { minHeight: 96, marginVertical: 24 },
+  start: { minHeight: 88, marginVertical: 12 },
 });

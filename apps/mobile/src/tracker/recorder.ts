@@ -90,6 +90,27 @@ async function flush() {
   await AsyncStorage.setItem(ACTIVE_KEY, JSON.stringify(active));
 }
 
+/**
+ * The track so far, for the live map: at most `max` points (evenly thinned, always ending with
+ * the newest fix) so a long flight does not slow the map down.
+ */
+export function currentTrack(max = 1_500): { latitude: number; longitude: number }[] {
+  const step = Math.max(1, Math.ceil(fixes.length / max));
+  const out: { latitude: number; longitude: number }[] = [];
+  for (let i = 0; i < fixes.length; i += step) {
+    const f = fixes[i];
+    if (f) out.push({ latitude: f.lat, longitude: f.lng });
+  }
+  const last = fixes[fixes.length - 1];
+  if (last && step > 1) out.push({ latitude: last.lat, longitude: last.lng });
+  return out;
+}
+
+/** Where the flight started (the first fix), for the takeoff pin. */
+export function firstFix(): Fix | null {
+  return fixes[0] ?? null;
+}
+
 export async function isRecording(): Promise<boolean> {
   await ensureLoaded();
   return active !== null;

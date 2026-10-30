@@ -98,6 +98,100 @@ export function Toggle({
   );
 }
 
+/** A value with − and + buttons (big targets, usable with gloves). */
+export function Stepper({
+  label,
+  value,
+  onStep,
+  canDown,
+  canUp,
+  help,
+}: {
+  label: string;
+  value: string;
+  onStep: (direction: 1 | -1) => void;
+  canDown: boolean;
+  canUp: boolean;
+  help?: string;
+}) {
+  const c = useTheme();
+  const button = (direction: 1 | -1, enabled: boolean) => (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={`${label} ${direction > 0 ? '+' : '−'}`}
+      accessibilityState={{ disabled: !enabled }}
+      disabled={!enabled}
+      onPress={() => onStep(direction)}
+      style={({ pressed }) => [
+        styles.stepButton,
+        {
+          borderColor: c.border,
+          backgroundColor: c.bg,
+          opacity: !enabled ? 0.4 : pressed ? 0.7 : 1,
+        },
+      ]}
+    >
+      <Text style={[styles.stepSign, { color: c.text }]}>{direction > 0 ? '+' : '−'}</Text>
+    </Pressable>
+  );
+  return (
+    <View style={styles.setting} accessibilityLabel={`${label}: ${value}`}>
+      <View style={{ flex: 1 }}>
+        <Text style={[styles.body, { color: c.text, fontWeight: '600' }]}>{label}</Text>
+        {help ? <Text style={[styles.help, { color: c.muted }]}>{help}</Text> : null}
+      </View>
+      {button(-1, canDown)}
+      <Text style={[styles.stepValue, { color: c.text }]}>{value}</Text>
+      {button(1, canUp)}
+    </View>
+  );
+}
+
+/** One choice out of a few, shown side by side. */
+export function Segmented<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+  help,
+}: {
+  label: string;
+  options: readonly { value: T; label: string }[];
+  value: T;
+  onChange: (v: T) => void;
+  help?: string;
+}) {
+  const c = useTheme();
+  return (
+    <View style={{ marginVertical: 8 }}>
+      <Text style={[styles.body, { color: c.text, fontWeight: '600' }]}>{label}</Text>
+      {help ? <Text style={[styles.help, { color: c.muted }]}>{help}</Text> : null}
+      <View
+        accessibilityRole="radiogroup"
+        style={[styles.segments, { borderColor: c.border, backgroundColor: c.bg }]}
+      >
+        {options.map((o) => {
+          const on = o.value === value;
+          return (
+            <Pressable
+              key={o.value}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: on }}
+              accessibilityLabel={o.label}
+              onPress={() => onChange(o.value)}
+              style={[styles.segment, on && { backgroundColor: c.primary }]}
+            >
+              <Text style={[styles.segmentText, { color: on ? c.primaryText : c.text }]}>
+                {o.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
 export function Link({ label, onPress }: { label: string; onPress: () => void }) {
   const c = useTheme();
   return (
@@ -131,4 +225,43 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   link: { minHeight: 44, justifyContent: 'center' },
+  help: { fontSize: 14, lineHeight: 19, marginTop: 2 },
+  setting: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    minHeight: 60,
+    marginVertical: 6,
+  },
+  stepButton: {
+    width: 48,
+    height: 48,
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepSign: { fontSize: 26, fontWeight: '600' },
+  stepValue: {
+    minWidth: 64,
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight: '700',
+    fontVariant: ['tabular-nums'],
+  },
+  segments: {
+    flexDirection: 'row',
+    borderRadius: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+    padding: 3,
+    marginTop: 8,
+  },
+  segment: {
+    flex: 1,
+    minHeight: 44,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  segmentText: { fontSize: 15, fontWeight: '600' },
 });
