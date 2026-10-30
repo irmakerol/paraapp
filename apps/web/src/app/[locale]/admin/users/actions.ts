@@ -7,6 +7,8 @@ import {
   profileSchema,
   ROLES,
   SUPER_ADMIN_ONLY_ROLES,
+  trainingLevelOptions,
+  trainingLevelSchema,
   type Role,
 } from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
@@ -104,11 +106,17 @@ export async function updateUserProfile(
     .enum(LICENCE_BODIES)
     .nullable()
     .safeParse(str(formData, 'licence_body') || null);
-  if (!parsed.success || !licenceBody.success) {
+  const training = trainingLevelSchema.safeParse(str(formData, 'training_level') || null);
+  const trainingOk =
+    training.success &&
+    (!training.data ||
+      (trainingLevelOptions(parsed.data?.pilot_level ?? null) as string[]).includes(training.data));
+  if (!parsed.success || !licenceBody.success || !trainingOk) {
     const fieldErrors: Record<string, string> = {};
     for (const issue of parsed.error?.issues ?? [])
       fieldErrors[String(issue.path[0])] = 'validation';
     if (!licenceBody.success) fieldErrors.licence_body = 'validation';
+    if (!trainingOk) fieldErrors.training_level = 'validation';
     return { error: 'validation', fieldErrors };
   }
   const v = parsed.data;
@@ -141,6 +149,16 @@ export async function updateUserProfile(
   });
   if (instructorError) {
     return { error: instructorError.code === '42501' ? 'admin.usersAdmin.notAllowed' : 'generic' };
+  }
+  // Only sent for student pilots. Saved after the level, which may have cleared a reached target.
+  if (formData.has('training_level')) {
+    const { error: trainingError } = await supabase.rpc('admin_set_training_level', {
+      p_user: userId,
+      p_level: training.data ?? null,
+    });
+    if (trainingError) {
+      return { error: trainingError.code === '42501' ? 'admin.usersAdmin.notAllowed' : 'generic' };
+    }
   }
   if (removedPath) await createAdminClient().storage.from('avatars').remove([removedPath]);
   revalidatePath('/[locale]/admin/users', 'layout');

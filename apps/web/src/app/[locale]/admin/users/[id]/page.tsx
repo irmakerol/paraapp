@@ -26,6 +26,7 @@ interface Overview {
     city: string | null;
     home_site: string | null;
     pilot_level: string | null;
+    training_level: string | null;
     flying_since: number | null;
     total_flight_hours: number;
     total_flights: number;
@@ -319,12 +320,14 @@ export default async function UserDetailPage({
           <UserForm
             id={profile.id}
             photoUrl={photo.data?.signedUrl ?? null}
+            isStudent={roles.includes('student_pilot')}
             values={{
               display_name: profile.display_name,
               full_name: profile.full_name ?? '',
               city: profile.city ?? '',
               home_site: profile.home_site ?? '',
               pilot_level: profile.pilot_level ?? '',
+              training_level: profile.training_level ?? '',
               bio: profile.bio ?? '',
               country: profile.country ?? '',
               flying_since: profile.flying_since?.toString() ?? '',

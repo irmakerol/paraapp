@@ -212,6 +212,9 @@
       "city": "Şehir",
       "homeSite": "Ana uçuş alanı",
       "pilotLevel": "Pilot seviyesi",
+      "trainingLevel": "Hedef seviye (eğitim)",
+      "trainingLevelHelp": "Öğrenci pilotlar: eğitimini aldığınız seviye. Yalnızca mevcut seviyenizin üstündeki seviyeler listelenir.",
+      "trainingLevelTop": "Eğitim alınacak daha yüksek bir seviye yok.",
       "levelNone": "Belirtilmedi",
       "levels": {
         "student": "Öğrenci",

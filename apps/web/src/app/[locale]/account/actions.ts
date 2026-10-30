@@ -8,6 +8,8 @@ import {
   LICENCE_BODIES,
   licenceNumberSchema,
   profileSchema,
+  trainingLevelOptions,
+  trainingLevelSchema,
   type ConsentType,
 } from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
@@ -74,12 +76,23 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     units_system: field('units_system'),
     units_speed: field('units_speed'),
   });
+  const training = trainingLevelSchema.safeParse(field('training_level') || null);
   const licence = licenceNumberSchema.safeParse(String(field('licence') ?? ''));
   const licenceBody = z
     .enum(LICENCE_BODIES)
     .nullable()
     .safeParse(field('licence_body') || null);
-  if (!parsed.success || !prefs.success || !licence.success || !licenceBody.success) {
+  const trainingOk =
+    training.success &&
+    (!training.data ||
+      (trainingLevelOptions(parsed.data?.pilot_level ?? null) as string[]).includes(training.data));
+  if (
+    !parsed.success ||
+    !prefs.success ||
+    !licence.success ||
+    !licenceBody.success ||
+    !trainingOk
+  ) {
     // Name the exact field, so the form can mark it (privacy selects as privacy_<field>).
     const fieldErrors: Record<string, string> = {};
     for (const issue of parsed.error?.issues ?? []) {
@@ -93,6 +106,7 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     }
     if (!licence.success) fieldErrors.licence = 'validation';
     if (!licenceBody.success) fieldErrors.licence_body = 'validation';
+    if (!trainingOk) fieldErrors.training_level = 'validation';
     return { error: 'validation', fieldErrors };
   }
 
@@ -102,6 +116,8 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     .update({
       ...parsed.data,
       is_instructor: formData.get('is_instructor') === 'on',
+      // Only student pilots see the field; leave it alone when it was not sent.
+      ...(formData.has('training_level') ? { training_level: training.data ?? null } : {}),
       locale: prefs.data.locale,
       units: { system: prefs.data.units_system, speed: prefs.data.units_speed },
     })

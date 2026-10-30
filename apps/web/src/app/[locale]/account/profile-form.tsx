@@ -18,6 +18,7 @@ import { routing } from '@/i18n/routing';
 import { Alert, Button, Card, Field, Input, Select, Textarea } from '@/components/ui';
 import { SubmitButton } from '@/components/submit-button';
 import { FormMessage } from '@/components/form-message';
+import { TrainingLevelField } from '@/components/training-level-field';
 import { saveProfile, setAvatar } from './actions';
 
 interface ProfileValues {
@@ -27,6 +28,7 @@ interface ProfileValues {
   city: string;
   home_site: string;
   pilot_level: string;
+  training_level: string;
   is_instructor: boolean;
   flying_since: string;
   weight_kg: string;
@@ -50,6 +52,8 @@ export function ProfileForm(props: {
   licenceBody: string;
   avatarUrl: string | null;
   isMinor: boolean;
+  /** Holds the student pilot role: can say which level they are training for. */
+  isStudent: boolean;
   /** Just saved with a new language (the page reloaded in it). */
   justSaved?: boolean;
 }) {
@@ -61,6 +65,7 @@ export function ProfileForm(props: {
   );
   const [licenceChanged, setLicenceChanged] = useState(false);
   const { profile, privacy } = props;
+  const [level, setLevel] = useState(profile.pilot_level);
   const root = useTranslations();
   const err = (name: string) =>
     state.fieldErrors?.[name] ? root('auth.errors.validation') : undefined;
@@ -165,7 +170,12 @@ export function ProfileForm(props: {
           {row(
             'pilot_level',
             <Field id="pilot_level" label={t('pilotLevel')} error={err('pilot_level')}>
-              <Select id="pilot_level" name="pilot_level" defaultValue={profile.pilot_level}>
+              <Select
+                id="pilot_level"
+                name="pilot_level"
+                defaultValue={profile.pilot_level}
+                onChange={(e) => setLevel(e.target.value)}
+              >
                 <option value="">{t('levelNone')}</option>
                 {/* An older level (student, P1, tandem) stays selectable until changed. */}
                 {[
@@ -183,6 +193,13 @@ export function ProfileForm(props: {
               </Select>
             </Field>,
           )}
+          {props.isStudent ? (
+            <TrainingLevelField
+              level={level}
+              defaultValue={profile.training_level}
+              error={err('training_level')}
+            />
+          ) : null}
           <label className="flex min-h-11 items-center gap-3">
             <input
               type="checkbox"

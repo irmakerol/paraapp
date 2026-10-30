@@ -212,6 +212,9 @@
       "city": "City",
       "homeSite": "Home site",
       "pilotLevel": "Pilot level",
+      "trainingLevel": "Training for",
+      "trainingLevelHelp": "Student pilots: the level you are working towards. Only levels above your current level are listed.",
+      "trainingLevelTop": "There is no higher level to train for.",
       "levelNone": "Not set",
       "levels": {
         "student": "Student",

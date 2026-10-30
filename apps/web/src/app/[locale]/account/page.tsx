@@ -68,6 +68,7 @@ export default async function ProfilePage({
           city: profile.city ?? '',
           home_site: profile.home_site ?? '',
           pilot_level: profile.pilot_level ?? '',
+          training_level: profile.training_level ?? '',
           is_instructor: profile.is_instructor,
           flying_since: profile.flying_since?.toString() ?? '',
           weight_kg: profile.weight_kg?.toString() ?? '',
@@ -83,6 +84,7 @@ export default async function ProfilePage({
         licenceBody={priv?.licence_body ?? ''}
         avatarUrl={avatarUrl}
         isMinor={profile.age_group === 'minor'}
+        isStudent={roles.includes('student_pilot')}
         justSaved={saved === '1'}
       />
     </div>

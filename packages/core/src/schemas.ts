@@ -40,6 +40,34 @@ export type PilotLevel = (typeof PILOT_LEVELS)[number];
  */
 export const PILOT_LEVEL_CHOICES = ['p2', 'p3', 'p4', 'p5', 't1', 't2', 't3'] as const;
 
+/** Position in the forms' order: P2 < P3 < P4 < P5 < T1 < T2 < T3. Must match private.level_order. */
+const LEVEL_ORDER: Record<PilotLevel, number> = {
+  student: 0,
+  p1: 1,
+  p2: 2,
+  p3: 3,
+  p4: 4,
+  p5: 5,
+  t1: 6,
+  tandem: 6,
+  t2: 7,
+  t3: 8,
+  instructor: 9,
+};
+
+/**
+ * Levels a student pilot can be training for: only those above their current level
+ * (all of them when no level is set). Must match private.training_level_ok.
+ */
+export function trainingLevelOptions(
+  current: string | null | undefined,
+): (typeof PILOT_LEVEL_CHOICES)[number][] {
+  const floor = current && current in LEVEL_ORDER ? LEVEL_ORDER[current as PilotLevel] : -1;
+  return PILOT_LEVEL_CHOICES.filter((l) => LEVEL_ORDER[l] > floor);
+}
+
+export const trainingLevelSchema = z.enum(PILOT_LEVEL_CHOICES).nullable();
+
 /** Years flying from the year a pilot started (falls back to the older "years flying" number). */
 export function yearsFlying(
   p: { flying_since?: number | null; years_flying?: number | null },

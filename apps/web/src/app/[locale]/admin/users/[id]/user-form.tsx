@@ -1,5 +1,5 @@
 'use client';
-import { useActionState } from 'react';
+import { useActionState, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { LICENCE_BODIES, PILOT_LEVEL_CHOICES, PROFILE_COUNTRIES } from '@paraapp/core';
 import { initialState } from '@/lib/action-state';
@@ -7,6 +7,7 @@ import { keepValuesOnSubmit } from '@/lib/keep-form-values';
 import { Card, Field, Input, Select, Textarea } from '@/components/ui';
 import { SubmitButton } from '@/components/submit-button';
 import { FormMessage } from '@/components/form-message';
+import { TrainingLevelField } from '@/components/training-level-field';
 import { updateUserProfile } from '../actions';
 
 export interface UserValues {
@@ -15,6 +16,7 @@ export interface UserValues {
   city: string;
   home_site: string;
   pilot_level: string;
+  training_level: string;
   bio: string;
   country: string;
   flying_since: string;
@@ -26,10 +28,13 @@ export function UserForm({
   id,
   values,
   photoUrl,
+  isStudent,
 }: {
   id: string;
   values: UserValues;
   photoUrl: string | null;
+  /** Holds the student pilot role: the "training for" level is shown. */
+  isStudent: boolean;
 }) {
   const t = useTranslations('admin.usersAdmin');
   const p = useTranslations('account.profile');
@@ -44,6 +49,7 @@ export function UserForm({
     ...PROFILE_COUNTRIES,
   ];
   const [state, action] = useActionState(updateUserProfile.bind(null, id), initialState);
+  const [level, setLevel] = useState(values.pilot_level);
   const err = (name: string) =>
     state.fieldErrors?.[name] ? root('auth.errors.validation') : undefined;
   // An older level (student, P1, tandem) stays selectable until changed. Instructor is the tick box.
@@ -113,7 +119,12 @@ export function UserForm({
             />
           </Field>
           <Field id="pilot_level" label={p('pilotLevel')}>
-            <Select id="pilot_level" name="pilot_level" defaultValue={values.pilot_level}>
+            <Select
+              id="pilot_level"
+              name="pilot_level"
+              defaultValue={values.pilot_level}
+              onChange={(e) => setLevel(e.target.value)}
+            >
               <option value="">{p('levelNone')}</option>
               {levels.map((l) => (
                 <option key={l} value={l}>
@@ -122,6 +133,13 @@ export function UserForm({
               ))}
             </Select>
           </Field>
+          {isStudent ? (
+            <TrainingLevelField
+              level={level}
+              defaultValue={values.training_level}
+              error={err('training_level')}
+            />
+          ) : null}
           <Field id="country" label={p('country')}>
             <Select id="country" name="country" defaultValue={values.country}>
               <option value="">—</option>

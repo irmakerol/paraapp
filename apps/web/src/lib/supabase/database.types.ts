@@ -64,11 +64,13 @@ export type Database = {
           created_at: Timestamp;
           last_seen_at: Timestamp | null;
           is_instructor: boolean;
+          training_level: Database['public']['Enums']['pilot_level'] | null;
           updated_at: Timestamp;
         };
         Insert: never;
         Update: {
           is_instructor?: boolean;
+          training_level?: Database['public']['Enums']['pilot_level'] | null;
           display_name?: string;
           full_name?: string | null;
           avatar_path?: string | null;
@@ -1423,6 +1425,10 @@ export type Database = {
       };
       admin_request_account_deletion: { Args: { p_user: string; p_reason: string }; Returns: string };
       admin_set_instructor: { Args: { p_user: string; p_on: boolean }; Returns: undefined };
+      admin_set_training_level: {
+        Args: { p_user: string; p_level: Database['public']['Enums']['pilot_level'] | null };
+        Returns: undefined;
+      };
     };
     Enums: {
       app_role:
