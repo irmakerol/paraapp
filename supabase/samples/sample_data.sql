@@ -50,15 +50,18 @@ select u.id::uuid, r.role::public.app_role
 from (values
   ('a0000000-0000-4000-8000-000000000001', 'member'), ('a0000000-0000-4000-8000-000000000001', 'instructor'),
   ('a0000000-0000-4000-8000-000000000002', 'member'), ('a0000000-0000-4000-8000-000000000002', 'instructor'),
-  ('a0000000-0000-4000-8000-000000000003', 'member'),
-  ('a0000000-0000-4000-8000-000000000004', 'member'),
+  ('a0000000-0000-4000-8000-000000000003', 'member'), ('a0000000-0000-4000-8000-000000000003', 'safety_officer'),
+  ('a0000000-0000-4000-8000-000000000004', 'member'), ('a0000000-0000-4000-8000-000000000004', 'admin'),
   ('a0000000-0000-4000-8000-000000000005', 'member'), ('a0000000-0000-4000-8000-000000000005', 'trip_organiser'),
-  ('a0000000-0000-4000-8000-000000000006', 'member'),
-  ('a0000000-0000-4000-8000-000000000007', 'member'),
-  ('a0000000-0000-4000-8000-000000000008', 'member')
+  ('a0000000-0000-4000-8000-000000000006', 'member'), ('a0000000-0000-4000-8000-000000000006', 'guide'),
+  ('a0000000-0000-4000-8000-000000000007', 'member'), ('a0000000-0000-4000-8000-000000000007', 'moderator'),
+  ('a0000000-0000-4000-8000-000000000008', 'pilot')
 ) as r(id, role)
 join auth.users u on u.id = r.id::uuid
 on conflict do nothing;
+-- Selin is a pilot who is not (yet) a club member; earlier versions of this file made her one.
+delete from public.user_roles
+where user_id = 'a0000000-0000-4000-8000-000000000008' and role = 'member';
 
 -- Sample pilots agreed to a public profile so guests can see them too.
 insert into public.consents (user_id, consent_type, granted, method)
