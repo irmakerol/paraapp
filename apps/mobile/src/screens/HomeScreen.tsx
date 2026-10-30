@@ -8,10 +8,14 @@ import { useTheme } from '../ui/theme';
 import { BoardScreen } from './BoardScreen';
 import { EventRow, EventsScreen } from './EventsScreen';
 import { NewsScreen } from './NewsScreen';
+import { SafetyScreen } from './SafetyScreen';
 import { SitesScreen } from './SitesScreen';
+import { SosScreen } from './SosScreen';
 import { TipsScreen } from './TipsScreen';
+import { TripsScreen } from './TripsScreen';
 
-export type Section = 'news' | 'tips' | 'notices' | 'market' | 'sites' | 'events';
+export type Section =
+  'news' | 'tips' | 'notices' | 'market' | 'sites' | 'events' | 'trips' | 'safety' | 'sos';
 
 type Route = { section: Section; id?: string | null } | null;
 
@@ -20,8 +24,10 @@ const SECTIONS: { id: Section; label: MessageKey; icon: string; members?: boolea
   { id: 'tips', label: 'nav.tips', icon: '🎓' },
   { id: 'sites', label: 'nav.sites', icon: '⛰️' },
   { id: 'events', label: 'nav.events', icon: '📅' },
+  { id: 'trips', label: 'nav.trips', icon: '🧳' },
   { id: 'notices', label: 'nav.notices', icon: '📌', members: true },
   { id: 'market', label: 'nav.market', icon: '🪂' },
+  { id: 'safety', label: 'nav.safety', icon: '🛟' },
 ];
 
 /**
@@ -73,6 +79,14 @@ export function HomeScreen({
         return <TipsScreen userId={userId} onBack={back} />;
       case 'events':
         return <EventsScreen userId={userId} onBack={back} initialId={route.id} />;
+      case 'trips':
+        return <TripsScreen userId={userId} onBack={back} />;
+      case 'safety':
+        return (
+          <SafetyScreen userId={userId} onBack={back} onSos={() => setRoute({ section: 'sos' })} />
+        );
+      case 'sos':
+        return <SosScreen onBack={back} />;
       case 'sites':
         return <SitesScreen onBack={back} />;
       case 'notices':
@@ -132,6 +146,16 @@ export function HomeScreen({
           </Pressable>
         ))}
       </View>
+
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={`${t('nav.sos')}: ${t('home.sosLead')}`}
+        onPress={() => setRoute({ section: 'sos' })}
+        style={({ pressed }) => [s.sos, { opacity: pressed ? 0.85 : 1 }]}
+      >
+        <Text style={s.sosTitle}>🆘 {t('nav.sos')}</Text>
+        <Text style={s.sosLead}>{t('home.sosLead')}</Text>
+      </Pressable>
 
       {failed ? <Body muted>{t('common.offline')}</Body> : null}
 
@@ -201,6 +225,18 @@ const s = StyleSheet.create({
     gap: 6,
   },
   icon: { fontSize: 28 },
+  sos: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    minHeight: 56,
+    borderRadius: 14,
+    backgroundColor: '#c81e1e',
+    paddingHorizontal: 16,
+    marginTop: 12,
+  },
+  sosTitle: { color: '#ffffff', fontSize: 20, fontWeight: '800' },
+  sosLead: { color: '#ffffff', fontSize: 15, flex: 1 },
   tileText: { fontSize: 14, fontWeight: '700', textAlign: 'center' },
   heading: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between' },
   all: { minHeight: 44, justifyContent: 'flex-end', paddingBottom: 10 },
