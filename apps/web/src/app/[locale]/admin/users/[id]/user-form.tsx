@@ -1,7 +1,7 @@
 'use client';
 import { useActionState } from 'react';
-import { useTranslations } from 'next-intl';
-import { PILOT_LEVEL_CHOICES } from '@paraapp/core';
+import { useLocale, useTranslations } from 'next-intl';
+import { LICENCE_BODIES, PILOT_LEVEL_CHOICES, PROFILE_COUNTRIES } from '@paraapp/core';
 import { initialState } from '@/lib/action-state';
 import { Card, Field, Input, Select, Textarea } from '@/components/ui';
 import { SubmitButton } from '@/components/submit-button';
@@ -15,6 +15,9 @@ export interface UserValues {
   home_site: string;
   pilot_level: string;
   bio: string;
+  country: string;
+  flying_since: string;
+  licence_body: string;
 }
 
 export function UserForm({
@@ -30,6 +33,14 @@ export function UserForm({
   const p = useTranslations('account.profile');
   const common = useTranslations('common');
   const root = useTranslations();
+  const locale = useLocale();
+  const countryName = new Intl.DisplayNames([locale], { type: 'region' });
+  const countries = [
+    ...(values.country && !(PROFILE_COUNTRIES as readonly string[]).includes(values.country)
+      ? [values.country]
+      : []),
+    ...PROFILE_COUNTRIES,
+  ];
   const [state, action] = useActionState(updateUserProfile.bind(null, id), initialState);
   const err = (name: string) =>
     state.fieldErrors?.[name] ? root('auth.errors.validation') : undefined;
@@ -104,6 +115,37 @@ export function UserForm({
               {levels.map((l) => (
                 <option key={l} value={l}>
                   {p(`levels.${l}` as 'levels.p2')}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field id="country" label={p('country')}>
+            <Select id="country" name="country" defaultValue={values.country}>
+              <option value="">—</option>
+              {countries.map((c) => (
+                <option key={c} value={c}>
+                  {countryName.of(c) ?? c}
+                </option>
+              ))}
+            </Select>
+          </Field>
+          <Field id="flying_since" label={p('flyingSince')} error={err('flying_since')}>
+            <Input
+              id="flying_since"
+              name="flying_since"
+              type="number"
+              inputMode="numeric"
+              min={1950}
+              max={2100}
+              defaultValue={values.flying_since}
+            />
+          </Field>
+          <Field id="licence_body" label={p('licenceBody')}>
+            <Select id="licence_body" name="licence_body" defaultValue={values.licence_body}>
+              <option value="">—</option>
+              {LICENCE_BODIES.map((b) => (
+                <option key={b} value={b}>
+                  {p(`licenceBodies.${b}`)}
                 </option>
               ))}
             </Select>

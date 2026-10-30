@@ -1407,6 +1407,17 @@ export type Database = {
         };
         Returns: string | null;
       };
+      admin_user_overview: { Args: { p_user: string }; Returns: Json };
+      admin_update_profile_details: {
+        Args: {
+          p_user: string;
+          p_country: string | null;
+          p_flying_since: number | null;
+          p_licence_body: string | null;
+        };
+        Returns: undefined;
+      };
+      admin_request_account_deletion: { Args: { p_user: string; p_reason: string }; Returns: string };
     };
     Enums: {
       app_role:

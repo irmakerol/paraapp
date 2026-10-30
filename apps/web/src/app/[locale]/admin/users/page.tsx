@@ -5,7 +5,7 @@ import { requireStaff } from '@/lib/staff';
 import { currentTime, formatDate, formatDateTime } from '@/lib/format';
 import { Link } from '@/i18n/navigation';
 import { sampleLabel } from '@/lib/sample';
-import { Button, buttonClass, Input } from '@/components/ui';
+import { Alert, Button, buttonClass, Input } from '@/components/ui';
 import { Pagination } from '@/components/pagination';
 import { setBan } from './actions';
 import { RoleToggles } from './role-toggles';
@@ -17,7 +17,7 @@ export default async function UsersPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ q?: string; page?: string }>;
+  searchParams: Promise<{ q?: string; page?: string; deleted?: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -71,6 +71,7 @@ export default async function UsersPage({
 
   return (
     <div className="space-y-4">
+      {sp.deleted === '1' ? <Alert tone="success">{t('deleted')}</Alert> : null}
       <form method="get" className="flex max-w-md gap-2" role="search">
         <label htmlFor="q" className="sr-only">
           {t('search')}

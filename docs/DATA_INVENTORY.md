@@ -113,6 +113,12 @@ organisers record payment status by hand.
   export. Sending is audited.
 - `profile_private.licence_body`: which body issued the licence (THK, APPI, …). Owner-only.
 - Admin profile edits (`admin_update_profile`) and photo removals are written to `audit_log`.
+- Admin user detail page (`admin_user_overview`): admins see a member's profile, flight list and
+  summary (no tracks), equipment, listings and notices; every view is written to `audit_log`
+  (`profile.admin_viewed`). Admins can correct country, flying-since and licence body, and delete
+  an account for the member (`admin_request_account_deletion`: same anonymise-then-purge path,
+  audited with a reason). Only the super admin manages other admins. **Mention in the privacy
+  notice that club admins can see this.**
 - `profiles.last_seen_at` and `user_activity`: when someone was last online and what they did
   (visits, flights added, listings, RSVPs, trip registrations, comments, rides), for admins. No
   message contents, no positions. Kept 90 days (`retention_policies.user_activity`); the person can
