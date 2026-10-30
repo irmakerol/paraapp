@@ -164,3 +164,71 @@ export function money(amount: number, currency: string, locale: string): string 
     return `${amount} ${currency}`;
   }
 }
+
+/** Must match NOTICE_KINDS / NOTICE_CATEGORIES in packages/core/src/notices.ts. */
+export const NOTICE_KINDS = ['offer', 'request'] as const;
+export const NOTICE_CATEGORIES = [
+  'transport',
+  'gear',
+  'buddy',
+  'training',
+  'lost_found',
+  'other',
+] as const;
+
+export interface NoticeInput {
+  kind: (typeof NOTICE_KINDS)[number];
+  category: (typeof NOTICE_CATEGORIES)[number];
+  title: string;
+  body: string;
+  siteId: string | null;
+  place: string;
+  date: string;
+  seats: number;
+  price: string;
+}
+
+/** Posts a notice as the signed-in adult (RLS checks age and owner; same rules as noticeSchema). */
+export async function postNotice(userId: string, n: NoticeInput): Promise<void> {
+  const blank = (v: string) => (v.trim() === '' ? null : v.trim());
+  const price = blank(n.price.replace(',', '.'));
+  const priceValue = price == null ? null : Number(price);
+  if (priceValue != null && (!Number.isFinite(priceValue) || priceValue < 0))
+    throw new Error('validation');
+  const { error } = await supabase.from('notices').insert({
+    user_id: userId,
+    kind: n.kind,
+    category: n.category,
+    title: n.title.trim(),
+    body: blank(n.body),
+    site_id: n.siteId,
+    place_text: blank(n.place),
+    notice_date: blank(n.date),
+    seats: n.category === 'transport' ? n.seats : null,
+    price: priceValue,
+    currency: priceValue == null ? null : 'TRY',
+  });
+  if (error) throw error;
+}
+
+export async function closeNotice(userId: string, id: string): Promise<void> {
+  const { error } = await supabase
+    .from('notices')
+    .update({ closed: true })
+    .eq('id', id)
+    .eq('user_id', userId);
+  if (error) throw error;
+}
+
+export async function deleteNotice(userId: string, id: string): Promise<void> {
+  const { data, error } = await supabase
+    .from('notices')
+    .delete()
+    .eq('id', id)
+    .eq('user_id', userId)
+    .select('photo_path')
+    .maybeSingle();
+  if (error) throw error;
+  const path = (data as { photo_path: string | null } | null)?.photo_path;
+  if (path) await supabase.storage.from('notice-photos').remove([path]);
+}

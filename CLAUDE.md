@@ -100,6 +100,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   `trips`); a trip's guides (`trip_guides`) see its participants. Registrations are written only through
   definer functions (`register_for_trip` etc.); seats, the waiting list and pilot notifications are
   handled by triggers. Payments are tracked by hand (`payment_status`), the app takes no money.
+- Student pilots record `profiles.training_level`: only levels above their current one in form order
+  P2 < … < P5 < T1 < T2 < T3 (`trainingLevelOptions()` in core = `private.training_level_ok` in SQL,
+  checked by a constraint; reaching the target clears it). Admins set it with `admin_set_training_level`.
 - Pilot levels offered in the UI are `PILOT_LEVEL_CHOICES` (P2–P5, T1–T3, Instructor); older enum values
   (student, p1, tandem) stay valid. For requirements, T1–T3 rank like P5 (`pilot_level_rank`).
 - Profile totals (`total_flight_hours`, `total_flights`) grow only through `add_flights_to_totals()`,
@@ -109,6 +112,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   only; the scored route can include takeoff and landing, so draw it for the owner only.
 - The 3D replay uses Terrain Tiles on AWS Open Data (`TERRAIN_TILES` in `lib/map.ts`, in the CSP),
   requested only when the user turns 3D on.
+- The phone app mirrors the whole website except admin (Irmak, 2026-10-30): tabs Home, Fly, Flights,
+  Messages, Profile; every club section is a tile on Home. Server-only steps use Bearer routes under
+  `/api/mobile/*` that share code with the website (`lib/incidents.ts`, `lib/send-message.ts`).
 - Phone app (`apps/mobile`, docs/MOBILE.md): its strings live in `src/messages.ts` (TR default, EN
   fallback, typed so both stay in sync). It talks to the website with a Bearer token
   (`lib/supabase/bearer.ts`, `/api/mobile/*`). Built and uploaded to TestFlight by

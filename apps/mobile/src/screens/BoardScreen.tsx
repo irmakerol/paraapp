@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
   FlatList,
   Image,
   Pressable,
@@ -11,8 +12,21 @@ import {
   View,
 } from 'react-native';
 import { locale, t, type MessageKey } from '../i18n';
-import { listAds, listNotices, money, type Ad, type Notice } from '../board';
-import { Badge, Body, Button, Segmented, Title } from '../ui/kit';
+import {
+  NOTICE_CATEGORIES,
+  NOTICE_KINDS,
+  closeNotice,
+  deleteNotice,
+  listAds,
+  listNotices,
+  money,
+  postNotice,
+  type Ad,
+  type Notice,
+  type NoticeInput,
+} from '../board';
+import { listSites, type Site } from '../sites';
+import { Badge, Body, Button, Chips, Field, Segmented, Stepper, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
 import { BackBar } from '../ui/screen';
 
@@ -27,11 +41,14 @@ const day = (iso: string) =>
 /** "Duyurular": the notice board and the gear market, as on the website's notices page. */
 export function BoardScreen({
   signedIn,
+  userId = null,
   onBack,
   onPilot,
   initial = 'notices',
 }: {
   signedIn: boolean;
+  /** The signed-in person (to post and manage their own notices). */
+  userId?: string | null;
   onBack?: () => void;
   /** Opens the poster's profile (to follow or message them). */
   onPilot?: (id: string) => void;
@@ -45,6 +62,8 @@ export function BoardScreen({
   const [failed, setFailed] = useState(false);
   const [openNotice, setOpenNotice] = useState<Notice | null>(null);
   const [openAd, setOpenAd] = useState<Ad | null>(null);
+  const [posting, setPosting] = useState(false);
+  const [posted, setPosted] = useState(false);
 
   const load = useCallback(async () => {
     setBusy(true);
@@ -64,9 +83,30 @@ export function BoardScreen({
     void load();
   }, [load]);
 
+  if (posting && userId)
+    return (
+      <NoticeForm
+        userId={userId}
+        onBack={() => setPosting(false)}
+        onPosted={() => {
+          setPosting(false);
+          setPosted(true);
+          void load();
+        }}
+      />
+    );
   if (openNotice)
     return (
-      <NoticeDetail notice={openNotice} onBack={() => setOpenNotice(null)} onPilot={onPilot} />
+      <NoticeDetail
+        notice={openNotice}
+        userId={userId}
+        onBack={() => setOpenNotice(null)}
+        onChanged={() => {
+          setOpenNotice(null);
+          void load();
+        }}
+        onPilot={onPilot}
+      />
     );
   if (openAd) return <AdDetail ad={openAd} onBack={() => setOpenAd(null)} />;
 
@@ -86,6 +126,10 @@ export function BoardScreen({
       {failed ? <Body muted>{t('common.offline')}</Body> : null}
       {busy && !notices && !ads ? <ActivityIndicator /> : null}
       {section === 'notices' && !signedIn ? <Body muted>{t('board.signIn')}</Body> : null}
+      {section === 'notices' && userId ? (
+        <Button label={`＋ ${t('noticeForm.new')}`} onPress={() => setPosting(true)} />
+      ) : null}
+      {section === 'notices' && posted ? <Body>{t('noticeForm.posted')}</Body> : null}
       {section === 'notices' && signedIn && notices?.length === 0 ? (
         <Body muted>{t('board.noNotices')}</Body>
       ) : null}
@@ -181,13 +225,18 @@ export function BoardScreen({
 
 function NoticeDetail({
   notice: n,
+  userId,
   onBack,
+  onChanged,
   onPilot,
 }: {
   notice: Notice;
+  userId: string | null;
   onBack: () => void;
+  onChanged: () => void;
   onPilot?: (id: string) => void;
 }) {
+  const mine = Boolean(userId && userId === n.userId);
   const c = useTheme();
   return (
     <ScrollView contentContainerStyle={s.page}>
@@ -290,3 +339,135 @@ const s = StyleSheet.create({
   factLabel: { fontSize: 16 },
   factValue: { fontSize: 16, fontWeight: '600', flexShrink: 1, textAlign: 'right' },
 });
+
+function NoticeForm({
+  userId,
+  onBack,
+  onPosted,
+}: {
+  userId: string;
+  onBack: () => void;
+  onPosted: () => void;
+}) {
+  const [sites, setSites] = useState<Site[]>([]);
+  const [form, setForm] = useState<NoticeInput>({
+    kind: 'offer',
+    category: 'transport',
+    title: '',
+    body: '',
+    siteId: null,
+    place: '',
+    date: '',
+    seats: 1,
+    price: '',
+  });
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    listSites().then(setSites, () => undefined);
+  }, []);
+  const set = <K extends keyof NoticeInput>(key: K, value: NoticeInput[K]) =>
+    setForm((f) => ({ ...f, [key]: value }));
+
+  const submit = async () => {
+    const next: Record<string, string> = {};
+    const title = form.title.trim();
+    if (title.length < 3 || title.length > 120) next.title = t('noticeForm.titleInvalid');
+    if (form.date.trim() && !/^\d{4}-\d{2}-\d{2}$/.test(form.date.trim()))
+      next.date = t('noticeForm.dateInvalid');
+    setErrors(next);
+    if (Object.keys(next).length) return;
+    setBusy(true);
+    setMessage(null);
+    try {
+      await postNotice(userId, form);
+      onPosted();
+    } catch (e) {
+      const code = (e as { code?: string }).code;
+      setMessage(code === '42501' ? t('noticeForm.adultsOnly') : t('common.error'));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={s.page} keyboardShouldPersistTaps="handled">
+      <BackBar label={t('board.title')} onBack={onBack} />
+      <Title>{t('noticeForm.title')}</Title>
+      <Segmented
+        label={t('noticeForm.kind')}
+        options={NOTICE_KINDS.map((k) => ({ value: k, label: t(`board.kinds.${k}`) }))}
+        value={form.kind}
+        onChange={(v) => set('kind', v)}
+      />
+      <Chips
+        label={t('noticeForm.category')}
+        options={NOTICE_CATEGORIES.map((cat) => ({
+          value: cat,
+          label: t(`board.categories.${cat}`),
+        }))}
+        value={form.category}
+        onChange={(v) => v && set('category', v)}
+      />
+      <Field
+        label={t('noticeForm.heading')}
+        value={form.title}
+        onChangeText={(v) => set('title', v)}
+        maxLength={120}
+        error={errors.title}
+      />
+      <Field
+        label={t('noticeForm.body')}
+        value={form.body}
+        onChangeText={(v) => set('body', v)}
+        maxLength={2000}
+        multiline
+      />
+      <Chips
+        label={t('noticeForm.site')}
+        options={[
+          { value: null, label: t('noticeForm.noSite') },
+          ...sites.map((site) => ({ value: site.id, label: site.name })),
+        ]}
+        value={form.siteId}
+        onChange={(v) => set('siteId', v)}
+      />
+      <Field
+        label={t('noticeForm.place')}
+        value={form.place}
+        onChangeText={(v) => set('place', v)}
+        maxLength={120}
+      />
+      <Field
+        label={t('noticeForm.date')}
+        value={form.date}
+        onChangeText={(v) => set('date', v)}
+        placeholder="2026-11-02"
+        keyboardType="numbers-and-punctuation"
+        maxLength={10}
+        error={errors.date}
+      />
+      {form.category === 'transport' ? (
+        <Stepper
+          label={t('noticeForm.seats')}
+          value={String(form.seats)}
+          onStep={(d) => set('seats', Math.max(1, Math.min(8, form.seats + d)))}
+          canDown={form.seats > 1}
+          canUp={form.seats < 8}
+        />
+      ) : null}
+      <Field
+        label={t('noticeForm.price')}
+        value={form.price}
+        onChangeText={(v) => set('price', v)}
+        keyboardType="decimal-pad"
+        maxLength={12}
+      />
+      <Body muted>{t('noticeForm.photoOnWeb')}</Body>
+      <Button label={t('noticeForm.submit')} busy={busy} onPress={() => void submit()} />
+      {message ? <Body>{message}</Body> : null}
+    </ScrollView>
+  );
+}

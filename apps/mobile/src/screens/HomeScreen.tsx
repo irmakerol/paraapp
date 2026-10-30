@@ -107,6 +107,7 @@ export function HomeScreen({
         return (
           <BoardScreen
             signedIn={Boolean(userId)}
+            userId={userId}
             onBack={back}
             initial={route.section}
             onPilot={userId ? (id) => setRoute({ section: 'pilot', id }) : undefined}
