@@ -11,6 +11,19 @@ const DIR = `${FileSystem.cacheDirectory ?? ''}vario/`;
 
 const freqFor = (climb: number) => 600 + Math.min(climb, 6) * 130;
 
+// Every volume setting plays 1.7× louder than before (Irmak, 2026-10-30: hard to hear with the
+// phone in the harness). Above full scale the wave is soft-clipped instead of cut off, so the
+// "high" setting gets louder (a squarer wave) without harsh crackle.
+export const VARIO_GAIN = 1.7;
+const KNEE = 0.7;
+
+/** Linear up to the knee, then bends smoothly towards ±1. */
+export function softClip(x: number): number {
+  const a = Math.abs(x);
+  if (a <= KNEE) return x;
+  return Math.sign(x) * (KNEE + (1 - KNEE) * Math.tanh((a - KNEE) / (1 - KNEE)));
+}
+
 function wav(freq: number, ms: number, volume = 0.6): string {
   const samples = Math.round((RATE * ms) / 1000);
   const bytes = new Uint8Array(44 + samples * 2);
@@ -34,7 +47,7 @@ function wav(freq: number, ms: number, volume = 0.6): string {
   const fade = Math.round(RATE * 0.005);
   for (let i = 0; i < samples; i++) {
     const env = Math.min(1, i / fade, (samples - i) / fade);
-    const v = Math.sin((2 * Math.PI * freq * i) / RATE) * volume * env;
+    const v = softClip(Math.sin((2 * Math.PI * freq * i) / RATE) * volume * VARIO_GAIN) * env;
     view.setInt16(44 + i * 2, Math.round(v * 32_767), true);
   }
   return base64(bytes);
@@ -114,20 +127,23 @@ export class VarioAudio {
     if (!this.climbPlayers.length || this.builtVolume !== this.tones.volume) {
       this.release();
       const volume = this.tones.volume;
-      const tag = Math.round(volume * 100);
+      const tag = `${Math.round(volume * 100)}g${VARIO_GAIN * 10}`;
       await FileSystem.makeDirectoryAsync(DIR, { intermediates: true }).catch(() => undefined);
       for (const level of LEVELS) {
         const uri = `${DIR}climb-${level}-${tag}.wav`;
         await FileSystem.writeAsStringAsync(uri, wav(freqFor(level), 140, volume), {
           encoding: FileSystem.EncodingType.Base64,
         });
-        this.climbPlayers.push({ level, player: createAudioPlayer({ uri }) });
+        const player = createAudioPlayer({ uri });
+        player.volume = 1;
+        this.climbPlayers.push({ level, player });
       }
       const sinkUri = `${DIR}sink-${tag}.wav`;
       await FileSystem.writeAsStringAsync(sinkUri, wav(320, 500, volume * 0.85), {
         encoding: FileSystem.EncodingType.Base64,
       });
       this.sinkPlayer = createAudioPlayer({ uri: sinkUri });
+      this.sinkPlayer.volume = 1;
       this.builtVolume = volume;
     }
     this.tick();
