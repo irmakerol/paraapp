@@ -264,7 +264,9 @@
         "ffvl": "FFVL",
         "dhv": "DHV",
         "other": "Other"
-      }
+      },
+      "isInstructor": "I am an instructor",
+      "isInstructorHelp": "Shown alongside your pilot level (e.g. P5 and instructor). Editing rights for Ground School and trips are granted by the club admins."
     },
     "privacy": {
       "consentsTitle": "Consents",

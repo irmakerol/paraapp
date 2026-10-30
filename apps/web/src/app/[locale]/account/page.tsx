@@ -54,6 +54,7 @@ export default async function ProfilePage({
         userId={profile.id}
         roles={roles}
         level={profile.pilot_level}
+        instructor={profile.is_instructor}
         hours={Number(profile.total_flight_hours ?? 0)}
         flights={profile.total_flights ?? 0}
         locale={locale}
@@ -67,6 +68,7 @@ export default async function ProfilePage({
           city: profile.city ?? '',
           home_site: profile.home_site ?? '',
           pilot_level: profile.pilot_level ?? '',
+          is_instructor: profile.is_instructor,
           flying_since: profile.flying_since?.toString() ?? '',
           weight_kg: profile.weight_kg?.toString() ?? '',
           total_flight_hours: String(profile.total_flight_hours ?? 0),
@@ -92,6 +94,7 @@ async function ProfileSummary({
   userId,
   roles,
   level,
+  instructor,
   hours,
   flights,
   locale,
@@ -99,6 +102,7 @@ async function ProfileSummary({
   userId: string;
   roles: readonly string[];
   level: string | null;
+  instructor: boolean;
   hours: number;
   flights: number;
   locale: string;
@@ -107,7 +111,7 @@ async function ProfileSummary({
   return (
     <section className="flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card p-4">
       <div className="min-w-0 flex-1 space-y-2">
-        <RoleBadges roles={roles} level={level} />
+        <RoleBadges roles={roles} level={level} instructor={instructor} />
         <p className="text-sm">
           {t('totals', {
             hours: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(hours),

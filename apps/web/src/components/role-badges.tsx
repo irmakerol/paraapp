@@ -10,10 +10,13 @@ const STAFF = new Set(['super_admin', 'admin', 'moderator', 'safety_officer', 't
 export async function RoleBadges({
   roles,
   level,
+  instructor = false,
   className = '',
 }: {
   roles: readonly string[];
   level?: string | null;
+  /** Ticked "I am an instructor" on their profile. */
+  instructor?: boolean;
   className?: string;
 }) {
   const t = await getTranslations('roles');
@@ -23,12 +26,18 @@ export async function RoleBadges({
     (r) => r !== 'member' && (MEMBER_LEVEL_ROLES as readonly string[]).includes(r),
   );
   const shown = roles.filter((r) => r !== 'member' || !hasStronger);
+  if (level === 'instructor') instructor = true;
+  // The claim shows as the instructor badge unless the club already granted the role.
+  if (instructor && !shown.includes('instructor')) shown.unshift('instructor');
   const levelLabel = level
     ? /^p\d$/.test(level)
       ? p('levelBadge.pilot', { level: levels(`levels.${level}` as 'levels.p2') })
       : /^t\d$/.test(level)
         ? p('levelBadge.tandem', { level: levels(`levels.${level}` as 'levels.p2') })
-        : levels(`levels.${level}` as 'levels.p2')
+        : // The legacy "instructor" level is shown by the instructor badge instead.
+          level === 'instructor'
+          ? null
+          : levels(`levels.${level}` as 'levels.p2')
     : null;
   if (!shown.length && !levelLabel) return null;
   return (

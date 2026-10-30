@@ -34,17 +34,11 @@ export const PILOT_LEVELS = [
   'instructor',
 ] as const;
 export type PilotLevel = (typeof PILOT_LEVELS)[number];
-/** Levels offered in forms (the club's list, 2026-10-27); older values stay valid for old data. */
-export const PILOT_LEVEL_CHOICES = [
-  'p2',
-  'p3',
-  'p4',
-  'p5',
-  't1',
-  't2',
-  't3',
-  'instructor',
-] as const;
+/**
+ * Levels offered in forms (the club's list, 2026-10-27); older values stay valid for old data.
+ * "Instructor" is a separate tick box (`profiles.is_instructor`) since 2026-10-30.
+ */
+export const PILOT_LEVEL_CHOICES = ['p2', 'p3', 'p4', 'p5', 't1', 't2', 't3'] as const;
 
 /** Years flying from the year a pilot started (falls back to the older "years flying" number). */
 export function yearsFlying(

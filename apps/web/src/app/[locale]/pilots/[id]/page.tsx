@@ -96,7 +96,13 @@ export default async function PilotPage({
         )}
         <div className="min-w-0 flex-1 space-y-1">
           <h1 className="text-3xl font-extrabold">{name}</h1>
-          {card ? <RoleBadges roles={card.roles ?? []} level={card.pilot_level} /> : null}
+          {card ? (
+            <RoleBadges
+              roles={card.roles ?? []}
+              level={card.pilot_level}
+              instructor={card.is_instructor}
+            />
+          ) : null}
           {card?.full_name && card.full_name !== card.display_name ? (
             <p className="text-muted">{card.full_name}</p>
           ) : null}

@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(2);
+select plan(4);
 
 insert into auth.users (id, email, raw_user_meta_data) values
   ('b1111111-1111-1111-1111-111111111111', 'chief@example.com', '{"birth_date":"1980-01-01"}'),
@@ -18,6 +18,10 @@ select is((select roles from public.profile_cards where id = 'b1111111-1111-1111
   'other members see every role, most notable first');
 select is((select roles from public.profile_cards where id = 'b2222222-2222-2222-2222-222222222222'),
   array['member'], 'a new account is a guest member');
+select lives_ok($$ update public.profiles set is_instructor = true, pilot_level = 'p5'
+  where id = 'b2222222-2222-2222-2222-222222222222' $$, 'a pilot can be P5 and tick instructor');
+select is((select roles from public.profile_cards where id = 'b2222222-2222-2222-2222-222222222222'),
+  array['member'], 'ticking the box grants no role');
 reset role;
 
 select * from finish();

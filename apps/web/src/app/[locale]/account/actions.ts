@@ -101,6 +101,7 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     .from('profiles')
     .update({
       ...parsed.data,
+      is_instructor: formData.get('is_instructor') === 'on',
       locale: prefs.data.locale,
       units: { system: prefs.data.units_system, speed: prefs.data.units_speed },
     })

@@ -264,7 +264,9 @@
         "ffvl": "FFVL",
         "dhv": "DHV",
         "other": "Diğer"
-      }
+      },
+      "isInstructor": "Eğitmenim",
+      "isInstructorHelp": "Pilot seviyenden ayrı olarak gösterilir (ör. P5 ve eğitmen). Yer Okulu ve gezi düzenleme yetkisini kulüp yönetimi verir."
     },
     "privacy": {
       "consentsTitle": "Onaylar",

@@ -27,6 +27,7 @@ interface ProfileValues {
   city: string;
   home_site: string;
   pilot_level: string;
+  is_instructor: boolean;
   flying_since: string;
   weight_kg: string;
   total_flight_hours: string;
@@ -181,6 +182,18 @@ export function ProfileForm(props: {
               </Select>
             </Field>,
           )}
+          <label className="flex min-h-11 items-center gap-3">
+            <input
+              type="checkbox"
+              name="is_instructor"
+              defaultChecked={profile.is_instructor}
+              className="size-5"
+            />
+            <span>
+              <span className="font-semibold">{t('isInstructor')}</span>
+              <span className="block text-sm text-muted">{t('isInstructorHelp')}</span>
+            </span>
+          </label>
           {row(
             'years_flying',
             <Field

@@ -63,10 +63,12 @@ export type Database = {
           status: Database['public']['Enums']['account_status'];
           created_at: Timestamp;
           last_seen_at: Timestamp | null;
+          is_instructor: boolean;
           updated_at: Timestamp;
         };
         Insert: never;
         Update: {
+          is_instructor?: boolean;
           display_name?: string;
           full_name?: string | null;
           avatar_path?: string | null;
@@ -1272,6 +1274,7 @@ export type Database = {
           total_flight_hours: number | null;
           total_flights: number | null;
           roles: string[];
+          is_instructor: boolean;
         };
         Relationships: [];
       };
