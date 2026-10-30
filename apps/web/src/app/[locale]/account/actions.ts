@@ -1,4 +1,5 @@
 'use server';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
@@ -15,6 +16,7 @@ import { getUser } from '@/lib/session';
 import { encryptField } from '@/lib/crypto';
 import { serverEnv } from '@/lib/env';
 import { routing } from '@/i18n/routing';
+import { LOCALE_COOKIE } from '@/lib/preferred-locale';
 import type { ActionState } from '@/lib/action-state';
 
 function localeFrom(formData: FormData): string {
@@ -122,6 +124,11 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
   if (licenceError) return { error: 'generic' };
 
   revalidatePath('/', 'layout');
+  // The page language comes from the URL; switch to the chosen one right away and remember it
+  // (next-intl's cookie) for visits that start without a language in the address.
+  const chosen = prefs.data.locale;
+  (await cookies()).set(LOCALE_COOKIE.name, chosen, LOCALE_COOKIE.options);
+  if (chosen !== localeFrom(formData)) redirect(`/${chosen}/account?saved=1`);
   return { ok: true };
 }
 

@@ -11,8 +11,15 @@ import { decryptField } from '@/lib/crypto';
 import { serverEnv } from '@/lib/env';
 import { ProfileForm } from './profile-form';
 
-export default async function ProfilePage({ params }: { params: Promise<{ locale: string }> }) {
+export default async function ProfilePage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ saved?: string }>;
+}) {
   const { locale } = await params;
+  const { saved } = await searchParams;
   setRequestLocale(locale);
   const { profile, roles } = await requireActiveViewer(locale);
   const supabase = await createClient();
@@ -67,6 +74,7 @@ export default async function ProfilePage({ params }: { params: Promise<{ locale
       avatarUrl={avatarUrl}
       isMinor={profile.age_group === 'minor'}
       isMember={isMemberLevel(roles)}
+      justSaved={saved === '1'}
     />
   );
 }

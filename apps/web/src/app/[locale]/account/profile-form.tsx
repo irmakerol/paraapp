@@ -49,10 +49,15 @@ export function ProfileForm(props: {
   avatarUrl: string | null;
   isMinor: boolean;
   isMember: boolean;
+  /** Just saved with a new language (the page reloaded in it). */
+  justSaved?: boolean;
 }) {
   const t = useTranslations('account.profile');
   const locale = useLocale();
-  const [state, action] = useActionState(saveProfile, initialState);
+  const [state, action] = useActionState(
+    saveProfile,
+    props.justSaved ? { ok: true } : initialState,
+  );
   const [licenceChanged, setLicenceChanged] = useState(false);
   const { profile, privacy } = props;
   const root = useTranslations();
