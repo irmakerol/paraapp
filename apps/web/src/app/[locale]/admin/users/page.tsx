@@ -8,7 +8,6 @@ import { sampleLabel } from '@/lib/sample';
 import { Alert, Button, buttonClass, Input } from '@/components/ui';
 import { Pagination } from '@/components/pagination';
 import { RoleBadges } from '@/components/role-badges';
-import { RoleToggles } from './role-toggles';
 
 const PAGE_SIZE = 30;
 
@@ -21,7 +20,7 @@ export default async function UsersPage({
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const viewer = await requireStaff(locale, 'users');
+  await requireStaff(locale, 'users');
   const t = await getTranslations('admin.usersAdmin');
   const common = await getTranslations('common');
   const sp = await searchParams;
@@ -69,7 +68,6 @@ export default async function UsersPage({
     for (const s of signed ?? []) if (s.path && s.signedUrl) photos.set(s.path, s.signedUrl);
   }
   const now = currentTime();
-  const isSuperAdmin = viewer.roles.includes('super_admin');
 
   return (
     <div className="space-y-4">
@@ -133,13 +131,6 @@ export default async function UsersPage({
                   {t('edit')}
                 </Link>
               </div>
-              <p className="text-xs font-semibold text-muted">{t('roles')}</p>
-              <RoleToggles
-                userId={u.id}
-                roles={mine}
-                isSelf={u.id === viewer.user.id}
-                isSuperAdmin={isSuperAdmin}
-              />
             </li>
           );
         })}
