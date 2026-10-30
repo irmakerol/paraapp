@@ -5,7 +5,13 @@ describe('profileBadges', () => {
   it('shows the training level instead of "student pilot"', () => {
     expect(
       profileBadges({ roles: ['student_pilot', 'member'], level: 'p2', trainingLevel: 'p3' }),
-    ).toEqual([{ kind: 'training', level: 'p3' }]);
+    ).toEqual([
+      { kind: 'pilot', level: 'p2' },
+      { kind: 'training', level: 'p3' },
+    ]);
+    expect(profileBadges({ roles: ['student_pilot', 'member'], trainingLevel: 'p2' })).toEqual([
+      { kind: 'training', level: 'p2' },
+    ]);
   });
 
   it('puts the licence first, then training, then other roles', () => {
@@ -24,8 +30,11 @@ describe('profileBadges', () => {
     ]);
   });
 
-  it('shows no level badge without the pilot role, and guest member only alone', () => {
+  it('any pilot level replaces guest member with a pilot badge', () => {
     expect(profileBadges({ roles: ['member'], level: 'p3' })).toEqual([
+      { kind: 'pilot', level: 'p3' },
+    ]);
+    expect(profileBadges({ roles: ['member'], level: 'student' })).toEqual([
       { kind: 'role', role: 'member' },
     ]);
     expect(profileBadges({ roles: ['pilot', 'member'], level: 'instructor' })).toEqual([
