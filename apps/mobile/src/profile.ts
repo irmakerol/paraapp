@@ -124,7 +124,6 @@ export interface ProfileEdit {
   pilotLevel: string | null;
   /** Only saved for student pilots (null otherwise means "leave as is"). */
   trainingLevel?: string | null;
-  isInstructor: boolean;
   flyingSince: number | null;
   bio: string;
   licenceBody: string | null;
@@ -141,7 +140,6 @@ export async function saveMyProfile(userId: string, edit: ProfileEdit): Promise<
       city: blank(edit.city),
       home_site: blank(edit.homeSite),
       pilot_level: edit.pilotLevel,
-      is_instructor: edit.isInstructor,
       ...(edit.trainingLevel !== undefined ? { training_level: edit.trainingLevel } : {}),
       flying_since: edit.flyingSince,
       bio: blank(edit.bio),

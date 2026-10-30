@@ -115,7 +115,6 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     .from('profiles')
     .update({
       ...parsed.data,
-      is_instructor: formData.get('is_instructor') === 'on',
       // Only student pilots see the field; leave it alone when it was not sent.
       ...(formData.has('training_level') ? { training_level: training.data ?? null } : {}),
       locale: prefs.data.locale,

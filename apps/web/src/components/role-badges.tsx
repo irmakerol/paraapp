@@ -17,7 +17,7 @@ export async function RoleBadges({
   roles: readonly string[];
   level?: string | null;
   trainingLevel?: string | null;
-  /** Ticked "I am an instructor" on their profile. */
+  /** The instructor rating, set by admins. */
   instructor?: boolean;
   className?: string;
 }) {

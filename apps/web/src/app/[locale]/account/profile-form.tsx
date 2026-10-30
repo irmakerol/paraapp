@@ -200,18 +200,6 @@ export function ProfileForm(props: {
               error={err('training_level')}
             />
           ) : null}
-          <label className="flex min-h-11 items-center gap-3">
-            <input
-              type="checkbox"
-              name="is_instructor"
-              defaultChecked={profile.is_instructor}
-              className="size-5"
-            />
-            <span>
-              <span className="font-semibold">{t('isInstructor')}</span>
-              <span className="block text-sm text-muted">{t('isInstructorHelp')}</span>
-            </span>
-          </label>
           {row(
             'years_flying',
             <Field

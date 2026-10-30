@@ -17,17 +17,16 @@ export function profileBadges({
   roles: readonly string[];
   level?: string | null;
   trainingLevel?: string | null;
-  /** Ticked "I am an instructor" on their profile. */
+  /** The instructor rating, set by admins. */
   instructor?: boolean;
 }): Badge[] {
   const badges: Badge[] = [];
-  // The legacy "instructor" level is shown by the instructor badge, and "student" is no licence.
+  // The legacy "instructor" level and "student" are no licence level.
   const licence = level && level !== 'instructor' && level !== 'student' ? level : null;
   if (roles.includes('pilot')) badges.push({ kind: 'pilot', level: licence });
   if (roles.includes('student_pilot')) badges.push({ kind: 'training', level: trainingLevel });
   const others = roles.filter((r) => r !== 'pilot' && r !== 'student_pilot' && r !== 'member');
-  if ((instructor || level === 'instructor') && !others.includes('instructor'))
-    others.unshift('instructor');
+  if (instructor && !others.includes('instructor')) others.unshift('instructor');
   for (const role of others) badges.push({ kind: 'role', role });
   if (!badges.length && roles.includes('member')) badges.push({ kind: 'role', role: 'member' });
   return badges;

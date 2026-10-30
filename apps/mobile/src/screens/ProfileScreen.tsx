@@ -29,7 +29,7 @@ import {
 import { VarioAudio } from '../tracker/vario-audio';
 import { VOLUME_LEVEL } from '../tracker/vario-settings';
 import { useVarioSettings } from '../tracker/vario-settings-store';
-import { Body, Button, Card, Chips, Field, Link, Segmented, Title, Toggle } from '../ui/kit';
+import { Body, Button, Card, Chips, Field, Link, Segmented, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
 import { ProfileBadges } from '../ui/badges';
 import { VarioSettingsScreen } from './VarioSettingsScreen';
@@ -265,7 +265,6 @@ function EditProfile({
     city: profile.city,
     homeSite: profile.homeSite,
     pilotLevel: profile.pilotLevel === 'instructor' ? null : profile.pilotLevel,
-    isInstructor: profile.isInstructor,
     flyingSince: profile.flyingSince,
     bio: profile.bio,
     licenceBody: profile.licenceBody,
@@ -378,11 +377,6 @@ function EditProfile({
               <Body muted>{t('profile.trainingLevelTop')}</Body>
             )
           ) : null}
-          <Toggle
-            label={t('profile.isInstructor')}
-            value={edit.isInstructor}
-            onChange={(v) => set('isInstructor', v)}
-          />
           <Chips
             label={t('profile.licenceBody')}
             options={[

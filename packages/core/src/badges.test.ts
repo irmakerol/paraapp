@@ -30,7 +30,6 @@ describe('profileBadges', () => {
     ]);
     expect(profileBadges({ roles: ['pilot', 'member'], level: 'instructor' })).toEqual([
       { kind: 'pilot', level: null },
-      { kind: 'role', role: 'instructor' },
     ]);
     expect(profileBadges({ roles: [] })).toEqual([]);
   });
