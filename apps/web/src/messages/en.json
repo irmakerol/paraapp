@@ -636,7 +636,9 @@
       "removePhoto": "Remove photo",
       "removePhotoHelp": "Deletes an unsuitable photo. The person can upload a new one.",
       "auditNote": "Your changes are written to the audit log.",
-      "notAllowed": "Only the super admin can do this."
+      "notAllowed": "Only the super admin can do this.",
+      "lastSeen": "last seen {time}",
+      "neverSeen": "never seen"
     },
     "requestsAdmin": {
       "new": "Log an email request",
@@ -895,6 +897,22 @@
       "history": "Sent messages",
       "noHistory": "No messages sent yet.",
       "readStats": "{read}/{total} read"
+    },
+    "activity": {
+      "title": "Activity log",
+      "lastSeen": "last seen {time}",
+      "neverSeen": "never seen",
+      "empty": "No activity recorded.",
+      "retention": "Kept for 90 days. Message contents and positions are never logged.",
+      "kinds": {
+        "visit": "Opened the site or app",
+        "flight.added": "Added a flight",
+        "ad.posted": "Posted a market listing",
+        "event.rsvp": "Replied to an event",
+        "trip.registered": "Registered for a trip",
+        "comment.posted": "Commented on news",
+        "ride.posted": "Posted a ride"
+      }
     }
   },
   "roles": {

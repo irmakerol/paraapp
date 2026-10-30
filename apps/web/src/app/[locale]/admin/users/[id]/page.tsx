@@ -5,7 +5,7 @@ import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireStaff } from '@/lib/staff';
-import { formatDate } from '@/lib/format';
+import { formatDate, formatDateTime } from '@/lib/format';
 import { sampleLabel } from '@/lib/sample';
 import { Button } from '@/components/ui';
 import { setGroupMember } from '../../groups/actions';
@@ -24,19 +24,31 @@ export default async function EditUserPage({
   const roleNames = await getTranslations('roles');
   const supabase = await createClient();
   const g = await getTranslations('admin.groupsAdmin');
-  const [{ data: profile }, { data: roles }, { data: groups }, { data: memberships }] =
-    await Promise.all([
-      supabase
-        .from('profiles')
-        .select(
-          'id, display_name, full_name, city, home_site, pilot_level, bio, avatar_path, status, created_at',
-        )
-        .eq('id', id)
-        .maybeSingle(),
-      supabase.from('user_roles').select('role').eq('user_id', id),
-      supabase.from('user_groups').select('id, name').order('name'),
-      supabase.from('user_group_members').select('group_id').eq('user_id', id),
-    ]);
+  const activityT = await getTranslations('admin.activity');
+  const [
+    { data: profile },
+    { data: roles },
+    { data: groups },
+    { data: memberships },
+    { data: activity },
+  ] = await Promise.all([
+    supabase
+      .from('profiles')
+      .select(
+        'id, display_name, full_name, city, home_site, pilot_level, bio, avatar_path, status, created_at, last_seen_at',
+      )
+      .eq('id', id)
+      .maybeSingle(),
+    supabase.from('user_roles').select('role').eq('user_id', id),
+    supabase.from('user_groups').select('id, name').order('name'),
+    supabase.from('user_group_members').select('group_id').eq('user_id', id),
+    supabase
+      .from('user_activity')
+      .select('id, kind, created_at')
+      .eq('user_id', id)
+      .order('created_at', { ascending: false })
+      .limit(50),
+  ]);
   const inGroup = new Set((memberships ?? []).map((m) => m.group_id));
   if (!profile || profile.status === 'deletion_requested') notFound();
 
@@ -57,7 +69,10 @@ export default async function EditUserPage({
         </Link>
         <h2 className="text-xl font-bold">{sampleLabel(profile.display_name, locale)}</h2>
         <p className="text-sm text-muted">
-          {authUser.user?.email} · {formatDate(profile.created_at, locale)}
+          {authUser.user?.email} · {formatDate(profile.created_at, locale)} ·{' '}
+          {profile.last_seen_at
+            ? activityT('lastSeen', { time: formatDateTime(profile.last_seen_at, locale) })
+            : activityT('neverSeen')}
           {roles?.length ? ` · ${roles.map((r) => roleNames(r.role)).join(', ')}` : ''}
         </p>
       </div>
@@ -98,6 +113,26 @@ export default async function EditUserPage({
           </div>
         </section>
       ) : null}
+      <section className="space-y-3 rounded-2xl border border-border bg-card p-4">
+        <h3 className="text-lg font-semibold">{activityT('title')}</h3>
+        {activity?.length ? (
+          <ol className="space-y-1 text-sm">
+            {activity.map((a) => (
+              <li key={a.id} className="flex flex-wrap gap-x-3">
+                <span className="tabular-nums text-muted">
+                  {formatDateTime(a.created_at, locale)}
+                </span>
+                <span>
+                  {activityT.has(`kinds.${a.kind}`) ? activityT(`kinds.${a.kind}`) : a.kind}
+                </span>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <p className="text-muted">{activityT('empty')}</p>
+        )}
+        <p className="text-xs text-muted">{activityT('retention')}</p>
+      </section>
     </div>
   );
 }

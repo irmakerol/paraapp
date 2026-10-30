@@ -65,6 +65,7 @@ export async function GET() {
     tripGuiding,
     clubMessages,
     groupMemberships,
+    activity,
   ] = await Promise.all([
     admin.from('news_comments').select('news_id, body, hidden_at, created_at').eq('author_id', uid),
     admin.from('news_likes').select('news_id, created_at').eq('user_id', uid),
@@ -114,6 +115,7 @@ export async function GET() {
       .select('read_at, club_messages(title, body, created_at)')
       .eq('user_id', uid),
     admin.from('user_group_members').select('added_at, user_groups(name)').eq('user_id', uid),
+    admin.from('user_activity').select('kind, ref, created_at').eq('user_id', uid),
   ]);
 
   const incidentKey = serverEnv().INCIDENT_ENCRYPTION_KEY;
@@ -195,6 +197,7 @@ export async function GET() {
     trips_guided: tripGuiding.data ?? [],
     club_messages_received: clubMessages.data ?? [],
     groups: groupMemberships.data ?? [],
+    activity_log: activity.data ?? [],
   };
 
   const date = new Date().toISOString().slice(0, 10);

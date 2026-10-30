@@ -62,6 +62,7 @@ export type Database = {
           age_group: Database['public']['Enums']['age_group'] | null;
           status: Database['public']['Enums']['account_status'];
           created_at: Timestamp;
+          last_seen_at: Timestamp | null;
           updated_at: Timestamp;
         };
         Insert: never;
@@ -221,6 +222,12 @@ export type Database = {
         };
         Insert: { user_id: string; started_at?: Timestamp; updated_at?: Timestamp };
         Update: { started_at?: Timestamp; updated_at?: Timestamp };
+        Relationships: [];
+      };
+      user_activity: {
+        Row: { id: number; user_id: string; kind: string; ref: string | null; created_at: Timestamp };
+        Insert: never;
+        Update: never;
         Relationships: [];
       };
       user_groups: {
@@ -1318,6 +1325,7 @@ export type Database = {
         Returns: Database['public']['Tables']['messages']['Row'][];
       };
       ban_user: { Args: { p_user: string; p_until: Timestamp | null; p_reason: string }; Returns: undefined };
+      touch_last_seen: { Args: Record<string, never>; Returns: undefined };
       send_club_message: {
         Args: {
           p_audience: 'all' | 'role' | 'group';

@@ -2,7 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { requireStaff } from '@/lib/staff';
-import { currentTime, formatDate } from '@/lib/format';
+import { currentTime, formatDate, formatDateTime } from '@/lib/format';
 import { Link } from '@/i18n/navigation';
 import { sampleLabel } from '@/lib/sample';
 import { Button, buttonClass, Input } from '@/components/ui';
@@ -31,7 +31,7 @@ export default async function UsersPage({
   const supabase = await createClient();
   let query = supabase
     .from('profiles')
-    .select('id, display_name, full_name, avatar_path, status, age_group, created_at')
+    .select('id, display_name, full_name, avatar_path, status, age_group, created_at, last_seen_at')
     .order('created_at', { ascending: false })
     .range((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
   if (q) {
@@ -112,7 +112,10 @@ export default async function UsersPage({
                   </p>
                   <p className="text-xs text-muted">
                     {info?.email} · {u.status} · {u.age_group ?? '—'} ·{' '}
-                    {formatDate(u.created_at, locale)}
+                    {formatDate(u.created_at, locale)} ·{' '}
+                    {u.last_seen_at
+                      ? t('lastSeen', { time: formatDateTime(u.last_seen_at, locale) })
+                      : t('neverSeen')}
                     {banned ? ` · ${t('banned')}` : ''}
                   </p>
                 </div>

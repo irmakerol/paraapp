@@ -636,7 +636,9 @@
       "removePhoto": "Fotoğrafı kaldır",
       "removePhotoHelp": "Uygunsuz bir fotoğrafı siler. Kişi yenisini yükleyebilir.",
       "auditNote": "Yaptığın değişiklikler denetim kaydına yazılır.",
-      "notAllowed": "Bunu yalnızca süper yönetici yapabilir."
+      "notAllowed": "Bunu yalnızca süper yönetici yapabilir.",
+      "lastSeen": "son görülme {time}",
+      "neverSeen": "hiç görülmedi"
     },
     "requestsAdmin": {
       "new": "E-postayla gelen talebi kaydet",
@@ -895,6 +897,22 @@
       "history": "Gönderilen mesajlar",
       "noHistory": "Henüz mesaj gönderilmedi.",
       "readStats": "{read}/{total} okundu"
+    },
+    "activity": {
+      "title": "Aktivite kaydı",
+      "lastSeen": "son görülme {time}",
+      "neverSeen": "hiç görülmedi",
+      "empty": "Kayıtlı aktivite yok.",
+      "retention": "Kayıtlar 90 gün saklanır. Mesaj içerikleri ve konumlar kaydedilmez.",
+      "kinds": {
+        "visit": "Siteye/uygulamaya girdi",
+        "flight.added": "Uçuş ekledi",
+        "ad.posted": "Pazara ilan verdi",
+        "event.rsvp": "Etkinliğe katılım bildirdi",
+        "trip.registered": "Geziye kaydoldu",
+        "comment.posted": "Habere yorum yaptı",
+        "ride.posted": "Yolculuk ilanı verdi"
+      }
     }
   },
   "roles": {

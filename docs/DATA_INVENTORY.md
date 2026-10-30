@@ -113,6 +113,10 @@ organisers record payment status by hand.
   export. Sending is audited.
 - `profile_private.licence_body`: which body issued the licence (THK, APPI, …). Owner-only.
 - Admin profile edits (`admin_update_profile`) and photo removals are written to `audit_log`.
+- `profiles.last_seen_at` and `user_activity`: when someone was last online and what they did
+  (visits, flights added, listings, RSVPs, trip registrations, comments, rides), for admins. No
+  message contents, no positions. Kept 90 days (`retention_policies.user_activity`); the person can
+  read their own log, and it is in the export. **Add to the privacy notice before launch.**
 
 ### Special category data
 
