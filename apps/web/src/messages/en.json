@@ -29,7 +29,8 @@
     "sosLabel": "SOS: emergency help and your position",
     "trips": "Trips",
     "flyNow": "Fly now",
-    "flying": "Flying"
+    "flying": "Flying",
+    "notices": "Notices"
   },
   "footer": {
     "privacyNotice": "Privacy notice",
@@ -64,7 +65,7 @@
       },
       "sites": {
         "title": "Sites",
-        "text": "Takeoffs and landings with wind directions and flyability."
+        "text": "Launch and landing sites with current wind speed, direction and rain."
       },
       "safety": {
         "title": "Safety",
@@ -609,14 +610,16 @@
         "news_comment": "Comment",
         "tip": "Tip",
         "ride": "Ride post",
-        "event": "Event"
+        "event": "Event",
+        "notice": "Notice"
       },
       "statuses": {
         "open": "Open",
         "actioned": "Action taken",
         "dismissed": "Dismissed"
       },
-      "removeRide": "Remove ride post"
+      "removeRide": "Remove ride post",
+      "removeNotice": "Remove notice"
     },
     "usersAdmin": {
       "search": "Search by name",
@@ -911,7 +914,8 @@
         "event.rsvp": "Replied to an event",
         "trip.registered": "Registered for a trip",
         "comment.posted": "Commented on news",
-        "ride.posted": "Posted a ride"
+        "ride.posted": "Posted a ride",
+        "notice.posted": "Posted a notice"
       }
     }
   },
@@ -1630,5 +1634,77 @@
     "unread": "unread",
     "back": "Back to messages",
     "from": "Fly Anatolia"
+  },
+  "notices": {
+    "title": "Notices",
+    "lead": "Got a free seat, looking for a harness or a flying buddy? The club members' notice board.",
+    "marketTitle": "Gear Market",
+    "marketLead": "Wings, harnesses, reserves and instruments for sale by club members.",
+    "marketAll": "All market listings",
+    "marketNew": "Sell something",
+    "marketEmpty": "No listings in the market right now.",
+    "boardTitle": "Notice board",
+    "boardLead": "Only adult members see this board. Notices close by themselves after 30 days; you can renew them.",
+    "signInForBoard": "Sign in to see the notice board and post a notice.",
+    "signIn": "Sign in",
+    "adultsOnly": "The notice board is for adult members only. You can still browse the Gear Market.",
+    "new": "Post a notice",
+    "filter": "Filter notices",
+    "all": "All",
+    "anySite": "All sites",
+    "anyCategory": "All categories",
+    "apply": "Filter",
+    "clear": "Clear",
+    "kinds": {
+      "offer": "Offering",
+      "request": "Looking for"
+    },
+    "kindsShort": {
+      "offer": "Offering",
+      "request": "Looking"
+    },
+    "categories": {
+      "transport": "Transport",
+      "gear": "Gear",
+      "buddy": "Flying buddy",
+      "training": "Training & services",
+      "lost_found": "Lost & found",
+      "other": "Other"
+    },
+    "fields": {
+      "kind": "Type",
+      "category": "Category",
+      "title": "Title",
+      "titleHelp": "E.g. \"2 free seats to Babadağ on Saturday\"",
+      "body": "Description (optional)",
+      "site": "Flying site (optional)",
+      "place": "Place (optional)",
+      "placeHelp": "A district or meeting point, not your home address.",
+      "date": "Date (optional)",
+      "seats": "Seats",
+      "price": "Price (optional)",
+      "currency": "Currency",
+      "photo": "Photo (optional)",
+      "photoHelp": "The photo is shrunk on your device and its location data removed.",
+      "removePhoto": "Remove photo"
+    },
+    "gearHint": "To sell gear, a Gear Market listing reaches more people.",
+    "privacyNote": "Other adult members see this notice with your name. Discuss details in a private message.",
+    "post": "Post",
+    "posted": "Your notice is live.",
+    "empty": "No notices match these filters.",
+    "yours": "Your notice",
+    "closed": "Closed",
+    "expired": "Expired",
+    "expires": "Closes on {date}",
+    "close": "Close",
+    "reopen": "Reopen",
+    "renew": "Renew for 30 days",
+    "mine": "My notices",
+    "mineLead": "Your closed or expired notices. Repost or delete them.",
+    "seatsCount": "{count, plural, one {# seat} other {# seats}}",
+    "photoAlt": "Notice photo: {title}",
+    "photoError": "The photo could not be uploaded. Try again or post without it.",
+    "adultsOnlyError": "The notice board is for adult members only."
   }
 }

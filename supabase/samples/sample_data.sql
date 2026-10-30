@@ -166,3 +166,34 @@ from (values
        currency, city, description)
 join auth.users u on u.id = a.owner::uuid
 on conflict (id) do update set expires_at = now() + interval '60 days', status = 'active';
+
+-- Notice board ("Duyurular") -----------------------------------------------------------------
+-- Fixed ids so a re-run refreshes them (reopened, 30 more days) instead of adding copies.
+insert into public.notices (id, user_id, kind, category, title, body, site_id, place_text,
+                            notice_date, seats, price, currency)
+select n.id::uuid, n.owner::uuid, n.kind::public.notice_kind, n.category::public.notice_category,
+       n.title, n.body, s.id, n.place, current_date + n.in_days, n.seats, n.price, n.currency
+from (values
+  ('d1000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000004', 'offer', 'transport',
+   'Cumartesi Sapanca''ya 2 kişilik yer var (Ö)', 'Sabah 07:00''de Kadıköy''den çıkıyorum. Benzini bölüşürüz.',
+   'sapanca-kirkpinar', 'Kadıköy', 1, 2::smallint, null::numeric, null),
+  ('d1000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000003', 'request', 'transport',
+   'Pazar günü Ali Dağı''nda pilot toplayacak sürücü arıyorum (Ö)', 'XC denemesi yapacağım, iniş yeri belli değil. Yakıt benden.',
+   null, 'Kayseri', 2, null, null, null),
+  ('d1000000-0000-4000-8000-000000000003', 'a0000000-0000-4000-8000-000000000004', 'request', 'gear',
+   'İkinci el M beden airbag harness arıyorum (Ö)', 'Bütçem 8.000 TL civarı. İstanbul içi teslim olursa sevinirim.',
+   null, 'İstanbul', null, null, 8000, 'TRY'),
+  ('d1000000-0000-4000-8000-000000000004', 'a0000000-0000-4000-8000-000000000006', 'request', 'buddy',
+   'Hafta içi Kaş''ta birlikte uçacak arkadaş (Ö)', 'Salı ve çarşamba sabahları uçuyorum, P2 ve üstü herkese açık.',
+   'kas-asas', null, null, null, null, null),
+  ('d1000000-0000-4000-8000-000000000005', 'a0000000-0000-4000-8000-000000000001', 'offer', 'training',
+   'Yedek paraşüt katlama günü (Ö)', 'Kulüp lokalinde yedek katlama ve kontrol. Yerinizi mesajla ayırtın.',
+   null, 'Kulüp lokali, İstanbul', 9, null, 750, 'TRY'),
+  ('d1000000-0000-4000-8000-000000000006', 'a0000000-0000-4000-8000-000000000002', 'offer', 'lost_found',
+   'Babadağ kalkışında güneş gözlüğü bulundu (Ö)', 'Siyah çerçeveli, kılıfıyla. Tarif edene teslim ederim.',
+   'babadag-1900', null, -1, null, null, null)
+) as n(id, owner, kind, category, title, body, site_slug, place, in_days, seats, price, currency)
+join auth.users u on u.id = n.owner::uuid
+left join public.sites s on s.slug = n.site_slug
+on conflict (id) do update set closed = false, expires_at = now() + interval '30 days',
+  notice_date = excluded.notice_date;

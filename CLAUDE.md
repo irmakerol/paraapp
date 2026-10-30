@@ -82,7 +82,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - Incident reports are for `safety_officer` only (admin area `safety`; admins are excluded on purpose).
   Fully anonymous reports are inserted with the service role and no reporter; injury details are
   encrypted with `INCIDENT_ENCRYPTION_KEY` and read only via `read_incident_injury()` (audited).
-- Rides and group chats are adults only (RLS + definer functions); keep minors out of new
+- The notice board (`notices`, page "Duyurular") replaced the ride board; the gear market stays at
+  `/market` but is shown as a prominent section of `/notices`. `rides` is legacy (no UI).
+- Notices, rides and group chats are adults only (RLS + definer functions); keep minors out of new
   person-to-person features unless the minor opted in (as with follows for 1-to-1 chats).
 - Weather is fetched only on the server (`lib/weather.ts`, cached in `weather_forecasts`); the
   flyability rules live in `packages/core/src/weather.ts`.

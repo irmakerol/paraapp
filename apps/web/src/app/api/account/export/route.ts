@@ -60,6 +60,7 @@ export async function GET() {
     incidents,
     rsvps,
     rides,
+    notices,
     tripRegistrations,
     tripInterests,
     tripGuiding,
@@ -101,6 +102,7 @@ export async function GET() {
       .eq('reporter_id', uid),
     admin.from('event_rsvps').select('event_id, status, note, created_at').eq('user_id', uid),
     admin.from('rides').select('*').eq('user_id', uid),
+    admin.from('notices').select('*').eq('user_id', uid),
     // Staff notes are the organisers' own working notes; everything the pilot gave is included.
     admin
       .from('trip_registrations')
@@ -192,6 +194,7 @@ export async function GET() {
     })),
     event_rsvps: rsvps.data ?? [],
     rides: rides.data ?? [],
+    notices: notices.data ?? [],
     trip_registrations: tripRegistrations.data ?? [],
     trip_interests: tripInterests.data ?? [],
     trips_guided: tripGuiding.data ?? [],

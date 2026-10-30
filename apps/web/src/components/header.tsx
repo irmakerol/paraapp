@@ -14,7 +14,8 @@ import { buttonClass } from './ui';
 const navItems = [
   { href: '/news', key: 'news' },
   { href: '/tips', key: 'tips' },
-  { href: '/market', key: 'market' },
+  // The gear market is a prominent section of the notices page.
+  { href: '/notices', key: 'notices' },
   { href: '/sites', key: 'sites' },
   { href: '/trips', key: 'trips' },
   { href: '/events', key: 'events' },
@@ -28,8 +29,6 @@ export async function Header({ locale }: { locale: string }) {
   const flying = viewer ? Boolean(await activeFlightStart(viewer.user.id)) : false;
 
   const items: { href: string; key: string }[] = [...navItems];
-  // The ride board is for adults only (no ride arrangements with minors).
-  if (viewer?.profile.age_group === 'adult') items.push({ href: '/rides', key: 'rides' });
   if (viewer) items.push({ href: '/messages', key: 'messages' });
   if (viewer && staffAreas(viewer).length) items.push({ href: '/admin', key: 'admin' });
 

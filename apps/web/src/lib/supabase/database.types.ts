@@ -1125,6 +1125,64 @@ export type Database = {
           },
         ];
       };
+      notices: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: Database['public']['Enums']['notice_kind'];
+          category: Database['public']['Enums']['notice_category'];
+          title: string;
+          body: string | null;
+          site_id: string | null;
+          place_text: string | null;
+          notice_date: string | null;
+          seats: number | null;
+          price: number | null;
+          currency: string | null;
+          photo_path: string | null;
+          closed: boolean;
+          expires_at: Timestamp;
+          created_at: Timestamp;
+        };
+        Insert: {
+          user_id: string;
+          kind: Database['public']['Enums']['notice_kind'];
+          category: Database['public']['Enums']['notice_category'];
+          title: string;
+          body?: string | null;
+          site_id?: string | null;
+          place_text?: string | null;
+          notice_date?: string | null;
+          seats?: number | null;
+          price?: number | null;
+          currency?: string | null;
+          photo_path?: string | null;
+        };
+        Update: {
+          kind?: Database['public']['Enums']['notice_kind'];
+          category?: Database['public']['Enums']['notice_category'];
+          title?: string;
+          body?: string | null;
+          site_id?: string | null;
+          place_text?: string | null;
+          notice_date?: string | null;
+          seats?: number | null;
+          price?: number | null;
+          currency?: string | null;
+          photo_path?: string | null;
+          closed?: boolean;
+          expires_at?: Timestamp;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notices_site_id_fkey';
+            columns: ['site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       rides: {
         Row: {
           id: string;
@@ -1423,7 +1481,7 @@ export type Database = {
       ad_condition: 'new' | 'like_new' | 'good' | 'fair' | 'for_parts';
       ad_status: 'active' | 'reserved' | 'sold' | 'archived';
       currency: 'TRY' | 'EUR' | 'USD';
-      report_target: 'ad' | 'user' | 'chat' | 'message' | 'news_comment' | 'tip' | 'ride' | 'event';
+      report_target: 'ad' | 'user' | 'chat' | 'message' | 'news_comment' | 'tip' | 'ride' | 'event' | 'notice';
       report_reason: 'spam' | 'scam' | 'harassment' | 'hate' | 'sexual' | 'dangerous' | 'illegal' | 'other';
       report_status: 'open' | 'actioned' | 'dismissed';
       chat_kind: 'direct' | 'group';
@@ -1451,6 +1509,8 @@ export type Database = {
       event_kind: 'club_trip' | 'course' | 'competition' | 'social' | 'meeting' | 'other';
       event_status: 'draft' | 'published' | 'cancelled';
       rsvp_status: 'going' | 'maybe' | 'not_going';
+      notice_kind: 'offer' | 'request';
+      notice_category: 'transport' | 'gear' | 'buddy' | 'training' | 'lost_found' | 'other';
       ride_kind: 'offer' | 'request';
       ride_purpose: 'carpool' | 'retrieve';
     };

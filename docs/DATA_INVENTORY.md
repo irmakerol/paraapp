@@ -117,6 +117,12 @@ organisers record payment status by hand.
   (visits, flights added, listings, RSVPs, trip registrations, comments, rides), for admins. No
   message contents, no positions. Kept 90 days (`retention_policies.user_activity`); the person can
   read their own log, and it is in the export. **Add to the privacy notice before launch.**
+- `notices` (notice board, "Duyurular", replaces the ride board): offer/request posts with category,
+  title, optional description, site or place, date, seats, price and one photo (`notice-photos`
+  bucket, private, resized in the browser so no EXIF/GPS). Adult members and moderators read them;
+  owners edit, close, renew (max 30 days ahead) or delete. A post closes itself after 30 days and is
+  deleted 30 days after that (`retention_policies.notices`). Photos are removed with the account;
+  rows are in the export. Upcoming ride posts were copied over; `rides` gets no new posts.
 
 ### Special category data
 
@@ -158,14 +164,14 @@ required (thresholds and exemptions depend on employees, balance sheet and main 
 
 ## 3. Data-subject rights in the app
 
-| Right                     | How                                                                                                                                                                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports, own incident reports with injury details, event sign-ups, rides); each flight page offers the original IGC/GPX; Logbook → CSV |
-| Rectification             | Edit profile; or file a request                                                                                                                                                                                                      |
-| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                                                                                    |
-| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                                                                                                |
-| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                                                                                                |
-| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                                                                                     |
+| Right                     | How                                                                                                                                                                                                                                           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports, own incident reports with injury details, event sign-ups, rides, notices); each flight page offers the original IGC/GPX; Logbook → CSV |
+| Rectification             | Edit profile; or file a request                                                                                                                                                                                                               |
+| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                                                                                             |
+| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                                                                                                         |
+| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                                                                                                         |
+| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                                                                                              |
 
 ## 4. Open points for the lawyer (Phase 1)
 

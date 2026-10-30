@@ -29,7 +29,8 @@
     "sosLabel": "SOS: acil yardım ve konumunuz",
     "trips": "Geziler",
     "flyNow": "Şimdi Uç",
-    "flying": "Uçuşta"
+    "flying": "Uçuşta",
+    "notices": "Duyurular"
   },
   "footer": {
     "privacyNotice": "Aydınlatma metni",
@@ -64,7 +65,7 @@
       },
       "sites": {
         "title": "Uçuş alanları",
-        "text": "Rüzgâr yönleri ve uçulabilirlik bilgisiyle kalkış ve iniş alanları."
+        "text": "Kalkış ve iniş alanları; güncel rüzgâr hızı, yönü ve yağış bilgisiyle."
       },
       "safety": {
         "title": "Güvenlik",
@@ -609,14 +610,16 @@
         "news_comment": "Yorum",
         "tip": "İpucu",
         "ride": "Yolculuk ilanı",
-        "event": "Etkinlik"
+        "event": "Etkinlik",
+        "notice": "Duyuru"
       },
       "statuses": {
         "open": "Açık",
         "actioned": "İşlem yapıldı",
         "dismissed": "Reddedildi"
       },
-      "removeRide": "Yolculuk ilanını kaldır"
+      "removeRide": "Yolculuk ilanını kaldır",
+      "removeNotice": "Duyuruyu kaldır"
     },
     "usersAdmin": {
       "search": "Ada göre ara",
@@ -911,7 +914,8 @@
         "event.rsvp": "Etkinliğe katılım bildirdi",
         "trip.registered": "Geziye kaydoldu",
         "comment.posted": "Habere yorum yaptı",
-        "ride.posted": "Yolculuk ilanı verdi"
+        "ride.posted": "Yolculuk ilanı verdi",
+        "notice.posted": "Duyuru verdi"
       }
     }
   },
@@ -1630,5 +1634,77 @@
     "unread": "okunmadı",
     "back": "Mesajlara dön",
     "from": "Fly Anatolia"
+  },
+  "notices": {
+    "title": "Duyurular",
+    "lead": "Yer var mı, harness mı arıyorsun, uçuş arkadaşı mı? Kulüp üyelerinin ilan panosu.",
+    "marketTitle": "Ekipman Pazarı",
+    "marketLead": "Kanat, harness, yedek paraşüt ve alet: kulüp üyelerinin satılık ekipmanı.",
+    "marketAll": "Tüm pazar ilanları",
+    "marketNew": "Satış ilanı ver",
+    "marketEmpty": "Şu an pazarda ilan yok.",
+    "boardTitle": "İlan panosu",
+    "boardLead": "Bu panoyu yalnızca yetişkin üyeler görür. Duyurular 30 gün sonra kendiliğinden kapanır; istersen uzatabilirsin.",
+    "signInForBoard": "İlan panosunu görmek ve duyuru vermek için giriş yap.",
+    "signIn": "Giriş yap",
+    "adultsOnly": "İlan panosu yalnızca yetişkin üyeler içindir. Ekipman Pazarı'na göz atabilirsin.",
+    "new": "Duyuru ver",
+    "filter": "Duyuruları filtrele",
+    "all": "Tümü",
+    "anySite": "Tüm alanlar",
+    "anyCategory": "Tüm kategoriler",
+    "apply": "Filtrele",
+    "clear": "Temizle",
+    "kinds": {
+      "offer": "Var / veriyorum",
+      "request": "Arıyorum"
+    },
+    "kindsShort": {
+      "offer": "Var",
+      "request": "Arıyor"
+    },
+    "categories": {
+      "transport": "Ulaşım",
+      "gear": "Ekipman",
+      "buddy": "Uçuş arkadaşı",
+      "training": "Eğitim ve hizmet",
+      "lost_found": "Kayıp / bulunan",
+      "other": "Diğer"
+    },
+    "fields": {
+      "kind": "Duyuru türü",
+      "category": "Kategori",
+      "title": "Başlık",
+      "titleHelp": "Örn. \"Cumartesi Babadağ'a 2 kişilik yer var\"",
+      "body": "Açıklama (isteğe bağlı)",
+      "site": "Uçuş alanı (isteğe bağlı)",
+      "place": "Yer (isteğe bağlı)",
+      "placeHelp": "Bir ilçe veya buluşma noktası; ev adresin değil.",
+      "date": "Tarih (isteğe bağlı)",
+      "seats": "Koltuk sayısı",
+      "price": "Fiyat (isteğe bağlı)",
+      "currency": "Para birimi",
+      "photo": "Fotoğraf (isteğe bağlı)",
+      "photoHelp": "Fotoğraf telefonunda küçültülür, konum bilgisi silinir.",
+      "removePhoto": "Fotoğrafı kaldır"
+    },
+    "gearHint": "Satılık ekipman için Ekipman Pazarı'nda ilan vermen daha çok kişiye ulaşır.",
+    "privacyNote": "Diğer yetişkin üyeler bu duyuruyu adınla görür. Ayrıntıları özel mesajla konuş.",
+    "post": "Yayınla",
+    "posted": "Duyurun yayında.",
+    "empty": "Bu filtrelere uyan duyuru yok.",
+    "yours": "Senin duyurun",
+    "closed": "Kapandı",
+    "expired": "Süresi doldu",
+    "expires": "{date} tarihinde kapanır",
+    "close": "Kapat",
+    "reopen": "Yeniden aç",
+    "renew": "30 gün uzat",
+    "mine": "Duyurularım",
+    "mineLead": "Kapanmış ya da süresi dolmuş duyuruların. Yeniden yayınlayabilir ya da silebilirsin.",
+    "seatsCount": "{count, plural, other {# koltuk}}",
+    "photoAlt": "Duyuru fotoğrafı: {title}",
+    "photoError": "Fotoğraf yüklenemedi. Tekrar dene ya da fotoğrafsız yayınla.",
+    "adultsOnlyError": "İlan panosu yalnızca yetişkin üyeler içindir."
   }
 }
