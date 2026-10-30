@@ -5,7 +5,7 @@
 #
 # The repository is public, so its Actions logs are too: never print a key. Every value that
 # isn't a GitHub secret already is masked with ::add-mask:: before it is used.
-set -euo pipefail
+set -Eeuo pipefail
 
 : "${SUPABASE_PROJECT_REF:?}" "${SUPABASE_ACCESS_TOKEN:?}" "${SUPABASE_DB_PASSWORD:?}" "${VERCEL_TOKEN:?}"
 VERCEL_PROJECT="${VERCEL_PROJECT:-fly-anatolia}"
@@ -33,7 +33,7 @@ sql() {
   printf '%s\n' "$out"
 }
 # Names the stage that failed in an annotation.
-trap 'echo "::error title=cloud-setup failed::stage: ${STAGE:-start}, line $LINENO"' ERR
+trap 'echo "::error title=cloud-setup failed::stage: ${STAGE:-start}, line $LINENO, command: ${BASH_COMMAND%% *}"' ERR
 
 echo "== Database: migrations"
 npx supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
