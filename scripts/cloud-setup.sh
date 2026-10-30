@@ -18,11 +18,30 @@ vc() { curl -fsS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'content-type: appl
 mask() { echo "::add-mask::$1"; }
 
 # Runs SQL through the Management API (GitHub runners have no IPv6 for the direct DB host).
-sql() { sb -X POST "$SB_API/database/query" --data "$(jq -n --arg q "$1" '{query: $q}')"; }
+# On failure the database's error message becomes a workflow annotation (readable without the log).
+sql() {
+  local out code
+  out=$(curl -sS -w '\n%{http_code}' -H "Authorization: Bearer $SUPABASE_ACCESS_TOKEN" \
+    -H 'content-type: application/json' -X POST "$SB_API/database/query" \
+    --data "$(jq -n --arg q "$1" '{query: $q}')")
+  code=${out##*$'\n'}
+  out=${out%$'\n'*}
+  if [ "${code:0:1}" != 2 ]; then
+    echo "::error title=SQL failed (${STAGE:-sql})::$(head -c 600 <<<"$out" | tr '\n' ' ')"
+    return 1
+  fi
+  printf '%s\n' "$out"
+}
+# Names the stage that failed in an annotation.
+trap 'echo "::error title=cloud-setup failed::stage: ${STAGE:-start}, line $LINENO"' ERR
 
 echo "== Database: migrations"
 npx supabase link --project-ref "$SUPABASE_PROJECT_REF" --password "$SUPABASE_DB_PASSWORD"
-npx supabase db push --password "$SUPABASE_DB_PASSWORD" --include-all
+STAGE=migrations
+if ! npx supabase db push --password "$SUPABASE_DB_PASSWORD" --include-all 2>&1 | tee "$RUNNER_TEMP/push.log"; then
+  echo "::error title=Migration failed::$(grep -v '^\s*$' "$RUNNER_TEMP/push.log" | tail -n 6 | tr '\n' ' ' | head -c 900)"
+  exit 1
+fi
 
 echo "== Database: legal texts (fresh database only) and example content"
 count=$(sql 'select count(*)::int as n from public.legal_documents' | jq -r '.[0].n')
@@ -33,6 +52,7 @@ fi
 # Example content (news, tips, sites, trips, sample people and events, all marked as examples).
 # Every file is safe to run again, so new samples reach the test server on the next deploy.
 for f in supabase/seeds/*.sql supabase/samples/*.sql; do
+  STAGE="seed $(basename "$f")"
   sql "$(cat "$f")" > /dev/null
   echo "seed: $(basename "$f")"
 done
@@ -88,6 +108,7 @@ deploy() {
   npx -y vercel@latest deploy --prebuilt --prod --token "$VERCEL_TOKEN"
 }
 
+STAGE=website
 echo "== Website deploy"
 mkdir -p .vercel
 jq -n --arg p "$PROJECT_ID" --arg o "$TEAM_ID" '{projectId: $p, orgId: $o}' > .vercel/project.json
@@ -102,6 +123,7 @@ if [ -z "$SITE" ]; then
 fi
 WEB_URL="https://$SITE"
 
+STAGE=auth-settings
 echo "== Sign-in settings"
 auth=$(jq -n --arg site "$WEB_URL" --arg bundle "$BUNDLE_ID" \
   --arg gweb "${GOOGLE_WEB_CLIENT_ID:-}" --arg gios "${GOOGLE_IOS_CLIENT_ID:-}" --arg gsecret "${GOOGLE_WEB_CLIENT_SECRET:-}" '
