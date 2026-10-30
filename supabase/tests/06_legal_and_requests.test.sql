@@ -14,6 +14,8 @@ insert into public.legal_documents (id, kind, locale, version, title, body_md, p
   ('aaaaaaaa-0000-0000-0000-000000000002', 'terms', 'tr', 1, 'Kullanım Koşulları', '...', now() - interval '1 day'),
   ('aaaaaaaa-0000-0000-0000-000000000003', 'terms', 'tr', 2, 'Kullanım Koşulları', 'draft', null);
 
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}', true);
 

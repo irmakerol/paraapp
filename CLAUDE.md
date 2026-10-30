@@ -20,6 +20,7 @@ and in `docs/`.
 
 ```
 apps/web          Next.js 16 (App Router) + next-intl + Tailwind v4 + Supabase SSR
+apps/mobile       Expo (React Native) phone app: flight recorder + upload. npm, not in the pnpm workspace
 packages/core     Pure TS shared logic: APP_CONFIG, age gate, privacy, units, roles, zod schemas
 supabase/         config.toml, migrations, seed.sql (generated), email templates, pgTAP tests
 scripts/          db-test.sh (+ shim for plain Postgres), gen-legal-seed.mjs
@@ -64,6 +65,11 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - Error keys in `ActionState` live under `auth.errors` unless they contain a dot (then they are full keys, e.g. `market.adultsOnly`).
 - Names of other people always come from the `profile_cards` view (`lib/people.ts`), never from `profiles`.
 - Admin pages call `requireStaff(locale, area)` (`lib/staff.ts`); RLS enforces the same roles.
+  `super_admin` (the club owner, `ADMIN_EMAIL` on the test server) always also holds `admin` and is
+  the only one who can grant or revoke `admin`/`super_admin`. `guide` (rehber) counts as a member.
+- Every new account gets `member` (shown as "Misafir üye" / guest member), so members-only means
+  signed in. `pilot` means licensed, `student_pilot` is in training (2026-10-30). Ground School
+  (`tips`) is written by instructors, moderators and the super admin; sites by the super admin only.
 - Push goes through `sendPush()` (`lib/push.ts`): it checks topic settings and, for club news, marketing consent.
 - Third-party embeds are click-to-load (`components/video-embed.tsx`). No third-party request before the user acts.
 - In render, use `currentTime()` from `lib/format.ts` instead of `Date.now()` (the React purity lint rule).
@@ -76,7 +82,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
 - Incident reports are for `safety_officer` only (admin area `safety`; admins are excluded on purpose).
   Fully anonymous reports are inserted with the service role and no reporter; injury details are
   encrypted with `INCIDENT_ENCRYPTION_KEY` and read only via `read_incident_injury()` (audited).
-- Rides and group chats are adults only (RLS + definer functions); keep minors out of new
+- The notice board (`notices`, page "Duyurular") replaced the ride board; the gear market stays at
+  `/market` but is shown as a prominent section of `/notices`. `rides` is legacy (no UI).
+- Notices, rides and group chats are adults only (RLS + definer functions); keep minors out of new
   person-to-person features unless the minor opted in (as with follows for 1-to-1 chats).
 - Weather is fetched only on the server (`lib/weather.ts`, cached in `weather_forecasts`); the
   flyability rules live in `packages/core/src/weather.ts`.
@@ -92,6 +100,9 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   `trips`); a trip's guides (`trip_guides`) see its participants. Registrations are written only through
   definer functions (`register_for_trip` etc.); seats, the waiting list and pilot notifications are
   handled by triggers. Payments are tracked by hand (`payment_status`), the app takes no money.
+- Student pilots record `profiles.training_level`: only levels above their current one in form order
+  P2 < … < P5 < T1 < T2 < T3 (`trainingLevelOptions()` in core = `private.training_level_ok` in SQL,
+  checked by a constraint; reaching the target clears it). Admins set it with `admin_set_training_level`.
 - Pilot levels offered in the UI are `PILOT_LEVEL_CHOICES` (P2–P5, T1–T3, Instructor); older enum values
   (student, p1, tandem) stay valid. For requirements, T1–T3 rank like P5 (`pilot_level_rank`).
 - Profile totals (`total_flight_hours`, `total_flights`) grow only through `add_flights_to_totals()`,
@@ -101,6 +112,19 @@ deploy/           compose stack (web, Caddy, scheduler, backups) and the deploym
   only; the scored route can include takeoff and landing, so draw it for the owner only.
 - The 3D replay uses Terrain Tiles on AWS Open Data (`TERRAIN_TILES` in `lib/map.ts`, in the CSP),
   requested only when the user turns 3D on.
+- The phone app mirrors the whole website except admin (Irmak, 2026-10-30): tabs Home, Fly, Flights,
+  Messages, Profile; every club section is a tile on Home. Server-only steps use Bearer routes under
+  `/api/mobile/*` that share code with the website (`lib/incidents.ts`, `lib/send-message.ts`).
+- The phone app has no chat (Irmak, 2026-10-30): its Messages tab is the read-only "Kulüp Mesajları"
+  (club messages the person received); no direct/group chats or "message the seller" in the app.
+- Phone app (`apps/mobile`, docs/MOBILE.md): its strings live in `src/messages.ts` (TR default, EN
+  fallback, typed so both stay in sync). It talks to the website with a Bearer token
+  (`lib/supabase/bearer.ts`, `/api/mobile/*`). Built and uploaded to TestFlight by
+  `.github/workflows/ios.yml`; the hosted test server is set up by `.github/workflows/cloud.yml`.
+  Public repo = public Actions logs: mask every key (`::add-mask::`).
+- Sample data for testing lives in `supabase/samples/sample_data.sql` (kept out of `seeds/` so `db reset` and the RLS tests stay clean; the test server loads it): names/titles end in "(Ö)",
+  shown as "(S)" on English pages via `sampleLabel()` (`lib/sample.ts`). Seeds must be safe to run
+  twice (the test server re-applies them on every deploy).
 - Years flying is derived from `profiles.flying_since` (`private.years_flying`); `years_flying` is legacy.
 
 ## Decisions (2026-10-26)

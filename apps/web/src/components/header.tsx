@@ -3,16 +3,19 @@ import { getTranslations } from 'next-intl/server';
 import { APP_CONFIG } from '@paraapp/core';
 import { Link } from '@/i18n/navigation';
 import { getViewer } from '@/lib/session';
+import { activeFlightStart } from '@/lib/active-flight';
 import { staffAreas } from '@/lib/staff';
 import { signOut } from '@/app/[locale]/auth/actions';
 import { LocaleSwitcher } from './locale-switcher';
+import { MenuDetails } from './menu-details';
 import { ThemeToggle } from './theme-toggle';
 import { buttonClass } from './ui';
 
 const navItems = [
   { href: '/news', key: 'news' },
   { href: '/tips', key: 'tips' },
-  { href: '/market', key: 'market' },
+  // The gear market is a prominent section of the notices page.
+  { href: '/notices', key: 'notices' },
   { href: '/sites', key: 'sites' },
   { href: '/trips', key: 'trips' },
   { href: '/events', key: 'events' },
@@ -23,10 +26,9 @@ const navItems = [
 export async function Header({ locale }: { locale: string }) {
   const t = await getTranslations({ locale, namespace: 'nav' });
   const viewer = await getViewer();
+  const flying = viewer ? Boolean(await activeFlightStart(viewer.user.id)) : false;
 
   const items: { href: string; key: string }[] = [...navItems];
-  // The ride board is for adults only (no ride arrangements with minors).
-  if (viewer?.profile.age_group === 'adult') items.push({ href: '/rides', key: 'rides' });
   if (viewer) items.push({ href: '/messages', key: 'messages' });
   if (viewer && staffAreas(viewer).length) items.push({ href: '/admin', key: 'admin' });
 
@@ -52,7 +54,7 @@ export async function Header({ locale }: { locale: string }) {
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2 2xl:max-w-[96rem]">
         <Link href="/" className="flex shrink-0 items-center gap-2">
           <Image src="/brand/fly-anatolia-96.png" alt="" width={44} height={44} priority />
-          <span className="text-lg font-bold">{APP_CONFIG.name}</span>
+          <span className="hidden text-lg font-bold sm:inline">{APP_CONFIG.name}</span>
         </Link>
 
         <nav aria-label={t('menu')} className="ml-4 hidden 2xl:block">
@@ -60,13 +62,24 @@ export async function Header({ locale }: { locale: string }) {
         </nav>
 
         <div className="ml-auto flex items-center gap-2">
-          <Link
-            href="/sos"
-            className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-sos px-3 font-extrabold text-white"
-            aria-label={t('sosLabel')}
-          >
-            SOS
-          </Link>
+          {viewer ? (
+            <>
+              {/* Flight recording is for phones and tablets; desktops only show logbook and replays. */}
+              <Link
+                href="/fly"
+                className={`hidden min-h-11 items-center justify-center whitespace-nowrap rounded-lg px-3 font-extrabold text-white pointer-coarse:inline-flex ${flying ? 'motion-safe:animate-pulse bg-sos' : 'bg-fly'}`}
+              >
+                {flying ? t('flying') : t('flyNow')}
+              </Link>
+              <Link
+                href="/sos"
+                className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg bg-sos px-3 font-extrabold text-white"
+                aria-label={t('sosLabel')}
+              >
+                SOS
+              </Link>
+            </>
+          ) : null}
           <div className="hidden items-center gap-2 sm:flex 2xl:hidden">
             <LocaleSwitcher />
             <ThemeToggle />
@@ -96,7 +109,7 @@ export async function Header({ locale }: { locale: string }) {
             </>
           )}
 
-          <details className="relative 2xl:hidden">
+          <MenuDetails className="relative 2xl:hidden">
             <summary className={buttonClass('secondary', 'list-none cursor-pointer')}>
               {t('menu')}
             </summary>
@@ -124,7 +137,7 @@ export async function Header({ locale }: { locale: string }) {
                 )}
               </div>
             </div>
-          </details>
+          </MenuDetails>
         </div>
       </div>
     </header>

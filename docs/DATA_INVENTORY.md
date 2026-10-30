@@ -93,6 +93,43 @@ organisers record payment status by hand.
 - Replaying flights together uses the same visibility rules: other pilots' flights come from
   `/api/flights/[id]/track`, which returns the trimmed public track unless the viewer is the owner.
 
+## 1g. Phase 7a (iPhone app)
+
+- Recorded flights stay on the phone (IGC files) until the pilot is signed in and online; then they
+  are uploaded and analysed like a web import (`/api/mobile/flights`).
+- `active_flights`: one row per pilot **while the phone records** (start time and last refresh, no
+  position). Owner-only (RLS); deleted when recording stops and with the account. Used only to show
+  the website's Fly button as "Flying".
+- Sample records (`supabase/samples/sample_data.sql`, marked "(Ö)"/"(S)") are invented people with
+  `@example.invalid` addresses: no personal data. Delete them before launch.
+
+## 1h. Club administration (2026-10-30)
+
+- `user_groups`, `user_group_members`: which groups a person is in (e.g. "Students 2026"). Kept by
+  admins; a person sees their own groups. Removed with the account; included in the data export.
+- `club_messages`, `club_message_recipients`: messages the super admin sends to everyone, a role or
+  a group, and who received and read them. A person sees only messages they received. Recipient
+  rows go with the account; the message text stays (it is the club's own text). Included in the
+  export. Sending is audited.
+- `profile_private.licence_body`: which body issued the licence (THK, APPI, …). Owner-only.
+- Admin profile edits (`admin_update_profile`) and photo removals are written to `audit_log`.
+- Admin user detail page (`admin_user_overview`): admins see a member's profile, flight list and
+  summary (no tracks), equipment, listings and notices; every view is written to `audit_log`
+  (`profile.admin_viewed`). Admins can correct country, flying-since and licence body, and delete
+  an account for the member (`admin_request_account_deletion`: same anonymise-then-purge path,
+  audited with a reason). Only the super admin manages other admins. **Mention in the privacy
+  notice that club admins can see this.**
+- `profiles.last_seen_at` and `user_activity`: when someone was last online and what they did
+  (visits, flights added, listings, RSVPs, trip registrations, comments, rides), for admins. No
+  message contents, no positions. Kept 90 days (`retention_policies.user_activity`); the person can
+  read their own log, and it is in the export. **Add to the privacy notice before launch.**
+- `notices` (notice board, "Duyurular", replaces the ride board): offer/request posts with category,
+  title, optional description, site or place, date, seats, price and one photo (`notice-photos`
+  bucket, private, resized in the browser so no EXIF/GPS). Adult members and moderators read them;
+  owners edit, close, renew (max 30 days ahead) or delete. A post closes itself after 30 days and is
+  deleted 30 days after that (`retention_policies.notices`). Photos are removed with the account;
+  rows are in the export. Upcoming ride posts were copied over; `rides` gets no new posts.
+
 ### Special category data
 
 **Incident reports** may contain health data (injuries): explicit consent in the form
@@ -110,19 +147,20 @@ its own consent.
 
 ## 2. Processors and transfers
 
-| Processor                                                    | Role                                                                     | Location                                            | Safeguard to complete                                                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Supabase Inc. (on AWS)                                       | Database, auth, storage                                                  | EU, Frankfurt (eu-central-1) when hosted; local now | Supabase DPA; KVKK Art. 9 standard contract notified to the Authority within 5 business days of signing |
-| Web server host (Oracle Cloud or an EU VPS; owner's choice)  | Runs the web app; sees IPs; holds the nightly encrypted database backups | EU, Frankfurt / Germany                             | DPA + KVKK standard contract                                                                            |
-| Brevo (Sendinblue SAS)                                       | Sign-up, reset, guardian emails                                          | EU, France                                          | DPA + KVKK standard contract                                                                            |
-| Google (only if Google sign-in is enabled)                   | Identity provider                                                        | USA/global                                          | Google's terms; user chooses this option; mention in privacy notice                                     |
-| Sentry (not used yet)                                        | Error tracking, only after analytics consent                             | EU region                                           | DPA + KVKK standard contract                                                                            |
-| Browser push services (Google FCM, Mozilla, Apple)           | Deliver push messages to the user's browser                              | Global                                              | Payload is short (sender name + preview); user turns push on per device; mention in privacy notice      |
-| YouTube / Vimeo (only when the reader presses play)          | Video embeds in tips                                                     | USA/global                                          | Click-to-load (no request before consent); youtube-nocookie.com and Vimeo `dnt=1`; privacy notice       |
-| OpenFreeMap (only when the user presses "Show map")          | Map tiles for flights and sites                                          | To confirm (OpenFreeMap project servers)            | Click-to-load; no account or cookies; mention in privacy notice                                         |
-| AWS Open Data Terrain Tiles (only when the user turns on 3D) | Elevation tiles for the 3D flight replay                                 | AWS (S3, us-east-1)                                 | Click-to-load; no account or cookies; mentioned in the privacy notice                                   |
-| Open-Meteo (server to server)                                | Weather forecasts per site                                               | EU (Switzerland/Germany)                            | Only site coordinates are sent, no personal data; free non-commercial use                               |
-| OpenAIP (only with a key and after "Show map")               | Airspace tiles                                                           | To confirm (Germany)                                | Click-to-load; the user's IP and map area reach OpenAIP; mention in privacy notice                      |
+| Processor                                                              | Role                                                                     | Location                                                                             | Safeguard to complete                                                                                   |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
+| Supabase Inc. (on AWS)                                                 | Database, auth, storage                                                  | EU: Ireland (eu-west-1) for the hosted test server since 2026-10-29; local otherwise | Supabase DPA; KVKK Art. 9 standard contract notified to the Authority within 5 business days of signing |
+| Web server host (Oracle Cloud or an EU VPS; owner's choice)            | Runs the web app; sees IPs; holds the nightly encrypted database backups | EU, Frankfurt / Germany                                                              | DPA + KVKK standard contract                                                                            |
+| Brevo (Sendinblue SAS)                                                 | Sign-up, reset, guardian emails                                          | EU, France                                                                           | DPA + KVKK standard contract                                                                            |
+| Google (only if Google sign-in is enabled)                             | Identity provider                                                        | USA/global                                                                           | Google's terms; user chooses this option; mention in privacy notice                                     |
+| Sentry (not used yet)                                                  | Error tracking, only after analytics consent                             | EU region                                                                            | DPA + KVKK standard contract                                                                            |
+| Browser push services (Google FCM, Mozilla, Apple)                     | Deliver push messages to the user's browser                              | Global                                                                               | Payload is short (sender name + preview); user turns push on per device; mention in privacy notice      |
+| YouTube / Vimeo (only when the reader presses play)                    | Video embeds in tips                                                     | USA/global                                                                           | Click-to-load (no request before consent); youtube-nocookie.com and Vimeo `dnt=1`; privacy notice       |
+| OpenFreeMap (only when the user presses "Show map")                    | Map tiles for flights and sites                                          | To confirm (OpenFreeMap project servers)                                             | Click-to-load; no account or cookies; mention in privacy notice                                         |
+| EOX Sentinel-2 cloudless (only when the user turns on satellite or 3D) | Satellite imagery for the flight replay (CC BY-NC-SA 4.0, credited)      | EOX IT Services (Austria, EU)                                                        | Click-to-load; no account or cookies; mentioned in the privacy notice                                   |
+| AWS Open Data Terrain Tiles (only when the user turns on 3D)           | Elevation tiles for the 3D flight replay                                 | AWS (S3, us-east-1)                                                                  | Click-to-load; no account or cookies; mentioned in the privacy notice                                   |
+| Open-Meteo (server to server)                                          | Weather forecasts per site                                               | EU (Switzerland/Germany)                                                             | Only site coordinates are sent, no personal data; free non-commercial use                               |
+| OpenAIP (only with a key and after "Show map")                         | Airspace tiles                                                           | To confirm (Germany)                                                                 | Click-to-load; the user's IP and map area reach OpenAIP; mention in privacy notice                      |
 
 **KVKK Art. 9 (since June 2024):** transfers abroad need an adequacy decision or appropriate safeguards.
 For each processor above, the club signs the Board's standard contract (or relies on another listed
@@ -133,14 +171,14 @@ required (thresholds and exemptions depend on employees, balance sheet and main 
 
 ## 3. Data-subject rights in the app
 
-| Right                     | How                                                                                                                                                                                                                                  |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports, own incident reports with injury details, event sign-ups, rides); each flight page offers the original IGC/GPX; Logbook → CSV |
-| Rectification             | Edit profile; or file a request                                                                                                                                                                                                      |
-| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                                                                                    |
-| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                                                                                                |
-| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                                                                                                |
-| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                                                                                     |
+| Right                     | How                                                                                                                                                                                                                                           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Access / portability      | Account → Privacy → Download my data (JSON incl. flights, full tracks, equipment, chats sent, reports, own incident reports with injury details, event sign-ups, rides, notices); each flight page offers the original IGC/GPX; Logbook → CSV |
+| Rectification             | Edit profile; or file a request                                                                                                                                                                                                               |
+| Erasure                   | Account → Privacy → Delete account (immediate anonymisation, purge after 30 days)                                                                                                                                                             |
+| Withdraw consent          | Account → Privacy → toggle off (as easy as giving it)                                                                                                                                                                                         |
+| Object / restrict / other | Account → Privacy → Other requests (due date tracked)                                                                                                                                                                                         |
+| By email                  | info@flyanatolia.com → admin logs it in Admin → Data requests (deadline tracked)                                                                                                                                                              |
 
 ## 4. Open points for the lawyer (Phase 1)
 

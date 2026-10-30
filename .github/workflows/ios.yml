@@ -1,0 +1,136 @@
+name: iOS app
+
+# Builds the phone app (apps/mobile) on a GitHub Mac. Pushes and PRs only check that it compiles.
+# A TestFlight upload happens only when someone runs this workflow by hand ("Run workflow"), with
+# the App Store Connect secrets set (docs/MOBILE.md).
+on:
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: Upload to TestFlight
+        type: boolean
+        default: true
+  push:
+    branches: [phase-7-ios]
+    paths: ['apps/mobile/**', 'packages/core/src/tracks/**', '.github/workflows/ios.yml']
+  pull_request:
+    paths: ['apps/mobile/**', '.github/workflows/ios.yml']
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Types and unit tests
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: apps/mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+
+  build:
+    name: Build${{ github.event_name == 'workflow_dispatch' && ' and upload' || '' }}
+    needs: check
+    runs-on: macos-26
+    timeout-minutes: 60
+    env:
+      SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      GOOGLE_IOS_CLIENT_ID: ${{ secrets.GOOGLE_IOS_CLIENT_ID }}
+      GOOGLE_WEB_CLIENT_ID: ${{ secrets.GOOGLE_WEB_CLIENT_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      # Each upload needs a higher build number than the last.
+      IOS_BUILD_NUMBER: ${{ github.run_number }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/mobile/package-lock.json
+      - name: Pick the newest Xcode
+        run: |
+          xcode=$(ls -d /Applications/Xcode_*.app | sort -V | tail -1)
+          echo "Using $xcode"
+          sudo xcode-select -s "$xcode/Contents/Developer"
+          xcodebuild -version
+      - name: App settings
+        run: scripts/mobile-env.sh
+      - name: Install
+        working-directory: apps/mobile
+        run: npm ci
+      - name: Generate the iOS project
+        working-directory: apps/mobile
+        run: npx expo prebuild --platform ios --clean
+      - name: Signing key
+        id: signing
+        run: |
+          if [ -n "$ASC_KEY_ID" ] && [ -n "$ASC_ISSUER_ID" ] && [ -n "$ASC_KEY_P8" ] && [ -n "$APPLE_TEAM_ID" ] \
+             && [ "${{ github.event_name }}" = workflow_dispatch ] && [ "${{ inputs.upload }}" != false ]; then
+            key="$RUNNER_TEMP/AuthKey_$ASC_KEY_ID.p8"
+            printf '%s\n' "$ASC_KEY_P8" > "$key"
+            echo "key=$key" >> "$GITHUB_OUTPUT"
+            echo "upload=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::App Store Connect secrets not set (or upload off): compile check only."
+            echo "upload=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Compile check (unsigned)
+        if: steps.signing.outputs.upload != 'true'
+        working-directory: apps/mobile/ios
+        run: |
+          ../../../scripts/xcodebuild-run.sh -workspace FlyAnatolia.xcworkspace -scheme FlyAnatolia -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO archive
+      - name: Archive (signed by Xcode with the API key)
+        if: steps.signing.outputs.upload == 'true'
+        working-directory: apps/mobile/ios
+        run: |
+          ../../../scripts/xcodebuild-run.sh -workspace FlyAnatolia.xcworkspace -scheme FlyAnatolia -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "${{ steps.signing.outputs.key }}" \
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
+            archive
+      - name: Upload to TestFlight
+        if: steps.signing.outputs.upload == 'true'
+        run: |
+          set -o pipefail
+          cat > "$RUNNER_TEMP/export.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>teamID</key><string>$APPLE_TEAM_ID</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>uploadSymbols</key><true/>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict>
+          </plist>
+          PLIST
+          scripts/xcodebuild-run.sh -exportArchive -archivePath "$RUNNER_TEMP/FlyAnatolia.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/export.plist" -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "${{ steps.signing.outputs.key }}" \
+            -authenticationKeyID "$ASC_KEY_ID" -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+          echo "### Uploaded build $IOS_BUILD_NUMBER to TestFlight" >> "$GITHUB_STEP_SUMMARY"
+      - name: Remove the key
+        if: always()
+        run: rm -f "$RUNNER_TEMP"/AuthKey_*.p8

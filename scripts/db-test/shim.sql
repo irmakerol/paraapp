@@ -29,8 +29,12 @@ alter default privileges in schema public grant all on sequences to anon, authen
 alter default privileges in schema public grant all on functions to anon, authenticated, service_role;
 
 create table auth.users (
+  instance_id uuid,
   id uuid primary key default gen_random_uuid(),
+  aud text,
+  role text,
   email text,
+  encrypted_password text,
   raw_user_meta_data jsonb default '{}'::jsonb,
   raw_app_meta_data jsonb default '{}'::jsonb,
   email_confirmed_at timestamptz,

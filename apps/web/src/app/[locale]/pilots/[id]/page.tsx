@@ -13,6 +13,9 @@ import { ReportButton } from '@/components/report-button';
 import { BlockButton } from '@/components/block-button';
 import { createClient } from '@/lib/supabase/server';
 import { FollowButton, MessageButton } from '../pilot-actions';
+import { sampleLabel } from '@/lib/sample';
+import { RoleBadges } from '@/components/role-badges';
+import { formatDate } from '@/lib/format';
 
 export async function generateMetadata({
   params,
@@ -24,7 +27,7 @@ export async function generateMetadata({
   if (!card) return { robots: { index: false } };
   const t = await getTranslations({ locale, namespace: 'pilots' });
   return {
-    title: card.display_name ?? t('pilot'),
+    title: sampleLabel(card.display_name, locale) ?? t('pilot'),
     description: card.bio?.slice(0, 160) ?? t('metaDescription', { name: card.display_name ?? '' }),
   };
 }
@@ -60,9 +63,8 @@ export default async function PilotPage({
       .maybeSingle();
     blocked = Boolean(data);
   }
-  const name = card?.display_name ?? t('pilot');
+  const name = sampleLabel(card?.display_name, locale) ?? t('pilot');
   const facts = [
-    card?.pilot_level ? account(`levels.${card.pilot_level}`) : null,
     card?.flying_since != null
       ? t('flyingSince', { year: card.flying_since })
       : card?.years_flying != null
@@ -93,14 +95,15 @@ export default async function PilotPage({
           </div>
         )}
         <div className="min-w-0 flex-1 space-y-1">
-          <h1 className="text-3xl font-extrabold">
-            {name}
-            {card?.is_member ? (
-              <span className="ml-2 align-middle rounded-full bg-brand-red px-2 py-0.5 text-xs font-bold text-white">
-                {account('memberBadge')}
-              </span>
-            ) : null}
-          </h1>
+          <h1 className="text-3xl font-extrabold">{name}</h1>
+          {card ? (
+            <RoleBadges
+              roles={card.roles ?? []}
+              level={card.pilot_level}
+              trainingLevel={card.training_level}
+              instructor={card.is_instructor}
+            />
+          ) : null}
           {card?.full_name && card.full_name !== card.display_name ? (
             <p className="text-muted">{card.full_name}</p>
           ) : null}
@@ -131,22 +134,38 @@ export default async function PilotPage({
         </div>
       </header>
       {card?.wings ? <p className="text-sm">{t('flies', { wings: card.wings })}</p> : null}
-      {card?.total_flights != null || card?.weight_kg != null ? (
-        <p className="text-sm">
-          {[
-            card.total_flights != null
-              ? t('totals', {
-                  hours: new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
-                    Number(card.total_flight_hours ?? 0),
-                  ),
-                  flights: card.total_flights,
-                })
-              : null,
-            card.weight_kg != null ? t('weight', { kg: card.weight_kg }) : null,
-          ]
-            .filter(Boolean)
-            .join(' · ')}
-        </p>
+      {card ? (
+        <section className="grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label={t('stats')}>
+          <Tile
+            label={t('totalHours')}
+            value={
+              card.total_flight_hours != null
+                ? new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
+                    Number(card.total_flight_hours),
+                  )
+                : '—'
+            }
+          />
+          <Tile
+            label={t('totalFlights')}
+            value={card.total_flights != null ? String(card.total_flights) : '—'}
+          />
+          <Tile
+            label={t('yearsFlyingStat')}
+            value={card.years_flying != null ? String(card.years_flying) : '—'}
+            note={
+              card.flying_since != null ? t('sinceStat', { year: card.flying_since }) : undefined
+            }
+          />
+          <Tile
+            label={t('levelStat')}
+            value={card.pilot_level ? account(`levels.${card.pilot_level}`) : t('noLevel')}
+            note={t('memberSince', { date: formatDate(card.created_at, locale) })}
+          />
+        </section>
+      ) : null}
+      {card?.weight_kg != null ? (
+        <p className="text-sm">{t('weight', { kg: card.weight_kg })}</p>
       ) : null}
       {card?.bio ? <p className="whitespace-pre-line">{card.bio}</p> : null}
       {card ? null : <p className="text-sm text-muted">{t('privateProfile')}</p>}
@@ -172,6 +191,16 @@ export default async function PilotPage({
           <ReportButton targetType="user" targetId={id} />
         </div>
       ) : null}
+    </div>
+  );
+}
+
+function Tile({ label, value, note }: { label: string; value: string; note?: string }) {
+  return (
+    <div className="rounded-2xl border border-border bg-card p-4">
+      <p className="text-xs font-semibold uppercase tracking-wide text-muted">{label}</p>
+      <p className="mt-1 text-2xl font-extrabold tabular-nums">{value}</p>
+      {note ? <p className="text-xs text-muted">{note}</p> : null}
     </div>
   );
 }

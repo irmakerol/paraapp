@@ -6,7 +6,7 @@
   "nav": {
     "home": "Ana sayfa",
     "news": "Haberler",
-    "tips": "İpuçları",
+    "tips": "Yer Okulu",
     "market": "Ekipman pazarı",
     "sites": "Uçuş alanları",
     "logbook": "Uçuş defteri",
@@ -27,7 +27,10 @@
     "safety": "Güvenlik",
     "rides": "Yolculuklar",
     "sosLabel": "SOS: acil yardım ve konumunuz",
-    "trips": "Geziler"
+    "trips": "Geziler",
+    "flyNow": "Şimdi Uç",
+    "flying": "Uçuşta",
+    "notices": "Duyurular"
   },
   "footer": {
     "privacyNotice": "Aydınlatma metni",
@@ -49,7 +52,7 @@
         "text": "Duyurular, geziler ve güvenlik uyarıları."
       },
       "tips": {
-        "title": "İpuçları",
+        "title": "Yer Okulu",
         "text": "Kalkış, termik, XC, meteoroloji ve SIV; başlangıçtan ileri seviyeye."
       },
       "market": {
@@ -62,7 +65,7 @@
       },
       "sites": {
         "title": "Uçuş alanları",
-        "text": "Rüzgâr yönleri ve uçulabilirlik bilgisiyle kalkış ve iniş alanları."
+        "text": "Kalkış ve iniş alanları; güncel rüzgâr hızı, yönü ve yağış bilgisiyle."
       },
       "safety": {
         "title": "Güvenlik",
@@ -205,11 +208,13 @@
       "photoHelp": "JPEG, PNG veya WebP. Yüklemeden önce küçültür ve konum bilgisini sileriz.",
       "displayName": "Görünen ad",
       "fullName": "Ad soyad",
-      "country": "Ülke kodu",
-      "countryHelp": "İki harf, ör. TR",
+      "country": "Ülke",
       "city": "Şehir",
       "homeSite": "Ana uçuş alanı",
       "pilotLevel": "Pilot seviyesi",
+      "trainingLevel": "Hedef seviye (eğitim)",
+      "trainingLevelHelp": "Öğrenci pilotlar: eğitimini aldığınız seviye. Yalnızca mevcut seviyenizin üstündeki seviyeler listelenir.",
+      "trainingLevelTop": "Eğitim alınacak daha yüksek bir seviye yok.",
       "levelNone": "Belirtilmedi",
       "levels": {
         "student": "Öğrenci",
@@ -252,7 +257,19 @@
       "weightHelp": "Ekipmansız kendi kilonuz. Siz değiştirmedikçe gizli kalır.",
       "totalHours": "Toplam uçuş saati",
       "totalFlights": "Uçuş sayısı",
-      "totalsHelp": "Burada kaydetmediğiniz uçuşlar dahil bugüne kadarki toplamlarınız. İçe aktardığınız ya da eklediğiniz uçuşlar bunun üstüne eklenebilir."
+      "totalsHelp": "Burada kaydetmediğiniz uçuşlar dahil bugüne kadarki toplamlarınız. İçe aktardığınız ya da eklediğiniz uçuşlar bunun üstüne eklenebilir.",
+      "licenceBody": "Lisansı veren kurum",
+      "licenceBodies": {
+        "thk": "THK / THSF",
+        "appi": "APPI",
+        "ushpa": "USHPA",
+        "bhpa": "BHPA",
+        "ffvl": "FFVL",
+        "dhv": "DHV",
+        "other": "Diğer"
+      },
+      "isInstructor": "Eğitmenim",
+      "isInstructorHelp": "Pilot seviyenden ayrı olarak gösterilir (ör. P5 ve eğitmen). Yer Okulu ve gezi düzenleme yetkisini kulüp yönetimi verir."
     },
     "privacy": {
       "consentsTitle": "Onaylar",
@@ -348,7 +365,7 @@
     "noNews": "Henüz haber yok."
   },
   "tips": {
-    "title": "İpuçları",
+    "title": "Yer Okulu",
     "lead": "İlk kalkışından XC'ye kadar eğitmenlerden ve deneyimli pilotlardan bilgiler.",
     "allCategories": "Tüm kategoriler",
     "allLevels": "Tüm seviyeler",
@@ -392,9 +409,10 @@
     },
     "videoInvalid": "Yalnızca YouTube veya Vimeo bağlantıları desteklenir.",
     "noTips": "Burada henüz ipucu yok.",
-    "safety": "İpuçları yetkin bir eğitmenle alınan eğitimin yerini tutmaz.",
+    "safety": "Yer Okulu içerikleri yetkin bir eğitmenle alınan eğitimin yerini tutmaz.",
     "loadVideo": "{host} videosunu oynat",
-    "videoNotice": "Video yalnızca oynat düğmesine bastığınızda {host} üzerinden yüklenir. {host} bu durumda çerez kullanabilir ve IP adresinizi görebilir."
+    "videoNotice": "Video yalnızca oynat düğmesine bastığınızda {host} üzerinden yüklenir. {host} bu durumda çerez kullanabilir ve IP adresinizi görebilir.",
+    "add": "Ders ekle"
   },
   "market": {
     "title": "Ekipman pazarı",
@@ -528,7 +546,7 @@
     "title": "Yönetim",
     "dashboard": "Genel bakış",
     "news": "Haberler",
-    "tips": "İpuçları",
+    "tips": "Yer Okulu",
     "reports": "Şikâyetler",
     "users": "Kullanıcılar",
     "requests": "Veri talepleri",
@@ -597,14 +615,16 @@
         "news_comment": "Yorum",
         "tip": "İpucu",
         "ride": "Yolculuk ilanı",
-        "event": "Etkinlik"
+        "event": "Etkinlik",
+        "notice": "Duyuru"
       },
       "statuses": {
         "open": "Açık",
         "actioned": "İşlem yapıldı",
         "dismissed": "Reddedildi"
       },
-      "removeRide": "Yolculuk ilanını kaldır"
+      "removeRide": "Yolculuk ilanını kaldır",
+      "removeNotice": "Duyuruyu kaldır"
     },
     "usersAdmin": {
       "search": "Ada göre ara",
@@ -616,7 +636,102 @@
       "verifyMember": "Üye olarak doğrula",
       "ban": "Engelle",
       "unban": "Engeli kaldır",
-      "banned": "Engelli"
+      "banned": "Engelli",
+      "edit": "Düzenle",
+      "back": "Kullanıcılara dön",
+      "photo": "Profil fotoğrafı",
+      "noPhoto": "Fotoğraf yok",
+      "removePhoto": "Fotoğrafı kaldır",
+      "removePhotoHelp": "Uygunsuz bir fotoğrafı siler. Kişi yenisini yükleyebilir.",
+      "auditNote": "Yaptığın değişiklikler denetim kaydına yazılır.",
+      "notAllowed": "Bunu yalnızca süper yönetici yapabilir.",
+      "lastSeen": "son görülme {time}",
+      "neverSeen": "hiç görülmedi",
+      "sections": "Bölümler",
+      "profileSection": "Profil",
+      "rolesSection": "Roller",
+      "flightsSection": "Uçuşlar",
+      "equipmentSection": "Ekipman",
+      "adsSection": "Pazar ilanları",
+      "noticesSection": "Duyurular",
+      "dangerSection": "Engelleme ve silme",
+      "email": "E-posta",
+      "memberSince": "Kayıt",
+      "ageGroup": "Yaş grubu",
+      "ageGroups": {
+        "adult": "Yetişkin",
+        "minor": "18 yaş altı"
+      },
+      "statuses": {
+        "onboarding": "Kayıt tamamlanmadı",
+        "active": "Aktif",
+        "deletion_requested": "Silinme bekliyor",
+        "pending_guardian": "Veli onayı bekliyor"
+      },
+      "language": "Dil",
+      "licence": "Lisans",
+      "licenceNumberSaved": "lisans numarası kayıtlı",
+      "licenceNumberMissing": "lisans numarası yok",
+      "reportsAbout": "{count, plural, =0 {Hakkında şikâyet yok} other {Hakkında # şikâyet}}",
+      "stats": {
+        "logged": "Kayıtlı uçuş",
+        "loggedTime": "Kayıtlı uçuş süresi",
+        "declared": "Profildeki toplam",
+        "declaredValue": "{flights} uçuş · {hours} saat",
+        "last": "Son uçuş",
+        "maxAlt": "En yüksek irtifa",
+        "maxDistance": "En uzun mesafe",
+        "none": "—"
+      },
+      "flightsLead": "Son 200 uçuş. İzler yalnızca pilotun kendisine açıktır; burada gösterilmez.",
+      "flightsEmpty": "Kayıtlı uçuş yok.",
+      "columns": {
+        "date": "Tarih",
+        "site": "Alan",
+        "duration": "Süre",
+        "distance": "Mesafe",
+        "maxAlt": "Maks. irtifa",
+        "glider": "Kanat",
+        "visibility": "Görünürlük",
+        "source": "Kaynak",
+        "kind": "Tür",
+        "model": "Model",
+        "check": "Son kontrol",
+        "repack": "Son katlama",
+        "title": "Başlık",
+        "status": "Durum",
+        "price": "Fiyat",
+        "category": "Kategori",
+        "created": "Tarih"
+      },
+      "sources": {
+        "manual": "Elle",
+        "igc": "IGC",
+        "gpx": "GPX",
+        "app": "Uygulama"
+      },
+      "equipmentEmpty": "Kayıtlı ekipman yok.",
+      "adsEmpty": "İlanı yok.",
+      "noticesEmpty": "Duyurusu yok.",
+      "removed": "Kaldırıldı",
+      "removeAd": "İlanı kaldır",
+      "deleteNotice": "Duyuruyu sil",
+      "open": "Açık",
+      "closed": "Kapalı",
+      "banLead": "Engellenen kişi giriş yapamaz; engeli istediğin zaman kaldırabilirsin.",
+      "banReason": "Sebep (isteğe bağlı, denetim kaydına yazılır)",
+      "isBanned": "Bu kullanıcı şu an engelli.",
+      "deleteTitle": "Hesabı sil",
+      "deleteLead": "Profil hemen anonimleştirilir, giriş kapanır, yüklediği fotoğraf ve dosyalar silinir. Kalan veriler {days} gün sonra tamamen silinir. Geri alınamaz.",
+      "deleteReason": "Silme sebebi (denetim kaydına yazılır)",
+      "deleteConfirm": "Bu hesabın silineceğini anlıyorum.",
+      "deleteButton": "Hesabı kalıcı olarak sil",
+      "deleted": "Hesap silindi. Kalan veriler 30 gün içinde tamamen temizlenecek.",
+      "selfNote": "Kendi hesabını buradan silemez veya engelleyemezsin.",
+      "adminNote": "Yöneticileri yalnızca süper yönetici düzenleyebilir; yöneticiler engellenemez.",
+      "viewAudited": "Bu sayfayı açman denetim kaydına yazılır.",
+      "isInstructor": "Eğitmen",
+      "isInstructorHelp": "Kişinin profilinde eğitmen rozeti gösterir. Düzenleme yetkisi (Yer Okulu, geziler) Roller bölümündeki Eğitmen rolüyle verilir."
     },
     "requestsAdmin": {
       "new": "E-postayla gelen talebi kaydet",
@@ -832,16 +947,79 @@
       "announceHelp": "Bu geziye bağlantı veren taslak bir haber oluşturur. Yayınlamadan önce düzenleyebilirsiniz.",
       "announcedHelp": "Bu gezinin zaten bir haberi var.",
       "openAnnouncement": "Haberi aç"
+    },
+    "groups": "Gruplar",
+    "broadcast": "Toplu mesaj",
+    "groupsAdmin": {
+      "title": "Gruplar",
+      "lead": "Kişileri gruplara ayır (ör. \"Öğrenciler 2026\", \"Tandem ekibi\"). Toplu mesajları bir gruba gönderebilirsin.",
+      "new": "Yeni grup",
+      "name": "Grup adı",
+      "namePlaceholder": "ör. Öğrenciler 2026",
+      "description": "Açıklama (isteğe bağlı)",
+      "create": "Grubu oluştur",
+      "nameTaken": "Bu isimde bir grup zaten var.",
+      "memberCount": "{count, plural, =0 {üye yok} other {# kişi}}",
+      "empty": "Henüz grup yok.",
+      "back": "Gruplara dön",
+      "members": "Üyeler",
+      "addPerson": "Kişi ekle",
+      "choosePerson": "Bir kişi seç",
+      "add": "Ekle",
+      "remove": "Çıkar",
+      "noMembers": "Bu grupta henüz kimse yok.",
+      "delete": "Grubu sil"
+    },
+    "broadcastAdmin": {
+      "lead": "Herkese, bir role ya da bir gruba mesaj gönder. Mesaj kişilerin Mesajlar sayfasında görünür; bildirimlere izin verenlere telefon bildirimi de gider.",
+      "audience": "Kime",
+      "audiences": {
+        "all": "Herkes",
+        "role": "Bir rol",
+        "group": "Bir grup"
+      },
+      "role": "Rol",
+      "group": "Grup",
+      "choose": "Seç",
+      "noGroups": "Önce Gruplar bölümünde bir grup oluştur.",
+      "title": "Başlık",
+      "body": "Mesaj",
+      "bodyHelp": "Düz metin. En fazla 4000 karakter.",
+      "send": "Gönder",
+      "sent": "Gönderildi: {count} kişi.",
+      "history": "Gönderilen mesajlar",
+      "noHistory": "Henüz mesaj gönderilmedi.",
+      "readStats": "{read}/{total} okundu"
+    },
+    "activity": {
+      "title": "Aktivite kaydı",
+      "lastSeen": "son görülme {time}",
+      "neverSeen": "hiç görülmedi",
+      "empty": "Kayıtlı aktivite yok.",
+      "retention": "Kayıtlar 90 gün saklanır. Mesaj içerikleri ve konumlar kaydedilmez.",
+      "kinds": {
+        "visit": "Siteye/uygulamaya girdi",
+        "flight_added": "Uçuş ekledi",
+        "ad_posted": "Pazara ilan verdi",
+        "event_rsvp": "Etkinliğe katılım bildirdi",
+        "trip_registered": "Geziye kaydoldu",
+        "comment_posted": "Habere yorum yaptı",
+        "ride_posted": "Yolculuk ilanı verdi",
+        "notice_posted": "Duyuru verdi"
+      }
     }
   },
   "roles": {
-    "pilot": "Pilot",
-    "member": "Üye",
+    "pilot": "Pilot (lisanslı)",
+    "member": "Misafir üye",
     "instructor": "Eğitmen",
     "moderator": "Moderatör",
     "safety_officer": "Güvenlik sorumlusu",
     "admin": "Yönetici",
-    "trip_organiser": "Gezi organizatörü"
+    "trip_organiser": "Gezi organizatörü",
+    "guide": "Rehber",
+    "super_admin": "Süper yönetici",
+    "student_pilot": "Öğrenci pilot"
   },
   "push": {
     "newMessage": "{name} size mesaj gönderdi",
@@ -882,7 +1060,6 @@
     "lead": "Uçuşlarınız, rekorlarınız ve ekipmanınız tek yerde.",
     "importButton": "IGC/GPX içe aktar",
     "addManual": "Elle uçuş ekle",
-    "equipmentButton": "Ekipmanım",
     "myPilotPage": "Pilot sayfam",
     "exportCsv": "Uçuş defterini indir (CSV)",
     "empty": "Henüz uçuş yok. Cihazınızdan ya da telefon uygulamanızdan IGC veya GPX dosyalarını içe aktarın ya da elle uçuş ekleyin.",
@@ -995,7 +1172,9 @@
       "together": "Birlikte oynat",
       "togetherHelp": "Aynı gün bu kalkıştan yapılan diğer uçuşlar. Aynı saatte uçurmak için birini işaretleyin.",
       "loadFailed": "Bu uçuş yüklenemedi.",
-      "terrainCredit": "3D arazi: AWS Open Data üzerindeki Terrain Tiles (Mapzen)."
+      "terrainCredit": "3D arazi: AWS Open Data üzerindeki Terrain Tiles (Mapzen).",
+      "satellite": "Uydu",
+      "satelliteCredit": "Uydu görüntüsü: Sentinel-2 cloudless – s2maps.eu, EOX IT Services GmbH (değiştirilmiş Copernicus Sentinel 2023 verisi içerir)."
     },
     "xc": {
       "title": "Mesafe (XC) puanı",
@@ -1098,7 +1277,8 @@
       "W": "B",
       "NW": "KB"
     },
-    "weather": "Hava durumu ve uçulabilirlik"
+    "weather": "Hava durumu ve uçulabilirlik",
+    "altitudeDiff": "{m} m irtifa farkı"
   },
   "pilots": {
     "pilot": "Pilot",
@@ -1124,35 +1304,49 @@
     "you": "Siz",
     "flyingSince": "{year} yılından beri uçuyor",
     "totals": "{flights} uçuşta {hours} saat",
-    "weight": "{kg} kg"
+    "weight": "{kg} kg",
+    "viewPublic": "Herkese açık profilimi gör",
+    "totalHours": "Toplam uçuş saati",
+    "totalFlights": "Toplam uçuş",
+    "yearsFlyingStat": "Uçuş yılı",
+    "sinceStat": "{year} yılından beri",
+    "memberSince": "Üyelik: {date}",
+    "levelStat": "Seviye",
+    "noLevel": "Belirtilmedi",
+    "badge": {
+      "pilot": "Pilot ({level})",
+      "pilotNoLevel": "Pilot",
+      "training": "{level} eğitiminde",
+      "trainingNoLevel": "Öğrenci pilot"
+    }
   },
   "weather": {
     "today": "Bugün",
-    "ratings": {
-      "good": "Uçulabilir",
-      "marginal": "Sınırda",
-      "no": "Uçulamaz"
-    },
-    "reasons": {
-      "rain": "yağmur",
-      "tooWindy": "çok rüzgârlı",
-      "gusty": "hamleli",
-      "crossWind": "rüzgâr yamaca uygun değil",
-      "strongish": "kuvvetli rüzgâr",
-      "overdevelopment": "aşırı gelişme riski",
-      "noData": "veri yok"
-    },
-    "goodHours": "{hours, plural, =0 {iyi saat yok} other {# iyi saat}}",
     "hourly": "Saat saat",
     "time": "Saat",
     "wind": "Rüzgâr (km/sa)",
-    "gusts": "Hamle",
+    "gusts": "Hamle (km/sa)",
     "rain": "Yağış (mm)",
-    "rating": "Değerlendirme",
     "unavailable": "Tahmin şu anda alınamıyor.",
-    "disclaimer": "Bir hava modelinden kaba bir yönlendirme, uçuş kararı değildir. Koşulları her zaman yerinde kontrol edin ve yerel pilotlara danışın.",
+    "disclaimer": "Bir hava modelinin tahmini (09:00–18:00). Koşulları her zaman yerinde kontrol edin ve yerel pilotlara danışın.",
     "updated": "Güncelleme: {time}.",
-    "credit": "Hava verileri: Open-Meteo.com"
+    "credit": "Hava verileri: Open-Meteo.com",
+    "kmh": "km/sa",
+    "windLabel": "Rüzgâr",
+    "from": "{dir} yönünden",
+    "gustsShort": "Hamle",
+    "rainShort": "Yağış",
+    "direction": "Yön",
+    "compass": {
+      "N": "K",
+      "NE": "KD",
+      "E": "D",
+      "SE": "GD",
+      "S": "G",
+      "SW": "GB",
+      "W": "B",
+      "NW": "KB"
+    }
   },
   "safety": {
     "title": "Güvenlik",
@@ -1527,5 +1721,97 @@
       "noParticipants": "Henüz eklenecek kabul edilmiş pilot yok.",
       "groupFailed": "Grup sohbeti oluşturulamadı."
     }
+  },
+  "fly": {
+    "title": "Şimdi uç",
+    "lead": "Uçuşunu telefonundaki Fly Anatolia uygulamasıyla kaydet: GPS, vario sesi, irtifa ve hız.",
+    "flyingNow": "Şu an uçuştasın",
+    "flyingSince": "Kayıt başladı: {time}",
+    "flyingHelp": "Kaydı telefonundaki uygulamadan durdur. İndikten sonra uçuş defterine otomatik yüklenir.",
+    "openApp": "Uygulamayı aç",
+    "noAppTitle": "Uygulama telefonunda yok mu?",
+    "noAppBody": "Fly Anatolia iPhone uygulaması şu an kulüp üyeleri için TestFlight ile deneniyor. Katılmak için kulübe yazın.",
+    "afterTitle": "Başka bir aletle mi uçtun?",
+    "afterBody": "Uçuşunu sonradan IGC veya GPX dosyası olarak uçuş defterine ekleyebilirsin.",
+    "import": "Uçuş dosyası yükle",
+    "notOpened": "Uygulama açılmadı. Ana ekranınızdaki Fly Anatolia uygulamasını (TestFlight ile yüklenen) doğrudan açın. Web sitesini ana ekrana eklediyseniz, o simge uygulama değil web sitesidir; uçuş kaydı yalnızca uygulamada yapılır."
+  },
+  "clubMessages": {
+    "title": "Kulüpten",
+    "unread": "okunmadı",
+    "back": "Mesajlara dön",
+    "from": "Fly Anatolia"
+  },
+  "notices": {
+    "title": "Duyurular",
+    "lead": "Yer var mı, harness mı arıyorsun, uçuş arkadaşı mı? Kulüp üyelerinin ilan panosu.",
+    "marketTitle": "Ekipman Pazarı",
+    "marketLead": "Kanat, harness, yedek paraşüt ve alet: kulüp üyelerinin satılık ekipmanı.",
+    "marketAll": "Tüm pazar ilanları",
+    "marketNew": "Satış ilanı ver",
+    "marketEmpty": "Şu an pazarda ilan yok.",
+    "boardTitle": "İlan panosu",
+    "boardLead": "Bu panoyu yalnızca yetişkin üyeler görür. Duyurular 30 gün sonra kendiliğinden kapanır; istersen uzatabilirsin.",
+    "signInForBoard": "İlan panosunu görmek ve duyuru vermek için giriş yap.",
+    "signIn": "Giriş yap",
+    "adultsOnly": "İlan panosu yalnızca yetişkin üyeler içindir. Ekipman Pazarı'na göz atabilirsin.",
+    "new": "Duyuru ver",
+    "filter": "Duyuruları filtrele",
+    "all": "Tümü",
+    "anySite": "Tüm alanlar",
+    "anyCategory": "Tüm kategoriler",
+    "apply": "Filtrele",
+    "clear": "Temizle",
+    "kinds": {
+      "offer": "Var / veriyorum",
+      "request": "Arıyorum"
+    },
+    "kindsShort": {
+      "offer": "Var",
+      "request": "Arıyor"
+    },
+    "categories": {
+      "transport": "Ulaşım",
+      "gear": "Ekipman",
+      "buddy": "Uçuş arkadaşı",
+      "training": "Eğitim ve hizmet",
+      "lost_found": "Kayıp / bulunan",
+      "other": "Diğer"
+    },
+    "fields": {
+      "kind": "Duyuru türü",
+      "category": "Kategori",
+      "title": "Başlık",
+      "titleHelp": "Örn. \"Cumartesi Babadağ'a 2 kişilik yer var\"",
+      "body": "Açıklama (isteğe bağlı)",
+      "site": "Uçuş alanı (isteğe bağlı)",
+      "place": "Yer (isteğe bağlı)",
+      "placeHelp": "Bir ilçe veya buluşma noktası; ev adresin değil.",
+      "date": "Tarih (isteğe bağlı)",
+      "seats": "Koltuk sayısı",
+      "price": "Fiyat (isteğe bağlı)",
+      "currency": "Para birimi",
+      "photo": "Fotoğraf (isteğe bağlı)",
+      "photoHelp": "Fotoğraf telefonunda küçültülür, konum bilgisi silinir.",
+      "removePhoto": "Fotoğrafı kaldır"
+    },
+    "gearHint": "Satılık ekipman için Ekipman Pazarı'nda ilan vermen daha çok kişiye ulaşır.",
+    "privacyNote": "Diğer yetişkin üyeler bu duyuruyu adınla görür. Ayrıntıları özel mesajla konuş.",
+    "post": "Yayınla",
+    "posted": "Duyurun yayında.",
+    "empty": "Bu filtrelere uyan duyuru yok.",
+    "yours": "Senin duyurun",
+    "closed": "Kapandı",
+    "expired": "Süresi doldu",
+    "expires": "{date} tarihinde kapanır",
+    "close": "Kapat",
+    "reopen": "Yeniden aç",
+    "renew": "30 gün uzat",
+    "mine": "Duyurularım",
+    "mineLead": "Kapanmış ya da süresi dolmuş duyuruların. Yeniden yayınlayabilir ya da silebilirsin.",
+    "seatsCount": "{count, plural, other {# koltuk}}",
+    "photoAlt": "Duyuru fotoğrafı: {title}",
+    "photoError": "Fotoğraf yüklenemedi. Tekrar dene ya da fotoğrafsız yayınla.",
+    "adultsOnlyError": "İlan panosu yalnızca yetişkin üyeler içindir."
   }
 }

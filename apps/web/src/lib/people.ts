@@ -1,6 +1,8 @@
 import 'server-only';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { getLocale } from 'next-intl/server';
 import type { Database } from '@/lib/supabase/database.types';
+import { sampleLabel } from '@/lib/sample';
 
 /**
  * Display names through the masked `profile_cards` view, so privacy settings apply.
@@ -12,8 +14,11 @@ export async function displayNames(
 ): Promise<Map<string, string>> {
   const unique = [...new Set(ids.filter((id): id is string => Boolean(id)))];
   if (!unique.length) return new Map();
-  const { data } = await supabase.from('profile_cards').select('id, display_name').in('id', unique);
-  return new Map((data ?? []).map((p) => [p.id!, p.display_name!]));
+  const [{ data }, locale] = await Promise.all([
+    supabase.from('profile_cards').select('id, display_name').in('id', unique),
+    getLocale(),
+  ]);
+  return new Map((data ?? []).map((p) => [p.id!, sampleLabel(p.display_name!, locale)]));
 }
 
 /** People the user follows, by name: the pick list for group chats. */

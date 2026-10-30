@@ -59,7 +59,7 @@ test('community sections render in both languages', async ({ page }) => {
   await page.goto('/en/news');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('News');
   await page.goto('/en/tips');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Tips & tricks');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Ground School');
   await expect(page.getByRole('link', { name: 'Cross-country' })).toBeVisible();
 });
 
@@ -81,7 +81,7 @@ test('messages, posting ads and admin require sign-in', async ({ page }) => {
     '/en/messages',
     '/en/market/new',
     '/en/admin',
-    '/en/tips/suggest',
+    '/en/admin/tips/new',
     '/en/trips/mine',
   ]) {
     await page.goto(path);
@@ -108,7 +108,7 @@ test('logbook pages require sign-in', async ({ page }) => {
     '/en/logbook',
     '/en/logbook/import',
     '/en/logbook/new',
-    '/en/logbook/equipment',
+    '/en/account/equipment',
   ]) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
@@ -130,8 +130,17 @@ test('safety, events and SOS pages render without an account', async ({ page }) 
   await expect(page.getByRole('link', { name: 'Call 112' })).toHaveAttribute('href', 'tel:112');
 });
 
-test('rides, reporting and group chats require sign-in', async ({ page }) => {
-  for (const path of ['/en/rides', '/en/safety/report', '/en/messages/new-group']) {
+test('the notice board shows the gear market and asks guests to sign in', async ({ page }) => {
+  await page.goto('/en/rides');
+  await expect(page).toHaveURL(/\/en\/notices\?category=transport$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Notices');
+  await expect(page.getByRole('heading', { name: 'Gear Market' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'All market listings' })).toBeVisible();
+  await expect(page.getByText('Sign in to see the notice board')).toBeVisible();
+});
+
+test('reporting and group chats require sign-in', async ({ page }) => {
+  for (const path of ['/en/safety/report', '/en/messages/new-group']) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/en\/auth\/sign-in$/);
   }

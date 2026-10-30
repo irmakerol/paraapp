@@ -4,6 +4,7 @@ import { DIFFICULTIES, TIP_CATEGORIES, type Difficulty, type TipCategory } from 
 import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getViewer } from '@/lib/session';
+import { canUse } from '@/lib/staff';
 import { buttonClass, Card, PageTitle } from '@/components/ui';
 import { Pagination } from '@/components/pagination';
 import { TipCard } from '@/components/tip-card';
@@ -71,9 +72,11 @@ export default async function TipsPage({
       <div className="mb-6 flex flex-wrap gap-2">
         {viewer ? (
           <>
-            <Link href="/tips/suggest" className={buttonClass('primary')}>
-              {t('suggest')}
-            </Link>
+            {canUse(viewer, 'tips') ? (
+              <Link href="/admin/tips/new" className={buttonClass('primary')}>
+                {t('add')}
+              </Link>
+            ) : null}
             <Link href="/tips/saved" className={buttonClass('secondary')}>
               {t('saved')}
             </Link>

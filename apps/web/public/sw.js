@@ -9,7 +9,7 @@
  * - Build files (/_next/static) are cached because their names change with every build.
  * - Nothing else (API, server actions, uploads, maps) is touched.
  */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const STATIC_CACHE = `paraapp-static-${VERSION}`;
 const PAGE_CACHE = `paraapp-pages-${VERSION}`;
 const MAX_PAGES = 40;
@@ -58,7 +58,12 @@ async function page(request) {
   const url = new URL(request.url);
   const cache = await caches.open(PAGE_CACHE);
   try {
-    const res = await fetch(request);
+    // One quick retry: a single failed request (e.g. while a new version goes live) should not
+    // put up the offline page.
+    const res = await fetch(request).catch(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      return fetch(request);
+    });
     if (
       res.ok &&
       res.type === 'basic' &&

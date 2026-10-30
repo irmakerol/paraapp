@@ -4,6 +4,7 @@ import { Link } from '@/i18n/navigation';
 import { publicUrl } from '@/lib/storage';
 import { formatPrice } from '@/lib/format';
 import { coverPhoto } from '@/lib/ads';
+import { sampleLabel } from '@/lib/sample';
 
 export interface AdSummary {
   id: string;
@@ -63,7 +64,7 @@ export async function AdCard({ ad, locale }: { ad: AdSummary; locale: string }) 
           {ad.certification ? ` · ${ad.certification}` : ''}
           {ad.size ? ` · ${ad.size}` : ''}
         </p>
-        <h2 className="font-bold leading-snug">{ad.title}</h2>
+        <h2 className="font-bold leading-snug">{sampleLabel(ad.title, locale)}</h2>
         <p className="mt-auto pt-2 text-lg font-extrabold">
           {formatPrice(Number(ad.price), ad.currency, locale)}
         </p>

@@ -14,7 +14,7 @@ interface Target {
   body?: string | null;
   href?: string;
   offenderId: string | null;
-  actions: ('hide_comment' | 'remove_ad' | 'unpublish_tip' | 'remove_ride')[];
+  actions: ('hide_comment' | 'remove_ad' | 'unpublish_tip' | 'remove_ride' | 'remove_notice')[];
 }
 
 export default async function ReportPage({
@@ -98,6 +98,22 @@ export default async function ReportPage({
           href: '/rides',
           offenderId: data.user_id,
           actions: ['remove_ride'],
+        };
+      break;
+    }
+    case 'notice': {
+      const { data } = await supabase
+        .from('notices')
+        .select('id, title, body, user_id')
+        .eq('id', report.target_id)
+        .maybeSingle();
+      if (data)
+        target = {
+          title: data.title,
+          body: data.body,
+          href: '/notices',
+          offenderId: data.user_id,
+          actions: ['remove_notice'],
         };
       break;
     }
@@ -251,6 +267,9 @@ export default async function ReportPage({
                 : null}
               {target.actions.includes('remove_ride')
                 ? actionButton('remove_ride', t('removeRide'))
+                : null}
+              {target.actions.includes('remove_notice')
+                ? actionButton('remove_notice', t('removeNotice'))
                 : null}
               {target.actions.includes('unpublish_tip')
                 ? actionButton('unpublish_tip', t('unpublishTip'))

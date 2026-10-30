@@ -62,10 +62,15 @@ export type Database = {
           age_group: Database['public']['Enums']['age_group'] | null;
           status: Database['public']['Enums']['account_status'];
           created_at: Timestamp;
+          last_seen_at: Timestamp | null;
+          is_instructor: boolean;
+          training_level: Database['public']['Enums']['pilot_level'] | null;
           updated_at: Timestamp;
         };
         Insert: never;
         Update: {
+          is_instructor?: boolean;
+          training_level?: Database['public']['Enums']['pilot_level'] | null;
           display_name?: string;
           full_name?: string | null;
           avatar_path?: string | null;
@@ -92,10 +97,11 @@ export type Database = {
           user_id: string;
           birth_date: string | null;
           licence_number_enc: string | null;
+          licence_body: string | null;
           updated_at: Timestamp;
         };
         Insert: never;
-        Update: { licence_number_enc?: string | null };
+        Update: { licence_number_enc?: string | null; licence_body?: string | null };
         Relationships: [];
       };
       legal_documents: {
@@ -210,6 +216,80 @@ export type Database = {
         Insert: never;
         Update: never;
         Relationships: [];
+      };
+
+      active_flights: {
+        Row: {
+          user_id: string;
+          started_at: Timestamp;
+          updated_at: Timestamp;
+        };
+        Insert: { user_id: string; started_at?: Timestamp; updated_at?: Timestamp };
+        Update: { started_at?: Timestamp; updated_at?: Timestamp };
+        Relationships: [];
+      };
+      user_activity: {
+        Row: { id: number; user_id: string; kind: string; ref: string | null; created_at: Timestamp };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      user_groups: {
+        Row: {
+          id: string;
+          name: string;
+          description: string | null;
+          created_by: string | null;
+          created_at: Timestamp;
+        };
+        Insert: { name: string; description?: string | null; created_by: string };
+        Update: { name?: string; description?: string | null };
+        Relationships: [];
+      };
+      user_group_members: {
+        Row: { group_id: string; user_id: string; added_by: string | null; added_at: Timestamp };
+        Insert: { group_id: string; user_id: string; added_by: string };
+        Update: never;
+        Relationships: [
+          {
+            foreignKeyName: 'user_group_members_group_id_fkey';
+            columns: ['group_id'];
+            isOneToOne: false;
+            referencedRelation: 'user_groups';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      club_messages: {
+        Row: {
+          id: string;
+          sender_id: string | null;
+          audience: 'all' | 'role' | 'group';
+          audience_role: Database['public']['Enums']['app_role'] | null;
+          audience_group: string | null;
+          audience_label: string | null;
+          title: string;
+          body: string;
+          recipient_count: number;
+          created_at: Timestamp;
+        };
+        Insert: never;
+        Update: never;
+        Relationships: [];
+      };
+      club_message_recipients: {
+        Row: { message_id: string; user_id: string; read_at: Timestamp | null };
+        Insert: never;
+        Update: { read_at?: Timestamp | null };
+        Relationships: [
+          {
+            foreignKeyName: 'club_message_recipients_message_id_fkey';
+            columns: ['message_id'];
+            isOneToOne: false;
+            referencedRelation: 'club_messages';
+            referencedColumns: ['id'];
+          },
+        ];
       };
 
       news: {
@@ -1049,6 +1129,64 @@ export type Database = {
           },
         ];
       };
+      notices: {
+        Row: {
+          id: string;
+          user_id: string;
+          kind: Database['public']['Enums']['notice_kind'];
+          category: Database['public']['Enums']['notice_category'];
+          title: string;
+          body: string | null;
+          site_id: string | null;
+          place_text: string | null;
+          notice_date: string | null;
+          seats: number | null;
+          price: number | null;
+          currency: string | null;
+          photo_path: string | null;
+          closed: boolean;
+          expires_at: Timestamp;
+          created_at: Timestamp;
+        };
+        Insert: {
+          user_id: string;
+          kind: Database['public']['Enums']['notice_kind'];
+          category: Database['public']['Enums']['notice_category'];
+          title: string;
+          body?: string | null;
+          site_id?: string | null;
+          place_text?: string | null;
+          notice_date?: string | null;
+          seats?: number | null;
+          price?: number | null;
+          currency?: string | null;
+          photo_path?: string | null;
+        };
+        Update: {
+          kind?: Database['public']['Enums']['notice_kind'];
+          category?: Database['public']['Enums']['notice_category'];
+          title?: string;
+          body?: string | null;
+          site_id?: string | null;
+          place_text?: string | null;
+          notice_date?: string | null;
+          seats?: number | null;
+          price?: number | null;
+          currency?: string | null;
+          photo_path?: string | null;
+          closed?: boolean;
+          expires_at?: Timestamp;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notices_site_id_fkey';
+            columns: ['site_id'];
+            isOneToOne: false;
+            referencedRelation: 'sites';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       rides: {
         Row: {
           id: string;
@@ -1137,6 +1275,9 @@ export type Database = {
           weight_kg: number | null;
           total_flight_hours: number | null;
           total_flights: number | null;
+          roles: string[];
+          is_instructor: boolean;
+          training_level: Database["public"]["Enums"]["pilot_level"] | null;
         };
         Relationships: [];
       };
@@ -1249,16 +1390,59 @@ export type Database = {
         Returns: Database['public']['Tables']['messages']['Row'][];
       };
       ban_user: { Args: { p_user: string; p_until: Timestamp | null; p_reason: string }; Returns: undefined };
+      touch_last_seen: { Args: Record<string, never>; Returns: undefined };
+      send_club_message: {
+        Args: {
+          p_audience: 'all' | 'role' | 'group';
+          p_role: Database['public']['Enums']['app_role'] | null;
+          p_group: string | null;
+          p_title: string;
+          p_body: string;
+        };
+        Returns: string;
+      };
+      admin_update_profile: {
+        Args: {
+          p_user: string;
+          p_display_name: string;
+          p_full_name: string | null;
+          p_city: string | null;
+          p_home_site: string | null;
+          p_pilot_level: Database['public']['Enums']['pilot_level'] | null;
+          p_bio: string | null;
+          p_remove_photo?: boolean;
+        };
+        Returns: string | null;
+      };
+      admin_user_overview: { Args: { p_user: string }; Returns: Json };
+      admin_update_profile_details: {
+        Args: {
+          p_user: string;
+          p_country: string | null;
+          p_flying_since: number | null;
+          p_licence_body: string | null;
+        };
+        Returns: undefined;
+      };
+      admin_request_account_deletion: { Args: { p_user: string; p_reason: string }; Returns: string };
+      admin_set_instructor: { Args: { p_user: string; p_on: boolean }; Returns: undefined };
+      admin_set_training_level: {
+        Args: { p_user: string; p_level: Database['public']['Enums']['pilot_level'] | null };
+        Returns: undefined;
+      };
     };
     Enums: {
       app_role:
+        | 'student_pilot'
         | 'pilot'
         | 'member'
         | 'instructor'
+        | 'guide'
         | 'moderator'
         | 'safety_officer'
         | 'trip_organiser'
-        | 'admin';
+        | 'admin'
+        | 'super_admin';
       trip_status: 'draft' | 'open' | 'closed' | 'completed' | 'cancelled';
       trip_registration_status: 'pending' | 'accepted' | 'waitlisted' | 'declined' | 'cancelled';
       trip_payment_status: 'unpaid' | 'deposit_paid' | 'paid' | 'refunded';
@@ -1320,7 +1504,7 @@ export type Database = {
       ad_condition: 'new' | 'like_new' | 'good' | 'fair' | 'for_parts';
       ad_status: 'active' | 'reserved' | 'sold' | 'archived';
       currency: 'TRY' | 'EUR' | 'USD';
-      report_target: 'ad' | 'user' | 'chat' | 'message' | 'news_comment' | 'tip' | 'ride' | 'event';
+      report_target: 'ad' | 'user' | 'chat' | 'message' | 'news_comment' | 'tip' | 'ride' | 'event' | 'notice';
       report_reason: 'spam' | 'scam' | 'harassment' | 'hate' | 'sexual' | 'dangerous' | 'illegal' | 'other';
       report_status: 'open' | 'actioned' | 'dismissed';
       chat_kind: 'direct' | 'group';
@@ -1348,6 +1532,8 @@ export type Database = {
       event_kind: 'club_trip' | 'course' | 'competition' | 'social' | 'meeting' | 'other';
       event_status: 'draft' | 'published' | 'cancelled';
       rsvp_status: 'going' | 'maybe' | 'not_going';
+      notice_kind: 'offer' | 'request';
+      notice_category: 'transport' | 'gear' | 'buddy' | 'training' | 'lost_found' | 'other';
       ride_kind: 'offer' | 'request';
       ride_purpose: 'carpool' | 'retrieve';
     };

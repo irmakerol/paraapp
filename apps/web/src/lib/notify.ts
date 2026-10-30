@@ -83,7 +83,7 @@ export async function pushPendingNotifications(): Promise<number> {
           model: payload.model ?? '',
           date: payload.due_on ? formatDate(payload.due_on, locale) : '',
         }),
-        url: `/${locale}/logbook/equipment`,
+        url: `/${locale}/account/equipment`,
         tag: `${n.kind}-${payload.equipment_id}`,
       }));
     } else if (n.kind.startsWith('trip_')) {
