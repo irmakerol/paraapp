@@ -1169,7 +1169,9 @@
       "together": "Replay together",
       "togetherHelp": "Other flights from this takeoff on the same day. Tick one to fly it on the same clock.",
       "loadFailed": "That flight could not be loaded.",
-      "terrainCredit": "3D terrain: Terrain Tiles on AWS Open Data (Mapzen)."
+      "terrainCredit": "3D terrain: Terrain Tiles on AWS Open Data (Mapzen).",
+      "satellite": "Satellite",
+      "satelliteCredit": "Satellite imagery: Sentinel-2 cloudless – s2maps.eu by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2023)."
     },
     "xc": {
       "title": "Cross-country score",

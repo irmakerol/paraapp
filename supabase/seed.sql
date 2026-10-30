@@ -53,7 +53,7 @@ Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (İrlanda ve Alma
 
 - **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
 - **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.
-- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları, 3D tekrar oynatmayı açarsanız AWS Open Data arazi karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
+- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları, 3D tekrar oynatmayı açarsanız AWS Open Data arazi karoları, uydu veya 3D görünümü açarsanız EOX (s2maps.eu) uydu görüntüleri), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
 - **Google ile oturum açma**, bunu seçerseniz.
 
 Güncel hizmet sağlayıcı listesi talep üzerine sunulur.
@@ -121,7 +121,7 @@ Data is stored on our service providers' servers in the European Union (Ireland 
 
 - **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
 - **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
-- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map", and elevation tiles from AWS Open Data when you turn on the 3D replay; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
+- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map", elevation tiles from AWS Open Data when you turn on the 3D replay, and satellite imagery from EOX (s2maps.eu) when you turn on the satellite or 3D view; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
 - **Sign in with Google**, if you choose it.
 
 The current list of processors is available on request.

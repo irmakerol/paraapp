@@ -49,7 +49,7 @@ Veriler, hizmet sağlayıcılarımızın Avrupa Birliği'ndeki (İrlanda ve Alma
 
 - **Uygulama içinde:** diğer kullanıcılar yayımlamayı seçtiklerinizi görür (gizlilik ayarlarınıza göre profil alanları, ilanlar, yorumlar, herkese açık uçuşlar, yolculuk ilanları). Moderatörler bir sohbeti yalnızca şikâyet edildiğinde görür. Olay bildirimlerini yalnızca kulübün güvenlik sorumluları görür, diğer yöneticiler göremez; bir bildirimin ve yaralanma bilgilerinin her görüntülenmesi kayıt altına alınır.
 - **Hizmet sağlayıcılar:** barındırma ve veritabanı (Supabase, AB), e-posta gönderimi ve bildirimleri açtığınızda Google, Mozilla veya Apple'ın tarayıcı bildirim hizmetleri.
-- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları, 3D tekrar oynatmayı açarsanız AWS Open Data arazi karoları), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
+- **Yalnızca bir düğmeye bastığınızda:** "Haritayı göster" dediğinizde OpenFreeMap harita karoları (gösteriliyorsa OpenAIP hava sahası karoları, 3D tekrar oynatmayı açarsanız AWS Open Data arazi karoları, uydu veya 3D görünümü açarsanız EOX (s2maps.eu) uydu görüntüleri), bir videoyu oynattığınızda YouTube veya Vimeo yüklenir. Bu hizmetler o anda IP adresinizi görür. Hava durumu, sunucumuz tarafından yalnızca uçuş yerinin koordinatlarıyla istenir.
 - **Google ile oturum açma**, bunu seçerseniz.
 
 Güncel hizmet sağlayıcı listesi talep üzerine sunulur.

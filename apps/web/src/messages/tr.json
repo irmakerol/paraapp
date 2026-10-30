@@ -1169,7 +1169,9 @@
       "together": "Birlikte oynat",
       "togetherHelp": "Aynı gün bu kalkıştan yapılan diğer uçuşlar. Aynı saatte uçurmak için birini işaretleyin.",
       "loadFailed": "Bu uçuş yüklenemedi.",
-      "terrainCredit": "3D arazi: AWS Open Data üzerindeki Terrain Tiles (Mapzen)."
+      "terrainCredit": "3D arazi: AWS Open Data üzerindeki Terrain Tiles (Mapzen).",
+      "satellite": "Uydu",
+      "satelliteCredit": "Uydu görüntüsü: Sentinel-2 cloudless – s2maps.eu, EOX IT Services GmbH (değiştirilmiş Copernicus Sentinel 2023 verisi içerir)."
     },
     "xc": {
       "title": "Mesafe (XC) puanı",

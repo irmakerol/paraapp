@@ -49,7 +49,7 @@ Data is stored on our service providers' servers in the European Union (Ireland 
 
 - **Within the app:** other users see what you choose to publish (profile fields per your privacy settings, ads, comments, public flights, ride posts). Moderators see a conversation only when it has been reported. Incident reports are seen only by the club's safety officers, never by other admins; every view of a report and of injury details is logged.
 - **Service providers:** hosting and database (Supabase, EU), email delivery, and the browser push services of Google, Mozilla or Apple when you turn on notifications.
-- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map", and elevation tiles from AWS Open Data when you turn on the 3D replay; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
+- **Only when you press a button:** map tiles from OpenFreeMap (and airspace tiles from OpenAIP, if shown) load when you press "Show map", elevation tiles from AWS Open Data when you turn on the 3D replay, and satellite imagery from EOX (s2maps.eu) when you turn on the satellite or 3D view; YouTube or Vimeo load when you play a video. These services then see your IP address. Weather is requested by our server with the site's coordinates only.
 - **Sign in with Google**, if you choose it.
 
 The current list of processors is available on request.
