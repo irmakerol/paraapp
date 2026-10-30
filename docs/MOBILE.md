@@ -20,6 +20,15 @@ flat `node_modules`, so use `npm` inside `apps/mobile`.
 - **Upload**: `POST /api/mobile/flights` with `Authorization: Bearer <access token>` runs the same
   server-side import as the website (`importTrack`). Then `add_flights_to_totals` if the pilot said
   yes after landing.
+- **Native screens (2026-10-30)**: nothing opens Safari for pilots. Fly has a live Apple Maps
+  satellite map (`src/ui/live-map.tsx`, free, no key) and a vario settings page
+  (`src/tracker/vario-settings*.ts`). Takeoff = 15 m from the Start point at faster than walking
+  pace for 3 s (or 50 m height change); the saved track keeps 30 s before takeoff. The logbook
+  (`src/logbook.ts`) reads `flights` / `flight_tracks` with the pilot's session (RLS); the replay
+  uses Apple's 3D satellite view (`satelliteFlyover`) with the camera behind the glider. Profile,
+  settings and language are native (`src/profile.ts`); account deletion goes through
+  `POST /api/mobile/account/delete` (files removed with the service role, then
+  `request_account_deletion`, App Store rule 5.1.1(v)).
 
 ## Hosted test server
 

@@ -5,7 +5,9 @@ import {
   StyleSheet,
   Switch,
   Text,
+  TextInput,
   View,
+  type TextInputProps,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
@@ -192,6 +194,91 @@ export function Segmented<T extends string>({
   );
 }
 
+/** A labelled text input (the label is visible and read out). */
+export function Field({
+  label,
+  error,
+  ...input
+}: { label: string; error?: string | null } & TextInputProps) {
+  const c = useTheme();
+  return (
+    <View style={{ marginVertical: 6 }}>
+      <Text style={[styles.body, { color: c.text, fontWeight: '600' }]}>{label}</Text>
+      <TextInput
+        accessibilityLabel={label}
+        placeholderTextColor={c.muted}
+        {...input}
+        style={[
+          styles.input,
+          { color: c.text, borderColor: error ? c.danger : c.border, backgroundColor: c.bg },
+          input.multiline && { minHeight: 96, textAlignVertical: 'top', paddingTop: 12 },
+        ]}
+      />
+      {error ? <Text style={[styles.help, { color: c.danger }]}>{error}</Text> : null}
+    </View>
+  );
+}
+
+/** Small pill choices that wrap onto several lines (pilot level, licence body). */
+export function Chips<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: readonly { value: T | null; label: string }[];
+  value: T | null;
+  onChange: (v: T | null) => void;
+}) {
+  const c = useTheme();
+  return (
+    <View style={{ marginVertical: 6 }}>
+      <Text style={[styles.body, { color: c.text, fontWeight: '600' }]}>{label}</Text>
+      <View accessibilityRole="radiogroup" style={styles.chips}>
+        {options.map((o) => {
+          const on = o.value === value;
+          return (
+            <Pressable
+              key={o.value ?? 'none'}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: on }}
+              onPress={() => onChange(o.value)}
+              style={[
+                styles.chip,
+                { borderColor: on ? c.primary : c.border, backgroundColor: on ? c.primary : c.bg },
+              ]}
+            >
+              <Text style={[styles.chipText, { color: on ? c.primaryText : c.text }]}>
+                {o.label}
+              </Text>
+            </Pressable>
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+/** A small coloured label (role and level badges). */
+export function Badge({ label, tone = 'neutral' }: { label: string; tone?: 'neutral' | 'strong' }) {
+  const c = useTheme();
+  return (
+    <View
+      style={[
+        styles.badge,
+        tone === 'strong'
+          ? { backgroundColor: c.primary, borderColor: c.primary }
+          : { backgroundColor: c.bg, borderColor: c.border },
+      ]}
+    >
+      <Text style={[styles.badgeText, { color: tone === 'strong' ? c.primaryText : c.text }]}>
+        {label}
+      </Text>
+    </View>
+  );
+}
+
 export function Link({ label, onPress }: { label: string; onPress: () => void }) {
   const c = useTheme();
   return (
@@ -264,4 +351,25 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   segmentText: { fontSize: 15, fontWeight: '600' },
+  input: {
+    minHeight: 52,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    fontSize: 17,
+    marginTop: 6,
+  },
+  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 8 },
+  chip: {
+    minHeight: 44,
+    minWidth: 52,
+    paddingHorizontal: 14,
+    borderRadius: 22,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chipText: { fontSize: 15, fontWeight: '600' },
+  badge: { borderRadius: 999, borderWidth: 1, paddingHorizontal: 10, paddingVertical: 4 },
+  badgeText: { fontSize: 13, fontWeight: '700' },
 });

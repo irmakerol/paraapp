@@ -4,14 +4,15 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { Session } from '@supabase/supabase-js';
-import { t, type MessageKey } from './src/i18n';
+import { loadSavedLocale, locale, setLocale, t, type Locale, type MessageKey } from './src/i18n';
 import { supabase } from './src/supabase';
 import { onboardingStep, type OnboardingStep } from './src/onboarding';
 import { uploadPending } from './src/upload';
 import { PILOT_NAME_KEY, subscribeRecorder } from './src/tracker/recorder';
 import { FlyScreen } from './src/screens/FlyScreen';
 import { FlightsScreen } from './src/screens/FlightsScreen';
-import { AccountScreen, SignIn } from './src/screens/AccountScreen';
+import { SignIn } from './src/screens/AccountScreen';
+import { ProfileScreen } from './src/screens/ProfileScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { useTheme } from './src/ui/theme';
 
@@ -35,8 +36,13 @@ function Main() {
   const [tab, setTab] = useState<Tab>('fly');
   const [session, setSession] = useState<Session | null>(null);
   const [step, setStep] = useState<OnboardingStep | null>(null);
-  const [name, setName] = useState<string | null>(null);
   const [recording, setRecording] = useState(false);
+  // Changing it re-renders every screen in the new language.
+  const [, setLang] = useState<Locale>(locale);
+
+  useEffect(() => {
+    void loadSavedLocale().then(setLang);
+  }, []);
 
   useEffect(
     () =>
@@ -49,7 +55,6 @@ function Main() {
   const refresh = useCallback(async (s: Session | null) => {
     if (!s) {
       setStep(null);
-      setName(null);
       return;
     }
     try {
@@ -57,11 +62,13 @@ function Main() {
       setStep(next);
       const { data } = await supabase
         .from('profiles')
-        .select('display_name')
+        .select('display_name, locale')
         .eq('id', s.user.id)
         .maybeSingle();
-      const display = (data as { display_name: string } | null)?.display_name ?? null;
-      setName(display);
+      const row = data as { display_name: string; locale: string } | null;
+      const display = row?.display_name ?? null;
+      // The language saved in the profile (also chosen on the website) wins.
+      if (setLocale(row?.locale)) setLang(locale);
       if (display) await AsyncStorage.setItem(PILOT_NAME_KEY, display);
       if (!next) void uploadPending();
     } catch {
@@ -111,7 +118,13 @@ function Main() {
             onDone={() => void refresh(session)}
           />
         ) : (
-          <AccountScreen session={session} name={name} />
+          <ProfileScreen
+            session={session}
+            onLocaleChange={(l) => {
+              setLocale(l);
+              setLang(l);
+            }}
+          />
         )}
       </View>
       <SafeAreaView

@@ -2,18 +2,10 @@ import { useState } from 'react';
 import { Alert, Platform, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import * as AppleAuthentication from 'expo-apple-authentication';
 import * as WebBrowser from 'expo-web-browser';
-import Constants from 'expo-constants';
-import type { Session } from '@supabase/supabase-js';
 import { CONFIG } from '../config';
 import { locale, t } from '../i18n';
-import {
-  signInWithApple,
-  signInWithEmail,
-  signInWithGoogle,
-  signOut,
-  type SignInResult,
-} from '../auth';
-import { Body, Button, Card, Link, Title } from '../ui/kit';
+import { signInWithApple, signInWithEmail, signInWithGoogle, type SignInResult } from '../auth';
+import { Body, Button, Link, Title } from '../ui/kit';
 import { useTheme } from '../ui/theme';
 
 const web = (path: string) => void WebBrowser.openBrowserAsync(`${CONFIG.webUrl}/${locale}${path}`);
@@ -97,29 +89,6 @@ export function SignIn() {
         }}
       />
       <Link label={t('auth.signUpOnWeb')} onPress={() => web('/auth/sign-up')} />
-    </ScrollView>
-  );
-}
-
-export function AccountScreen({ session, name }: { session: Session; name: string | null }) {
-  return (
-    <ScrollView contentContainerStyle={s.page}>
-      <Card>
-        <Body muted>{t('account.signedInAs')}</Body>
-        <Title>{name ?? session.user.email ?? ''}</Title>
-        {name && session.user.email ? <Body muted>{session.user.email}</Body> : null}
-      </Card>
-      <Button label={t('account.logbook')} kind="secondary" onPress={() => web('/logbook')} />
-      <Button label={t('account.website')} kind="secondary" onPress={() => web('')} />
-      <Button label={t('account.signOut')} kind="secondary" onPress={() => void signOut()} />
-      <Link label={t('account.deleteAccount')} onPress={() => web('/account/privacy')} />
-      <View style={s.gap} />
-      <Body muted>
-        {t('account.version', {
-          v: `${Constants.expoConfig?.version ?? ''} (${Constants.expoConfig?.ios?.buildNumber ?? ''})`,
-        })}
-      </Body>
-      <Body muted>{t('account.testBuild')}</Body>
     </ScrollView>
   );
 }
