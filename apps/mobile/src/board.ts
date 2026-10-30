@@ -1,0 +1,166 @@
+import { supabase } from './supabase';
+
+export interface Notice {
+  id: string;
+  userId: string;
+  kind: 'offer' | 'request';
+  category: string;
+  title: string;
+  body: string | null;
+  site: string | null;
+  place: string | null;
+  date: string | null;
+  seats: number | null;
+  price: number | null;
+  currency: string | null;
+  photoUrl: string | null;
+  createdAt: string;
+  author: string | null;
+}
+
+export interface Ad {
+  id: string;
+  title: string;
+  category: string;
+  brand: string | null;
+  model: string | null;
+  size: string | null;
+  condition: string;
+  price: number;
+  currency: string;
+  city: string | null;
+  status: string;
+  isClub: boolean;
+  description: string;
+  photos: string[];
+  createdAt: string;
+}
+
+async function names(ids: string[]): Promise<Map<string, string>> {
+  const unique = [...new Set(ids)];
+  if (!unique.length) return new Map();
+  // Other people's names only through the privacy-masked view.
+  const { data } = await supabase.from('profile_cards').select('id, display_name').in('id', unique);
+  return new Map(
+    ((data ?? []) as { id: string; display_name: string }[]).map((r) => [r.id, r.display_name]),
+  );
+}
+
+interface NoticeRow {
+  id: string;
+  user_id: string;
+  kind: Notice['kind'];
+  category: string;
+  title: string;
+  body: string | null;
+  place_text: string | null;
+  notice_date: string | null;
+  seats: number | null;
+  price: number | null;
+  currency: string | null;
+  photo_path: string | null;
+  created_at: string;
+  sites: { name: string } | null;
+}
+
+/** Open notices (adults only: the database returns nothing to minors and guests). */
+export async function listNotices(): Promise<Notice[]> {
+  const { data, error } = await supabase
+    .from('notices')
+    .select('*, sites:site_id(name)')
+    .eq('closed', false)
+    .gt('expires_at', new Date().toISOString())
+    .order('created_at', { ascending: false })
+    .limit(200);
+  if (error) throw error;
+  const rows = (data ?? []) as NoticeRow[];
+  const who = await names(rows.map((r) => r.user_id));
+  const paths = rows.map((r) => r.photo_path).filter((p): p is string => Boolean(p));
+  const signed = new Map<string, string>();
+  if (paths.length) {
+    const { data: urls } = await supabase.storage
+      .from('notice-photos')
+      .createSignedUrls(paths, 3600);
+    for (const u of urls ?? []) if (u.path && u.signedUrl) signed.set(u.path, u.signedUrl);
+  }
+  return rows.map((r) => ({
+    id: r.id,
+    userId: r.user_id,
+    kind: r.kind,
+    category: r.category,
+    title: r.title,
+    body: r.body,
+    site: r.sites?.name ?? null,
+    place: r.place_text,
+    date: r.notice_date,
+    seats: r.seats,
+    price: r.price,
+    currency: r.currency,
+    photoUrl: r.photo_path ? (signed.get(r.photo_path) ?? null) : null,
+    createdAt: r.created_at,
+    author: who.get(r.user_id) ?? null,
+  }));
+}
+
+interface AdRow {
+  id: string;
+  title: string;
+  category: string;
+  brand: string | null;
+  model: string | null;
+  size: string | null;
+  condition: string;
+  price: number;
+  currency: string;
+  city: string | null;
+  status: string;
+  is_club: boolean;
+  description: string;
+  created_at: string;
+  ad_photos: { path: string; position: number }[];
+}
+
+/** Gear market ads that are for sale or reserved (photos are public). */
+export async function listAds(): Promise<Ad[]> {
+  const { data, error } = await supabase
+    .from('ads')
+    .select(
+      'id, title, category, brand, model, size, condition, price, currency, city, status, is_club, description, created_at, ad_photos(path, position)',
+    )
+    .in('status', ['active', 'reserved'])
+    .is('removed_at', null)
+    .order('created_at', { ascending: false })
+    .limit(100);
+  if (error) throw error;
+  return ((data ?? []) as AdRow[]).map((r) => ({
+    id: r.id,
+    title: r.title,
+    category: r.category,
+    brand: r.brand,
+    model: r.model,
+    size: r.size,
+    condition: r.condition,
+    price: r.price,
+    currency: r.currency,
+    city: r.city,
+    status: r.status,
+    isClub: r.is_club,
+    description: r.description,
+    createdAt: r.created_at,
+    photos: [...r.ad_photos]
+      .sort((a, b) => a.position - b.position)
+      .map((p) => supabase.storage.from('ad-photos').getPublicUrl(p.path).data.publicUrl),
+  }));
+}
+
+export function money(amount: number, currency: string, locale: string): string {
+  try {
+    return new Intl.NumberFormat(locale === 'tr' ? 'tr-TR' : 'en-GB', {
+      style: 'currency',
+      currency,
+      maximumFractionDigits: 0,
+    }).format(amount);
+  } catch {
+    return `${amount} ${currency}`;
+  }
+}

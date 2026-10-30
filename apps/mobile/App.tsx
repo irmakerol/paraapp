@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { AppState, Pressable, StyleSheet, Text, View } from 'react-native';
+import { AppState, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,14 +14,16 @@ import { FlightsScreen } from './src/screens/FlightsScreen';
 import { SignIn } from './src/screens/AccountScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { SitesScreen } from './src/screens/SitesScreen';
+import { BoardScreen } from './src/screens/BoardScreen';
 import { OnboardingScreen } from './src/screens/OnboardingScreen';
 import { useTheme } from './src/ui/theme';
 
-type Tab = 'fly' | 'flights' | 'sites' | 'account';
+type Tab = 'fly' | 'flights' | 'sites' | 'board' | 'account';
 const TABS: { id: Tab; label: MessageKey }[] = [
   { id: 'fly', label: 'tabs.fly' },
   { id: 'flights', label: 'tabs.flights' },
   { id: 'sites', label: 'tabs.sites' },
+  { id: 'board', label: 'tabs.board' },
   { id: 'account', label: 'tabs.account' },
 ];
 
@@ -44,6 +46,9 @@ function Main() {
 
   useEffect(() => {
     void loadSavedLocale().then(setLang);
+    // The website's "Fly now" opens flyanatolia:// — land on the recorder.
+    const sub = Linking.addEventListener('url', () => setTab('fly'));
+    return () => sub.remove();
   }, []);
 
   useEffect(
@@ -113,6 +118,9 @@ function Main() {
       <View style={[s.screen, tab !== 'sites' && s.hidden]}>
         <SitesScreen />
       </View>
+      <View style={[s.screen, tab !== 'board' && s.hidden]}>
+        <BoardScreen signedIn={signedIn} />
+      </View>
       <View style={[s.screen, tab !== 'account' && s.hidden]}>
         {!session ? (
           <SignIn />
@@ -164,5 +172,5 @@ const s = StyleSheet.create({
   hidden: { display: 'none' },
   tabs: { flexDirection: 'row', borderTopWidth: StyleSheet.hairlineWidth },
   tab: { flex: 1, minHeight: 56, alignItems: 'center', justifyContent: 'center' },
-  tabText: { fontSize: 16, fontWeight: '700' },
+  tabText: { fontSize: 14, fontWeight: '700' },
 });
