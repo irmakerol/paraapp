@@ -7,7 +7,6 @@ import { Link } from '@/i18n/navigation';
 import { sampleLabel } from '@/lib/sample';
 import { Alert, Button, buttonClass, Input } from '@/components/ui';
 import { Pagination } from '@/components/pagination';
-import { setBan } from './actions';
 import { RoleToggles } from './role-toggles';
 
 const PAGE_SIZE = 30;
@@ -130,15 +129,6 @@ export default async function UsersPage({
                 isSelf={u.id === viewer.user.id}
                 isSuperAdmin={isSuperAdmin}
               />
-              {u.id !== viewer.user.id && !mine.includes('admin') ? (
-                <form action={setBan} className="flex flex-wrap items-center gap-2">
-                  <input type="hidden" name="user_id" value={u.id} />
-                  <input type="hidden" name="ban" value={banned ? '0' : '1'} />
-                  <Button variant={banned ? 'secondary' : 'ghost'} aria-pressed={Boolean(banned)}>
-                    {banned ? t('unban') : t('ban')}
-                  </Button>
-                </form>
-              ) : null}
             </li>
           );
         })}
