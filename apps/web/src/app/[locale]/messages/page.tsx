@@ -4,6 +4,7 @@ import { requireActiveViewer } from '@/lib/session';
 import { listChats } from '@/lib/chats';
 import { listClubMessages } from '@/lib/club-messages';
 import { formatDateTime } from '@/lib/format';
+import { sampleLabel } from '@/lib/sample';
 import { buttonClass, Card, PageTitle } from '@/components/ui';
 
 export const dynamic = 'force-dynamic';
@@ -47,7 +48,7 @@ export default async function MessagesPage({ params }: { params: Promise<{ local
                   <span
                     className={`min-w-0 flex-1 truncate ${m.unread ? 'font-bold' : 'font-medium'}`}
                   >
-                    {m.title}
+                    {sampleLabel(m.title, locale)}
                   </span>
                   <span className="shrink-0 text-xs text-muted">
                     {formatDateTime(m.createdAt, locale)}

@@ -197,3 +197,78 @@ join auth.users u on u.id = n.owner::uuid
 left join public.sites s on s.slug = n.site_slug
 on conflict (id) do update set closed = false, expires_at = now() + interval '30 days',
   notice_date = excluded.notice_date;
+
+-- Club messages ("Kulüp Mesajları") ------------------------------------------------------------
+-- Two sample groups, then messages to everyone and to each group. Super admins join both groups so
+-- the owner sees every kind of message. Recipients and read state are written only the first time
+-- (on conflict do nothing), so what someone has already read stays read after a re-run.
+insert into public.user_groups (id, name, description)
+values
+  ('e2000000-0000-4000-8000-000000000001', 'Kaş Gezisi Kasım 2026 (Ö)', 'Kasım sonu Kaş gezisine katılanlar (örnek grup).'),
+  ('e2000000-0000-4000-8000-000000000002', 'Eğitimdeki Pilotlar (Ö)', 'Bir sonraki seviyeye çalışan pilotlar (örnek grup).')
+on conflict (id) do nothing;
+
+insert into public.user_group_members (group_id, user_id)
+select g.id::uuid, g.member::uuid
+from (values
+  ('e2000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000001'),
+  ('e2000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000003'),
+  ('e2000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000005'),
+  ('e2000000-0000-4000-8000-000000000001', 'a0000000-0000-4000-8000-000000000006'),
+  ('e2000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000001'),
+  ('e2000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000004'),
+  ('e2000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000007'),
+  ('e2000000-0000-4000-8000-000000000002', 'a0000000-0000-4000-8000-000000000008')
+) as g(id, member)
+join auth.users u on u.id = g.member::uuid
+union
+select g.id, r.user_id
+from public.user_groups g
+cross join public.user_roles r
+where g.id in ('e2000000-0000-4000-8000-000000000001', 'e2000000-0000-4000-8000-000000000002')
+  and r.role = 'super_admin'
+on conflict do nothing;
+
+insert into public.club_messages (id, sender_id, audience, audience_group, audience_label, title,
+                                  body, created_at)
+select m.id::uuid,
+       (select r.user_id from public.user_roles r where r.role = 'super_admin' limit 1),
+       m.audience, g.id, g.name, m.title, m.body, now() - m.age::interval
+from (values
+  ('e1000000-0000-4000-8000-000000000001', 'all', null, '9 days',
+   'Kış dönemi yer okulu programı (Ö)',
+   E'Merhaba arkadaşlar,\n\nKış boyunca her ayın ilk salı akşamı kulüp lokalinde **yer okulu** yapıyoruz:\n\n- Meteoroloji ve termik okuma\n- Yedek paraşüt kullanımı\n- Hava sahası ve kurallar\n\nKatılım ücretsiz. Görüşmek üzere!'),
+  ('e1000000-0000-4000-8000-000000000002', 'all', null, '5 days',
+   'Babadağ kalkış yolunda çalışma (Ö)',
+   E'Babadağ 1900 kalkışına çıkan yolda bu hafta asfalt çalışması var. Servisler sabah 09:00''dan önce çıkamıyor, planınızı buna göre yapın.'),
+  ('e1000000-0000-4000-8000-000000000003', 'group', 'e2000000-0000-4000-8000-000000000001', '2 days',
+   'Kaş gezisi: buluşma saati ve ekipman listesi (Ö)',
+   E'Cuma 06:30''da Kadıköy iskelesi önünde buluşuyoruz.\n\nYanınızda olsun:\n\n1. Kanat, harness, yedek (katlama tarihi 6 aydan eski olmasın)\n2. Kask ve telsiz\n3. Lisans kartınız\n\nOda paylaşımı listesini perşembe paylaşacağım.'),
+  ('e1000000-0000-4000-8000-000000000004', 'group', 'e2000000-0000-4000-8000-000000000002', '20 hours',
+   'Cumartesi yer çalışması – Riva (Ö)',
+   E'Bu cumartesi Riva''da yer çalışması (ground handling) yapıyoruz. 10:00''da sahildeki otoparkta buluşalım. Rüzgar uygun değilse sabah 07:00''de buradan haber vereceğim.'),
+  ('e1000000-0000-4000-8000-000000000005', 'all', null, '2 hours',
+   'Hafta sonu kuvvetli lodos uyarısı (Ö)',
+   E'Cumartesi öğleden sonra Marmara''da **40 km/s üzeri lodos** bekleniyor. Sapanca ve Riva uçuşlarını sabah saatleriyle sınırlayın, şüphe varsa uçmayın.\n\nİyi uçuşlar!')
+) as m(id, audience, group_id, age, title, body)
+left join public.user_groups g on g.id = m.group_id::uuid
+on conflict (id) do update set title = excluded.title, body = excluded.body;
+
+-- The two oldest messages start as read, the three newest as unread (bold, bouncing tab icon).
+insert into public.club_message_recipients (message_id, user_id, read_at)
+select m.id, p.id,
+       case when m.id in ('e1000000-0000-4000-8000-000000000001', 'e1000000-0000-4000-8000-000000000002')
+            then m.created_at + interval '3 hours' end
+from public.club_messages m
+join public.profiles p on p.status = 'active'
+where m.id in ('e1000000-0000-4000-8000-000000000001', 'e1000000-0000-4000-8000-000000000002',
+               'e1000000-0000-4000-8000-000000000003', 'e1000000-0000-4000-8000-000000000004',
+               'e1000000-0000-4000-8000-000000000005')
+  and (m.audience = 'all' or exists (
+        select 1 from public.user_group_members gm
+        where gm.group_id = m.audience_group and gm.user_id = p.id))
+on conflict do nothing;
+
+update public.club_messages m
+set recipient_count = (select count(*) from public.club_message_recipients r where r.message_id = m.id)
+where m.id::text like 'e1000000-0000-4000-8000-%';

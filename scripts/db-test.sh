@@ -56,5 +56,7 @@ if [ "${SKIP_SEED:-0}" != "1" ]; then
     || (select count(*) from public.sites where name like '%(Ö)') || ' sites, '
     || (select count(distinct role) from public.user_roles where user_id::text like 'a0000000-%') || ' roles, '
     || (select count(*) from public.ads where title like '%(Ö)') || ' ads, '
-    || (select count(*) from public.notices where title like '%(Ö)') || ' notices'"
+    || (select count(*) from public.notices where title like '%(Ö)') || ' notices, '
+    || (select count(*) from public.club_messages where title like '%(Ö)') || ' club messages, '
+    || (select count(*) from public.club_message_recipients r join public.club_messages m on m.id = r.message_id where m.title like '%(Ö)' and r.read_at is null) || ' unread'"
 fi

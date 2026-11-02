@@ -6,6 +6,7 @@ import { requireActiveViewer } from '@/lib/session';
 import { createClient } from '@/lib/supabase/server';
 import { formatDateTime } from '@/lib/format';
 import { Card } from '@/components/ui';
+import { sampleLabel } from '@/lib/sample';
 import { MarkRead } from './mark-read';
 
 export const dynamic = 'force-dynamic';
@@ -41,7 +42,7 @@ export default async function ClubMessagePage({
         <p className="text-sm font-semibold text-muted">
           {t('from')} · {formatDateTime(message.created_at, locale)}
         </p>
-        <h1 className="text-2xl font-bold">{message.title}</h1>
+        <h1 className="text-2xl font-bold">{sampleLabel(message.title, locale)}</h1>
         <p className="whitespace-pre-line">{message.body}</p>
       </Card>
       {receipt && !receipt.read_at ? <MarkRead id={message.id} /> : null}
