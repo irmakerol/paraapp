@@ -11,6 +11,7 @@ import { Alert, buttonClass, Card } from '@/components/ui';
 import { Markdown } from '@/components/markdown';
 import { ReportButton } from '@/components/report-button';
 import { RsvpForm } from './rsvp-form';
+import { sampleLabel } from '@/lib/sample';
 
 export async function generateMetadata({
   params,
@@ -21,7 +22,7 @@ export async function generateMetadata({
   const event = await getEvent(slug);
   if (!event) return {};
   return {
-    title: event.title,
+    title: sampleLabel(event.title, locale),
     description: `${formatDateTime(event.starts_at, locale)} · ${event.description_md.slice(0, 140)}`,
     robots: event.members_only || event.status === 'draft' ? { index: false } : undefined,
   };
@@ -72,7 +73,9 @@ export default async function EventPage({
             {t(`kinds.${event.kind}`)}
             {event.members_only ? ` · ${t('membersOnly')}` : ''}
           </p>
-          <h1 className="text-3xl font-extrabold leading-tight">{event.title}</h1>
+          <h1 className="text-3xl font-extrabold leading-tight">
+            {sampleLabel(event.title, locale)}
+          </h1>
           {event.status === 'cancelled' ? <Alert tone="error">{t('cancelledNotice')}</Alert> : null}
           <p className="text-lg">
             {formatDateTime(event.starts_at, locale)} – {formatDateTime(event.ends_at, locale)}

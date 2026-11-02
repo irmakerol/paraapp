@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { defaultFieldPrivacy } from './privacy';
-import { profileSchema, signUpSchema, yearsFlying } from './schemas';
+import { profileSchema, signUpSchema, trainingLevelOptions, yearsFlying } from './schemas';
 
 describe('signUpSchema', () => {
   it('normalises email and enforces password length', () => {
@@ -38,5 +38,18 @@ describe('yearsFlying', () => {
     expect(yearsFlying({ flying_since: 2019 }, now)).toBe(7);
     expect(yearsFlying({ flying_since: null, years_flying: 4 }, now)).toBe(4);
     expect(yearsFlying({}, now)).toBeNull();
+  });
+});
+
+describe('trainingLevelOptions', () => {
+  it('offers only levels above the current one', () => {
+    expect(trainingLevelOptions('p3')).toEqual(['p4', 'p5', 't1', 't2', 't3']);
+    expect(trainingLevelOptions('p5')).toEqual(['t1', 't2', 't3']);
+    expect(trainingLevelOptions('t3')).toEqual([]);
+  });
+  it('offers everything without a level, and places legacy levels on the same ladder', () => {
+    expect(trainingLevelOptions(null)).toEqual(['p2', 'p3', 'p4', 'p5', 't1', 't2', 't3']);
+    expect(trainingLevelOptions('student')).toHaveLength(7);
+    expect(trainingLevelOptions('tandem')).toEqual(['t2', 't3']);
   });
 });

@@ -14,6 +14,8 @@ update public.profiles set pilot_level = 'p3', years_flying = 4
   where id in ('11111111-1111-1111-1111-111111111111', '33333333-3333-3333-3333-333333333333',
                '55555555-5555-5555-5555-555555555555', '44444444-4444-4444-4444-444444444444');
 update public.profiles set pilot_level = 'p1', years_flying = 0 where id = '55555555-5555-5555-5555-555555555555';
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 insert into public.user_roles (user_id, role) values
   ('77777777-7777-7777-7777-777777777777', 'trip_organiser'),
   ('55555555-5555-5555-5555-555555555555', 'member');

@@ -11,6 +11,14 @@ export const MAP_CONSENT_KEY = 'paraapp.maps';
 export const TERRAIN_TILES =
   'https://s3.amazonaws.com/elevation-tiles-prod/terrarium/{z}/{x}/{y}.png';
 
+/**
+ * Free satellite imagery (Sentinel-2 cloudless by EOX, CC BY-NC-SA 4.0, no key) for the replay's
+ * satellite view. Requested only when the user turns satellite or 3D on. About 10 m per pixel:
+ * fine for valleys and ridges, soft when zoomed right in.
+ */
+export const SATELLITE_TILES =
+  'https://tiles.maps.eox.at/wmts/1.0.0/s2cloudless-2023_3857/default/g/{z}/{y}/{x}.jpg';
+
 /** OpenAIP raster tiles (airspace, obstacles, airports). Needs a free key; off without one. */
 const OPENAIP_TILES = ['a', 'b', 'c'].map(
   (s) => `https://${s}.api.tiles.openaip.net/api/data/openaip/{z}/{x}/{y}.png?apiKey=`,

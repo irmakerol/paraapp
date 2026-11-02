@@ -9,6 +9,7 @@ const PAGES = [
   '/en/news',
   '/en/tips',
   '/en/market',
+  '/en/notices',
   '/en/sites',
   '/en/events',
   '/en/trips',

@@ -34,6 +34,9 @@ export const getViewer = cache(async (): Promise<Viewer | null> => {
     supabase.from('user_roles').select('role').eq('user_id', user.id),
   ]);
   if (!profile) return null;
+  // "Last seen" for admins: the database writes at most every 5 minutes; skip the call before that.
+  const seen = profile.last_seen_at ? new Date(profile.last_seen_at).getTime() : 0;
+  if (Date.now() - seen > 5 * 60_000) await supabase.rpc('touch_last_seen');
   return { user, profile, roles: (roles ?? []).map((r) => r.role) };
 });
 

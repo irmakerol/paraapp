@@ -45,3 +45,18 @@ if [ "${SKIP_SEED:-0}" != "1" ] && [ -f "$ROOT/supabase/seed.sql" ]; then
 fi
 
 pg_prove -d postgres --ext .sql -r "$ROOT/supabase/tests"
+
+if [ "${SKIP_SEED:-0}" != "1" ]; then
+  # The sample data must load cleanly, and twice (the test server re-applies it on every deploy).
+  echo "seed: samples/sample_data.sql (twice)"
+  "${PSQL[@]}" -f "$ROOT/supabase/samples/sample_data.sql"
+  "${PSQL[@]}" -f "$ROOT/supabase/samples/sample_data.sql"
+  "${PSQL[@]}" -tA -c "select 'sample: ' || (select count(*) from public.profiles where display_name like '%(Ö)') || ' people, '
+    || (select count(*) from public.events where title like '%(Ö)') || ' events, '
+    || (select count(*) from public.sites where name like '%(Ö)') || ' sites, '
+    || (select count(distinct role) from public.user_roles where user_id::text like 'a0000000-%') || ' roles, '
+    || (select count(*) from public.ads where title like '%(Ö)') || ' ads, '
+    || (select count(*) from public.notices where title like '%(Ö)') || ' notices, '
+    || (select count(*) from public.club_messages where title like '%(Ö)') || ' club messages, '
+    || (select count(*) from public.club_message_recipients r join public.club_messages m on m.id = r.message_id where m.title like '%(Ö)' and r.read_at is null) || ' unread'"
+fi

@@ -10,6 +10,8 @@ insert into public.flights (id, user_id, started_at, duration_s, source, visibil
   ('f2000000-0000-0000-0000-000000000001', '11111111-1111-1111-1111-111111111111', now() - interval '1 day', 5400,
    'igc', 'public', 'fai', 42000, 58.8);
 
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"11111111-1111-1111-1111-111111111111","role":"authenticated"}', true);
 select throws_ok($$ update public.flights set xc_points = 999 where id = 'f2000000-0000-0000-0000-000000000001' $$,

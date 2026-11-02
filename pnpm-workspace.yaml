@@ -1,6 +1,8 @@
 packages:
   - apps/*
   - packages/*
+  # The phone app uses npm on its own (Expo/React Native native builds expect a flat node_modules).
+  - '!apps/mobile'
 onlyBuiltDependencies:
   - supabase
   - sharp

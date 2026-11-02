@@ -17,7 +17,7 @@ async function listFolder(bucket: string, folder: string): Promise<string[]> {
 }
 
 /**
- * Removes every file a user uploaded: avatar, ad photos, flight files and the photos they
+ * Removes every file a user uploaded: avatar, ad and notice photos, flight files and the photos they
  * sent in chats. Storage objects are not covered by database cascades, so this runs when
  * the user asks to delete their account. Best effort: errors are swallowed so the deletion
  * request itself still goes through (the files are retried by staff if needed).
@@ -33,6 +33,7 @@ export async function removeUserFiles(userId: string): Promise<void> {
     const byBucket: [string, string[]][] = [
       ['avatars', await listFolder('avatars', userId)],
       ['ad-photos', await listFolder('ad-photos', userId)],
+      ['notice-photos', await listFolder('notice-photos', userId)],
       ['flight-files', await listFolder('flight-files', userId)],
       ['chat-media', (images ?? []).map((m) => m.image_path!)],
     ];

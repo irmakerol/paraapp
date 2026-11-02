@@ -9,6 +9,7 @@ import { Link } from '@/i18n/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { getOnboardingStep, getViewer } from '@/lib/session';
 import { displayNames } from '@/lib/people';
+import { sampleLabel } from '@/lib/sample';
 import { publicUrl } from '@/lib/storage';
 import { formatDate, formatPrice } from '@/lib/format';
 import { Alert, Button, buttonClass, Card } from '@/components/ui';
@@ -41,7 +42,7 @@ export async function generateMetadata({
   );
   const price = formatPrice(Number(ad.price), ad.currency, locale);
   return {
-    title: `${ad.title} – ${price}`,
+    title: `${sampleLabel(ad.title, locale)} – ${price}`,
     description: ad.description.slice(0, 160),
     openGraph: { images: photo ? [photo] : undefined },
   };
@@ -152,7 +153,9 @@ export default async function AdPage({
                 {t(`statuses.${ad.status}`)}
               </span>
             </div>
-            <h1 className="text-2xl font-extrabold leading-tight">{ad.title}</h1>
+            <h1 className="text-2xl font-extrabold leading-tight">
+              {sampleLabel(ad.title, locale)}
+            </h1>
             <p className="text-3xl font-extrabold">
               {formatPrice(Number(ad.price), ad.currency, locale)}
             </p>

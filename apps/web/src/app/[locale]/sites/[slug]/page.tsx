@@ -16,6 +16,7 @@ import { SitesMap } from '@/components/sites-map';
 import { WindRose } from '@/components/wind-rose';
 import { WeatherPanel } from '@/components/weather-panel';
 import { siteForecast } from '@/lib/weather';
+import { sampleLabel } from '@/lib/sample';
 
 export async function generateMetadata({
   params,
@@ -27,7 +28,7 @@ export async function generateMetadata({
   if (!site) return {};
   const t = await getTranslations({ locale, namespace: 'sites' });
   return {
-    title: site.name,
+    title: sampleLabel(site.name, locale),
     description: site.description.slice(0, 160) || t('metaDescription', { name: site.name }),
   };
 }
@@ -65,7 +66,7 @@ export default async function SitePage({
         ← {t('title')}
       </Link>
       <header className="space-y-1">
-        <h1 className="text-3xl font-extrabold">{site.name}</h1>
+        <h1 className="text-3xl font-extrabold">{sampleLabel(site.name, locale)}</h1>
         <p className="text-muted">
           {[
             t(`kinds.${site.kind}`),
@@ -79,7 +80,18 @@ export default async function SitePage({
       {site.verified ? null : <Alert tone="error">{t('unverifiedNotice')}</Alert>}
       <div className="grid gap-8 lg:grid-cols-[1fr_18rem]">
         <div className="space-y-6">
-          <SitesMap sites={[{ slug: site.slug, name: site.name, lat: site.lat, lng: site.lng }]} />
+          <SitesMap
+            sites={[
+              {
+                slug: site.slug,
+                name: site.name,
+                lat: site.lat,
+                lng: site.lng,
+                kind: site.kind,
+                elevation_m: site.elevation_m,
+              },
+            ]}
+          />
           <section className="space-y-3">
             <h2 className="text-xl font-bold">{t('weather')}</h2>
             <WeatherPanel forecast={forecast} locale={locale} />

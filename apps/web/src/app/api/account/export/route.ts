@@ -60,9 +60,13 @@ export async function GET() {
     incidents,
     rsvps,
     rides,
+    notices,
     tripRegistrations,
     tripInterests,
     tripGuiding,
+    clubMessages,
+    groupMemberships,
+    activity,
   ] = await Promise.all([
     admin.from('news_comments').select('news_id, body, hidden_at, created_at').eq('author_id', uid),
     admin.from('news_likes').select('news_id, created_at').eq('user_id', uid),
@@ -98,6 +102,7 @@ export async function GET() {
       .eq('reporter_id', uid),
     admin.from('event_rsvps').select('event_id, status, note, created_at').eq('user_id', uid),
     admin.from('rides').select('*').eq('user_id', uid),
+    admin.from('notices').select('*').eq('user_id', uid),
     // Staff notes are the organisers' own working notes; everything the pilot gave is included.
     admin
       .from('trip_registrations')
@@ -107,6 +112,12 @@ export async function GET() {
       .eq('user_id', uid),
     admin.from('trip_interests').select('trip_id, created_at').eq('user_id', uid),
     admin.from('trip_guides').select('trip_id, role_label').eq('user_id', uid),
+    admin
+      .from('club_message_recipients')
+      .select('read_at, club_messages(title, body, created_at)')
+      .eq('user_id', uid),
+    admin.from('user_group_members').select('added_at, user_groups(name)').eq('user_id', uid),
+    admin.from('user_activity').select('kind, ref, created_at').eq('user_id', uid),
   ]);
 
   const incidentKey = serverEnv().INCIDENT_ENCRYPTION_KEY;
@@ -149,7 +160,11 @@ export async function GET() {
       providers: user.app_metadata.providers ?? [],
     },
     profile: profile.data,
-    private: { birth_date: priv.data?.birth_date ?? null, licence_number: licence },
+    private: {
+      birth_date: priv.data?.birth_date ?? null,
+      licence_number: licence,
+      licence_body: priv.data?.licence_body ?? null,
+    },
     roles: roles.data ?? [],
     consents: consents.data ?? [],
     legal_acceptances: acceptances.data ?? [],
@@ -179,9 +194,13 @@ export async function GET() {
     })),
     event_rsvps: rsvps.data ?? [],
     rides: rides.data ?? [],
+    notices: notices.data ?? [],
     trip_registrations: tripRegistrations.data ?? [],
     trip_interests: tripInterests.data ?? [],
     trips_guided: tripGuiding.data ?? [],
+    club_messages_received: clubMessages.data ?? [],
+    groups: groupMemberships.data ?? [],
+    activity_log: activity.data ?? [],
   };
 
   const date = new Date().toISOString().slice(0, 10);

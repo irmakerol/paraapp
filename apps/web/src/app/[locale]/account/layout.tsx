@@ -14,12 +14,14 @@ export default async function AccountLayout({
   await requireActiveViewer(locale);
   const t = await getTranslations({ locale, namespace: 'account' });
   const notifications = await getTranslations({ locale, namespace: 'notificationsSettings' });
+  const equipment = await getTranslations({ locale, namespace: 'equipment' });
   return (
     <div className="mx-auto max-w-3xl">
       <PageTitle>{t('title')}</PageTitle>
       <Tabs
         tabs={[
           { href: '/account', label: t('tabs.profile') },
+          { href: '/account/equipment', label: equipment('title') },
           { href: '/account/notifications', label: notifications('tab') },
           { href: '/account/privacy', label: t('tabs.privacy') },
         ]}

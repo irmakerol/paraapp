@@ -7,6 +7,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('33333333-3333-3333-3333-333333333333', 'other@example.com', '{"birth_date":"1990-01-01"}'),
   ('66666666-6666-6666-6666-666666666666', 'safety@example.com', '{"birth_date":"1980-01-01"}'),
   ('99999999-9999-9999-9999-999999999999', 'admin@example.com', '{"birth_date":"1980-01-01"}');
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 insert into public.user_roles (user_id, role) values
   ('66666666-6666-6666-6666-666666666666', 'safety_officer'),
   ('99999999-9999-9999-9999-999999999999', 'admin');

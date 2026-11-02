@@ -170,3 +170,60 @@ export function openMeteoUrl(
   });
   return `${base}?${params}`;
 }
+
+export type Compass = 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'NW';
+const COMPASS: readonly Compass[] = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+
+/** Nearest of the 8 compass points for a direction in degrees (where the wind comes from). */
+export function compassPoint(deg: number): Compass {
+  const i = Math.round((((deg % 360) + 360) % 360) / 45) % 8;
+  return COMPASS[i] ?? 'N';
+}
+
+export interface DayConditions {
+  date: string;
+  windMinKmh: number | null;
+  windMaxKmh: number | null;
+  gustMaxKmh: number | null;
+  /** Average direction the wind comes from (vector mean), null without data. */
+  directionDeg: number | null;
+  rainMm: number;
+}
+
+/**
+ * Plain numbers per day during flying hours (09–18): wind range, strongest gust, main direction
+ * and total rain. Pilots judge for themselves; we no longer label days "flyable" (Irmak, 2026-10-30).
+ */
+export function dailyConditions(hours: HourRating[]): DayConditions[] {
+  const days = new Map<string, HourRating[]>();
+  for (const h of hours) {
+    const hour = Number(h.time.slice(11, 13));
+    if (hour < 9 || hour > 18) continue;
+    const date = h.time.slice(0, 10);
+    days.set(date, [...(days.get(date) ?? []), h]);
+  }
+  return [...days.entries()].map(([date, list]) => {
+    const winds = list.map((h) => h.windKmh).filter((v): v is number => v != null);
+    const gusts = list.map((h) => h.gustKmh).filter((v): v is number => v != null);
+    let x = 0;
+    let y = 0;
+    let n = 0;
+    for (const h of list) {
+      if (h.directionDeg == null) continue;
+      // Weight by speed so calm hours don't swing the average.
+      const w = h.windKmh ?? 1;
+      x += Math.cos((h.directionDeg * Math.PI) / 180) * w;
+      y += Math.sin((h.directionDeg * Math.PI) / 180) * w;
+      n++;
+    }
+    const directionDeg = n ? ((((Math.atan2(y, x) * 180) / Math.PI) % 360) + 360) % 360 : null;
+    return {
+      date,
+      windMinKmh: winds.length ? Math.min(...winds) : null,
+      windMaxKmh: winds.length ? Math.max(...winds) : null,
+      gustMaxKmh: gusts.length ? Math.max(...gusts) : null,
+      directionDeg,
+      rainMm: Math.round(list.reduce((sum, h) => sum + (h.precipitation ?? 0), 0) * 10) / 10,
+    };
+  });
+}

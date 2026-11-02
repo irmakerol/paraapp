@@ -7,6 +7,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
 insert into auth.sessions (id, user_id) values (gen_random_uuid(), '11111111-1111-1111-1111-111111111111');
 update public.profiles set bio = 'Thermal hunter' where id = '11111111-1111-1111-1111-111111111111';
 
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 set local role anon;
 select throws_ok($$ select public.request_account_deletion() $$, '42501', null, 'guests cannot call deletion');
 reset role;

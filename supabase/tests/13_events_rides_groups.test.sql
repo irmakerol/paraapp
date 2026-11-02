@@ -9,6 +9,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('77777777-7777-7777-7777-777777777777', 'instructor@example.com', '{"birth_date":"1980-01-01"}'),
   ('44444444-4444-4444-4444-444444444444', 'teen@example.com', jsonb_build_object('birth_date', (current_date - interval '16 years')::date));
 update public.profiles set status = 'active' where id = '44444444-4444-4444-4444-444444444444';
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 insert into public.user_roles (user_id, role) values
   ('77777777-7777-7777-7777-777777777777', 'instructor'),
   ('55555555-5555-5555-5555-555555555555', 'member');

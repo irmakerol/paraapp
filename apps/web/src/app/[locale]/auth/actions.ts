@@ -14,6 +14,7 @@ import { createClient } from '@/lib/supabase/server';
 import { publicEnv } from '@/lib/env';
 import { authErrorKey, type ActionState } from '@/lib/action-state';
 import { routing } from '@/i18n/routing';
+import { preferredLocale } from '@/lib/preferred-locale-server';
 
 function localeFrom(formData: FormData): string {
   const value = String(formData.get('locale') ?? '');
@@ -31,9 +32,9 @@ export async function signIn(_prev: ActionState, formData: FormData): Promise<Ac
   if (!parsed.success) return { error: 'invalidCredentials' };
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
+  const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
   if (error) return { error: authErrorKey(error.code) };
-  redirect(`/${locale}/onboarding`);
+  redirect(`/${await preferredLocale(supabase, data.user.id, locale)}/onboarding`);
 }
 
 const signUpForm = signUpSchema.extend({

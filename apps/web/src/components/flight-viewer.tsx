@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import type { GeoJSONSource, Map as MapLibreMap, Marker } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { varioSeries, type CompactTrack, type XcScore } from '@paraapp/core';
-import { addAirspaceControl, MAP_STYLE, TERRAIN_TILES } from '@/lib/map';
+import { addAirspaceControl, MAP_STYLE, SATELLITE_TILES, TERRAIN_TILES } from '@/lib/map';
 import { MapGate } from './map-gate';
 
 interface Point {
@@ -186,6 +186,8 @@ export function FlightViewer({
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(25);
   const [follow, setFollow] = useState(true);
   const [threeD, setThreeD] = useState(false);
+  // Satellite comes on with 3D (Google Earth style) and can be switched on its own in 2D.
+  const [satellite, setSatellite] = useState(false);
   const [others, setOthers] = useState<LoadedCompanion[]>([]);
   const [loading, setLoading] = useState<string | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -254,6 +256,7 @@ export function FlightViewer({
           time={time}
           follow={follow && playing}
           threeD={threeD}
+          satellite={satellite}
           xc={xc ?? null}
           others={others}
           label={t('mapLabel')}
@@ -265,13 +268,18 @@ export function FlightViewer({
         speed={speed}
         follow={follow}
         threeD={threeD}
+        satellite={satellite}
         onPlay={() => {
           if (time >= t1) setTime(t0);
           setPlaying((p) => !p);
         }}
         onSpeed={setSpeed}
         onFollow={setFollow}
-        onThreeD={setThreeD}
+        onThreeD={(v) => {
+          setThreeD(v);
+          if (v) setSatellite(true);
+        }}
+        onSatellite={setSatellite}
       />
       <AltitudeChart
         points={points}
@@ -323,6 +331,7 @@ export function FlightViewer({
         {trimmed ? `${t('trimmedNote')} ` : ''}
         {t('mapCredit')}
         {threeD ? ` ${t('replay.terrainCredit')}` : ''}
+        {satellite ? ` ${t('replay.satelliteCredit')}` : ''}
       </p>
     </div>
   );
@@ -334,20 +343,24 @@ function ReplayControls({
   speed,
   follow,
   threeD,
+  satellite,
   onPlay,
   onSpeed,
   onFollow,
   onThreeD,
+  onSatellite,
 }: {
   playing: boolean;
   atEnd: boolean;
   speed: number;
   follow: boolean;
   threeD: boolean;
+  satellite: boolean;
   onPlay: () => void;
   onSpeed: (s: (typeof SPEEDS)[number]) => void;
   onFollow: (v: boolean) => void;
   onThreeD: (v: boolean) => void;
+  onSatellite: (v: boolean) => void;
 }) {
   const t = useTranslations('flight.replay');
   const pill =
@@ -390,6 +403,14 @@ function ReplayControls({
       >
         3D
       </button>
+      <button
+        type="button"
+        className={pill}
+        aria-pressed={satellite}
+        onClick={() => onSatellite(!satellite)}
+      >
+        {t('satellite')}
+      </button>
     </div>
   );
 }
@@ -399,6 +420,7 @@ function TrackMap({
   time,
   follow,
   threeD,
+  satellite,
   xc,
   others,
   label,
@@ -407,6 +429,7 @@ function TrackMap({
   time: number;
   follow: boolean;
   threeD: boolean;
+  satellite: boolean;
   xc: XcScore | null;
   others: LoadedCompanion[];
   label: string;
@@ -607,6 +630,25 @@ function TrackMap({
       );
     }
   }, [ready, others]);
+
+  // Satellite imagery under the track and the map's labels, only requested once turned on.
+  useEffect(() => {
+    const instance = map.current;
+    if (!ready || !instance) return;
+    if (satellite && !instance.getSource('satellite')) {
+      instance.addSource('satellite', {
+        type: 'raster',
+        tiles: [SATELLITE_TILES],
+        tileSize: 256,
+        maxzoom: 15,
+      });
+      const firstLabel = instance.getStyle().layers.find((l) => l.type === 'symbol')?.id;
+      instance.addLayer({ id: 'satellite', type: 'raster', source: 'satellite' }, firstLabel);
+    }
+    if (instance.getLayer('satellite')) {
+      instance.setLayoutProperty('satellite', 'visibility', satellite ? 'visible' : 'none');
+    }
+  }, [ready, satellite]);
 
   // 3D terrain from free elevation tiles, only requested once the pilot turns 3D on.
   useEffect(() => {

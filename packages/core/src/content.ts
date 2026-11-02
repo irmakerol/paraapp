@@ -37,6 +37,7 @@ export const REPORT_TARGETS = [
   'tip',
   'ride',
   'event',
+  'notice',
 ] as const;
 export type ReportTarget = (typeof REPORT_TARGETS)[number];
 

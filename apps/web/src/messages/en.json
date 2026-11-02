@@ -6,7 +6,7 @@
   "nav": {
     "home": "Home",
     "news": "News",
-    "tips": "Tips",
+    "tips": "Ground School",
     "market": "Gear market",
     "sites": "Sites",
     "logbook": "Logbook",
@@ -27,7 +27,10 @@
     "safety": "Safety",
     "rides": "Rides",
     "sosLabel": "SOS: emergency help and your position",
-    "trips": "Trips"
+    "trips": "Trips",
+    "flyNow": "Fly now",
+    "flying": "Flying",
+    "notices": "Notices"
   },
   "footer": {
     "privacyNotice": "Privacy notice",
@@ -49,7 +52,7 @@
         "text": "Announcements, trips and safety notices."
       },
       "tips": {
-        "title": "Tips & tricks",
+        "title": "Ground School",
         "text": "Launching, thermalling, XC, weather and SIV, from beginner to advanced."
       },
       "market": {
@@ -62,7 +65,7 @@
       },
       "sites": {
         "title": "Sites",
-        "text": "Takeoffs and landings with wind directions and flyability."
+        "text": "Launch and landing sites with current wind speed, direction and rain."
       },
       "safety": {
         "title": "Safety",
@@ -205,11 +208,13 @@
       "photoHelp": "JPEG, PNG or WebP. We shrink it and remove location data before upload.",
       "displayName": "Display name",
       "fullName": "Full name",
-      "country": "Country code",
-      "countryHelp": "Two letters, e.g. TR",
+      "country": "Country",
       "city": "City",
       "homeSite": "Home site",
       "pilotLevel": "Pilot level",
+      "trainingLevel": "Training for",
+      "trainingLevelHelp": "Student pilots: the level you are working towards. Only levels above your current level are listed.",
+      "trainingLevelTop": "There is no higher level to train for.",
       "levelNone": "Not set",
       "levels": {
         "student": "Student",
@@ -252,7 +257,19 @@
       "weightHelp": "Your own weight without gear. Private unless you choose otherwise.",
       "totalHours": "Total flight hours",
       "totalFlights": "Number of flights",
-      "totalsHelp": "Your totals so far, including flights you did not log here. Flights you import or add can be added on top."
+      "totalsHelp": "Your totals so far, including flights you did not log here. Flights you import or add can be added on top.",
+      "licenceBody": "Issued by",
+      "licenceBodies": {
+        "thk": "THK / THSF",
+        "appi": "APPI",
+        "ushpa": "USHPA",
+        "bhpa": "BHPA",
+        "ffvl": "FFVL",
+        "dhv": "DHV",
+        "other": "Other"
+      },
+      "isInstructor": "I am an instructor",
+      "isInstructorHelp": "Shown alongside your pilot level (e.g. P5 and instructor). Editing rights for Ground School and trips are granted by the club admins."
     },
     "privacy": {
       "consentsTitle": "Consents",
@@ -348,7 +365,7 @@
     "noNews": "No news yet."
   },
   "tips": {
-    "title": "Tips & tricks",
+    "title": "Ground School",
     "lead": "Knowledge from instructors and experienced pilots, from your first launch to XC.",
     "allCategories": "All categories",
     "allLevels": "All levels",
@@ -392,9 +409,10 @@
     },
     "videoInvalid": "Only YouTube or Vimeo links are supported.",
     "noTips": "No tips here yet.",
-    "safety": "Tips do not replace training with a qualified instructor.",
+    "safety": "Ground School content does not replace training with a qualified instructor.",
     "loadVideo": "Play video from {host}",
-    "videoNotice": "The video is loaded from {host} only when you press play. {host} may then set cookies and see your IP address."
+    "videoNotice": "The video is loaded from {host} only when you press play. {host} may then set cookies and see your IP address.",
+    "add": "Add a lesson"
   },
   "market": {
     "title": "Gear market",
@@ -528,7 +546,7 @@
     "title": "Admin",
     "dashboard": "Overview",
     "news": "News",
-    "tips": "Tips",
+    "tips": "Ground School",
     "reports": "Reports",
     "users": "Users",
     "requests": "Data requests",
@@ -597,14 +615,16 @@
         "news_comment": "Comment",
         "tip": "Tip",
         "ride": "Ride post",
-        "event": "Event"
+        "event": "Event",
+        "notice": "Notice"
       },
       "statuses": {
         "open": "Open",
         "actioned": "Action taken",
         "dismissed": "Dismissed"
       },
-      "removeRide": "Remove ride post"
+      "removeRide": "Remove ride post",
+      "removeNotice": "Remove notice"
     },
     "usersAdmin": {
       "search": "Search by name",
@@ -616,7 +636,102 @@
       "verifyMember": "Verify as member",
       "ban": "Ban",
       "unban": "Unban",
-      "banned": "Banned"
+      "banned": "Banned",
+      "edit": "Edit",
+      "back": "Back to users",
+      "photo": "Profile photo",
+      "noPhoto": "No photo",
+      "removePhoto": "Remove photo",
+      "removePhotoHelp": "Deletes an unsuitable photo. The person can upload a new one.",
+      "auditNote": "Your changes are written to the audit log.",
+      "notAllowed": "Only the super admin can do this.",
+      "lastSeen": "last seen {time}",
+      "neverSeen": "never seen",
+      "sections": "Sections",
+      "profileSection": "Profile",
+      "rolesSection": "Roles",
+      "flightsSection": "Flights",
+      "equipmentSection": "Equipment",
+      "adsSection": "Market listings",
+      "noticesSection": "Notices",
+      "dangerSection": "Ban and delete",
+      "email": "Email",
+      "memberSince": "Joined",
+      "ageGroup": "Age group",
+      "ageGroups": {
+        "adult": "Adult",
+        "minor": "Under 18"
+      },
+      "statuses": {
+        "onboarding": "Sign-up not finished",
+        "active": "Active",
+        "deletion_requested": "Deletion pending",
+        "pending_guardian": "Waiting for guardian consent"
+      },
+      "language": "Language",
+      "licence": "Licence",
+      "licenceNumberSaved": "licence number on file",
+      "licenceNumberMissing": "no licence number",
+      "reportsAbout": "{count, plural, =0 {No reports about them} one {# report about them} other {# reports about them}}",
+      "stats": {
+        "logged": "Logged flights",
+        "loggedTime": "Logged airtime",
+        "declared": "Profile totals",
+        "declaredValue": "{flights} flights · {hours} h",
+        "last": "Last flight",
+        "maxAlt": "Highest altitude",
+        "maxDistance": "Longest distance",
+        "none": "—"
+      },
+      "flightsLead": "Latest 200 flights. Tracks are only visible to the pilot and are not shown here.",
+      "flightsEmpty": "No flights logged.",
+      "columns": {
+        "date": "Date",
+        "site": "Site",
+        "duration": "Duration",
+        "distance": "Distance",
+        "maxAlt": "Max alt.",
+        "glider": "Wing",
+        "visibility": "Visibility",
+        "source": "Source",
+        "kind": "Type",
+        "model": "Model",
+        "check": "Last check",
+        "repack": "Last repack",
+        "title": "Title",
+        "status": "Status",
+        "price": "Price",
+        "category": "Category",
+        "created": "Date"
+      },
+      "sources": {
+        "manual": "Manual",
+        "igc": "IGC",
+        "gpx": "GPX",
+        "app": "App"
+      },
+      "equipmentEmpty": "No equipment.",
+      "adsEmpty": "No listings.",
+      "noticesEmpty": "No notices.",
+      "removed": "Removed",
+      "removeAd": "Remove listing",
+      "deleteNotice": "Delete notice",
+      "open": "Open",
+      "closed": "Closed",
+      "banLead": "A banned person cannot sign in; you can lift the ban at any time.",
+      "banReason": "Reason (optional, written to the audit log)",
+      "isBanned": "This user is currently banned.",
+      "deleteTitle": "Delete account",
+      "deleteLead": "The profile is anonymised at once, sign-in is closed and their photos and files are deleted. The rest is purged after {days} days. This cannot be undone.",
+      "deleteReason": "Reason for deletion (written to the audit log)",
+      "deleteConfirm": "I understand this account will be deleted.",
+      "deleteButton": "Delete account permanently",
+      "deleted": "Account deleted. The remaining data will be purged within 30 days.",
+      "selfNote": "You cannot delete or ban your own account here.",
+      "adminNote": "Only the super admin can edit admins; admins cannot be banned.",
+      "viewAudited": "Opening this page is written to the audit log.",
+      "isInstructor": "Instructor",
+      "isInstructorHelp": "Shows the instructor badge on their profile. Editing rights (Ground School, trips) come from the Instructor role under Roles."
     },
     "requestsAdmin": {
       "new": "Log an email request",
@@ -832,16 +947,79 @@
       "announceHelp": "Creates a draft news post that links to this trip. You can edit it before publishing.",
       "announcedHelp": "This trip already has a news post.",
       "openAnnouncement": "Open the news post"
+    },
+    "groups": "Groups",
+    "broadcast": "Club messages",
+    "groupsAdmin": {
+      "title": "Groups",
+      "lead": "Sort people into groups (e.g. \"Students 2026\", \"Tandem team\"). You can send club messages to a group.",
+      "new": "New group",
+      "name": "Group name",
+      "namePlaceholder": "e.g. Students 2026",
+      "description": "Description (optional)",
+      "create": "Create group",
+      "nameTaken": "A group with this name already exists.",
+      "memberCount": "{count, plural, =0 {no members} one {# person} other {# people}}",
+      "empty": "No groups yet.",
+      "back": "Back to groups",
+      "members": "Members",
+      "addPerson": "Add a person",
+      "choosePerson": "Choose a person",
+      "add": "Add",
+      "remove": "Remove",
+      "noMembers": "Nobody in this group yet.",
+      "delete": "Delete group"
+    },
+    "broadcastAdmin": {
+      "lead": "Send a message to everyone, one role or one group. It shows on their Messages page, and people who allow notifications also get a phone notification.",
+      "audience": "To",
+      "audiences": {
+        "all": "Everyone",
+        "role": "A role",
+        "group": "A group"
+      },
+      "role": "Role",
+      "group": "Group",
+      "choose": "Choose",
+      "noGroups": "Create a group in Groups first.",
+      "title": "Title",
+      "body": "Message",
+      "bodyHelp": "Plain text, up to 4000 characters.",
+      "send": "Send",
+      "sent": "Sent to {count} people.",
+      "history": "Sent messages",
+      "noHistory": "No messages sent yet.",
+      "readStats": "{read}/{total} read"
+    },
+    "activity": {
+      "title": "Activity log",
+      "lastSeen": "last seen {time}",
+      "neverSeen": "never seen",
+      "empty": "No activity recorded.",
+      "retention": "Kept for 90 days. Message contents and positions are never logged.",
+      "kinds": {
+        "visit": "Opened the site or app",
+        "flight_added": "Added a flight",
+        "ad_posted": "Posted a market listing",
+        "event_rsvp": "Replied to an event",
+        "trip_registered": "Registered for a trip",
+        "comment_posted": "Commented on news",
+        "ride_posted": "Posted a ride",
+        "notice_posted": "Posted a notice"
+      }
     }
   },
   "roles": {
-    "pilot": "Pilot",
-    "member": "Member",
+    "pilot": "Pilot (licensed)",
+    "member": "Guest member",
     "instructor": "Instructor",
     "moderator": "Moderator",
     "safety_officer": "Safety officer",
     "admin": "Admin",
-    "trip_organiser": "Trip organiser"
+    "trip_organiser": "Trip organiser",
+    "guide": "Guide",
+    "super_admin": "Super admin",
+    "student_pilot": "Student pilot"
   },
   "push": {
     "newMessage": "New message from {name}",
@@ -882,7 +1060,6 @@
     "lead": "Your flights, records and equipment in one place.",
     "importButton": "Import IGC/GPX",
     "addManual": "Add a flight by hand",
-    "equipmentButton": "My equipment",
     "myPilotPage": "My pilot page",
     "exportCsv": "Download logbook (CSV)",
     "empty": "No flights yet. Import IGC or GPX files from your instrument or phone app, or add a flight by hand.",
@@ -995,7 +1172,9 @@
       "together": "Replay together",
       "togetherHelp": "Other flights from this takeoff on the same day. Tick one to fly it on the same clock.",
       "loadFailed": "That flight could not be loaded.",
-      "terrainCredit": "3D terrain: Terrain Tiles on AWS Open Data (Mapzen)."
+      "terrainCredit": "3D terrain: Terrain Tiles on AWS Open Data (Mapzen).",
+      "satellite": "Satellite",
+      "satelliteCredit": "Satellite imagery: Sentinel-2 cloudless – s2maps.eu by EOX IT Services GmbH (contains modified Copernicus Sentinel data 2023)."
     },
     "xc": {
       "title": "Cross-country score",
@@ -1098,7 +1277,8 @@
       "W": "W",
       "NW": "NW"
     },
-    "weather": "Weather and flyability"
+    "weather": "Weather and flyability",
+    "altitudeDiff": "{m} m height difference"
   },
   "pilots": {
     "pilot": "Pilot",
@@ -1124,35 +1304,49 @@
     "you": "You",
     "flyingSince": "Flying since {year}",
     "totals": "{hours} h in {flights, plural, one {# flight} other {# flights}}",
-    "weight": "{kg} kg"
+    "weight": "{kg} kg",
+    "viewPublic": "View my public profile",
+    "totalHours": "Total flight hours",
+    "totalFlights": "Total flights",
+    "yearsFlyingStat": "Years flying",
+    "sinceStat": "since {year}",
+    "memberSince": "Member since {date}",
+    "levelStat": "Level",
+    "noLevel": "Not set",
+    "badge": {
+      "pilot": "Pilot ({level})",
+      "pilotNoLevel": "Pilot",
+      "training": "Training for {level}",
+      "trainingNoLevel": "Student pilot"
+    }
   },
   "weather": {
     "today": "Today",
-    "ratings": {
-      "good": "Flyable",
-      "marginal": "Marginal",
-      "no": "Not flyable"
-    },
-    "reasons": {
-      "rain": "rain",
-      "tooWindy": "too windy",
-      "gusty": "gusty",
-      "crossWind": "wind not on the slope",
-      "strongish": "strong wind",
-      "overdevelopment": "risk of overdevelopment",
-      "noData": "no data"
-    },
-    "goodHours": "{hours, plural, =0 {no good hours} one {# good hour} other {# good hours}}",
     "hourly": "Hour by hour",
     "time": "Time",
     "wind": "Wind (km/h)",
-    "gusts": "Gusts",
+    "gusts": "Gusts (km/h)",
     "rain": "Rain (mm)",
-    "rating": "Rating",
     "unavailable": "The forecast is not available right now.",
-    "disclaimer": "A rough guide from a weather model, not a flying decision. Always check conditions on site and ask local pilots.",
+    "disclaimer": "A weather model forecast (09:00–18:00). Always check conditions on site and ask local pilots.",
     "updated": "Updated {time}.",
-    "credit": "Weather data by Open-Meteo.com"
+    "credit": "Weather data by Open-Meteo.com",
+    "kmh": "km/h",
+    "windLabel": "Wind",
+    "from": "from {dir}",
+    "gustsShort": "Gusts",
+    "rainShort": "Rain",
+    "direction": "Direction",
+    "compass": {
+      "N": "N",
+      "NE": "NE",
+      "E": "E",
+      "SE": "SE",
+      "S": "S",
+      "SW": "SW",
+      "W": "W",
+      "NW": "NW"
+    }
   },
   "safety": {
     "title": "Safety",
@@ -1527,5 +1721,97 @@
       "noParticipants": "There are no accepted pilots to add yet.",
       "groupFailed": "The group chat could not be created."
     }
+  },
+  "fly": {
+    "title": "Fly now",
+    "lead": "Record your flight with the Fly Anatolia app on your phone: GPS, vario sound, altitude and speed.",
+    "flyingNow": "You are flying right now",
+    "flyingSince": "Recording since {time}",
+    "flyingHelp": "Stop the recording in the app on your phone. After landing the flight goes to your logbook automatically.",
+    "openApp": "Open the app",
+    "noAppTitle": "No app on your phone?",
+    "noAppBody": "The Fly Anatolia iPhone app is being tested by club members through TestFlight. Write to the club to join.",
+    "afterTitle": "Flew with another instrument?",
+    "afterBody": "You can add the flight to your logbook later as an IGC or GPX file.",
+    "import": "Upload a flight file",
+    "notOpened": "The app did not open. Open the Fly Anatolia app on your home screen (the one installed with TestFlight) directly. If you added the website to your home screen, that icon is the website, not the app; flights are recorded only in the app."
+  },
+  "clubMessages": {
+    "title": "From the club",
+    "unread": "unread",
+    "back": "Back to messages",
+    "from": "Fly Anatolia"
+  },
+  "notices": {
+    "title": "Notices",
+    "lead": "Got a free seat, looking for a harness or a flying buddy? The club members' notice board.",
+    "marketTitle": "Gear Market",
+    "marketLead": "Wings, harnesses, reserves and instruments for sale by club members.",
+    "marketAll": "All market listings",
+    "marketNew": "Sell something",
+    "marketEmpty": "No listings in the market right now.",
+    "boardTitle": "Notice board",
+    "boardLead": "Only adult members see this board. Notices close by themselves after 30 days; you can renew them.",
+    "signInForBoard": "Sign in to see the notice board and post a notice.",
+    "signIn": "Sign in",
+    "adultsOnly": "The notice board is for adult members only. You can still browse the Gear Market.",
+    "new": "Post a notice",
+    "filter": "Filter notices",
+    "all": "All",
+    "anySite": "All sites",
+    "anyCategory": "All categories",
+    "apply": "Filter",
+    "clear": "Clear",
+    "kinds": {
+      "offer": "Offering",
+      "request": "Looking for"
+    },
+    "kindsShort": {
+      "offer": "Offering",
+      "request": "Looking"
+    },
+    "categories": {
+      "transport": "Transport",
+      "gear": "Gear",
+      "buddy": "Flying buddy",
+      "training": "Training & services",
+      "lost_found": "Lost & found",
+      "other": "Other"
+    },
+    "fields": {
+      "kind": "Type",
+      "category": "Category",
+      "title": "Title",
+      "titleHelp": "E.g. \"2 free seats to Babadağ on Saturday\"",
+      "body": "Description (optional)",
+      "site": "Flying site (optional)",
+      "place": "Place (optional)",
+      "placeHelp": "A district or meeting point, not your home address.",
+      "date": "Date (optional)",
+      "seats": "Seats",
+      "price": "Price (optional)",
+      "currency": "Currency",
+      "photo": "Photo (optional)",
+      "photoHelp": "The photo is shrunk on your device and its location data removed.",
+      "removePhoto": "Remove photo"
+    },
+    "gearHint": "To sell gear, a Gear Market listing reaches more people.",
+    "privacyNote": "Other adult members see this notice with your name. Discuss details in a private message.",
+    "post": "Post",
+    "posted": "Your notice is live.",
+    "empty": "No notices match these filters.",
+    "yours": "Your notice",
+    "closed": "Closed",
+    "expired": "Expired",
+    "expires": "Closes on {date}",
+    "close": "Close",
+    "reopen": "Reopen",
+    "renew": "Renew for 30 days",
+    "mine": "My notices",
+    "mineLead": "Your closed or expired notices. Repost or delete them.",
+    "seatsCount": "{count, plural, one {# seat} other {# seats}}",
+    "photoAlt": "Notice photo: {title}",
+    "photoError": "The photo could not be uploaded. Try again or post without it.",
+    "adultsOnlyError": "The notice board is for adult members only."
   }
 }

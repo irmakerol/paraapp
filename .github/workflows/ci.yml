@@ -48,7 +48,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: latest
+          # A fixed version (the one in package.json): "latest" asks the GitHub API, which is
+          # rate limited on shared runners.
+          version: 2.122.0
       - run: supabase db start
       - run: supabase test db
 

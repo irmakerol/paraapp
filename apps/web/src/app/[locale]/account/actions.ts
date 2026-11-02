@@ -1,14 +1,24 @@
 'use server';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
-import { CONSENT_TYPES, licenceNumberSchema, profileSchema, type ConsentType } from '@paraapp/core';
+import {
+  CONSENT_TYPES,
+  LICENCE_BODIES,
+  licenceNumberSchema,
+  profileSchema,
+  trainingLevelOptions,
+  trainingLevelSchema,
+  type ConsentType,
+} from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
 import { removeUserFiles } from '@/lib/account-files';
 import { getUser } from '@/lib/session';
 import { encryptField } from '@/lib/crypto';
 import { serverEnv } from '@/lib/env';
 import { routing } from '@/i18n/routing';
+import { LOCALE_COOKIE } from '@/lib/preferred-locale';
 import type { ActionState } from '@/lib/action-state';
 
 function localeFrom(formData: FormData): string {
@@ -40,7 +50,11 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     pilot_level: field('pilot_level') || null,
     flying_since: field('flying_since') === '' ? null : field('flying_since'),
     weight_kg: field('weight_kg') === '' ? null : field('weight_kg'),
-    total_flight_hours: field('total_flight_hours') === '' ? 0 : field('total_flight_hours'),
+    // Some keyboards type "12,5"; accept the comma.
+    total_flight_hours:
+      field('total_flight_hours') === ''
+        ? 0
+        : String(field('total_flight_hours') ?? '').replace(',', '.'),
     total_flights: field('total_flights') === '' ? 0 : field('total_flights'),
     wings: field('wings'),
     bio: field('bio'),
@@ -62,11 +76,37 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     units_system: field('units_system'),
     units_speed: field('units_speed'),
   });
+  const training = trainingLevelSchema.safeParse(field('training_level') || null);
   const licence = licenceNumberSchema.safeParse(String(field('licence') ?? ''));
-  if (!parsed.success || !prefs.success || !licence.success) {
+  const licenceBody = z
+    .enum(LICENCE_BODIES)
+    .nullable()
+    .safeParse(field('licence_body') || null);
+  const trainingOk =
+    training.success &&
+    (!training.data ||
+      (trainingLevelOptions(parsed.data?.pilot_level ?? null) as string[]).includes(training.data));
+  if (
+    !parsed.success ||
+    !prefs.success ||
+    !licence.success ||
+    !licenceBody.success ||
+    !trainingOk
+  ) {
+    // Name the exact field, so the form can mark it (privacy selects as privacy_<field>).
     const fieldErrors: Record<string, string> = {};
-    for (const issue of parsed.error?.issues ?? [])
-      fieldErrors[String(issue.path[0])] = 'validation';
+    for (const issue of parsed.error?.issues ?? []) {
+      const [first, second] = issue.path;
+      fieldErrors[first === 'field_privacy' ? `privacy_${String(second)}` : String(first)] =
+        'validation';
+    }
+    for (const issue of prefs.error?.issues ?? []) {
+      const key = String(issue.path[0]);
+      fieldErrors[key === 'locale' ? 'pref_locale' : key] = 'validation';
+    }
+    if (!licence.success) fieldErrors.licence = 'validation';
+    if (!licenceBody.success) fieldErrors.licence_body = 'validation';
+    if (!trainingOk) fieldErrors.training_level = 'validation';
     return { error: 'validation', fieldErrors };
   }
 
@@ -75,6 +115,8 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
     .from('profiles')
     .update({
       ...parsed.data,
+      // Only student pilots see the field; leave it alone when it was not sent.
+      ...(formData.has('training_level') ? { training_level: training.data ?? null } : {}),
       locale: prefs.data.locale,
       units: { system: prefs.data.units_system, speed: prefs.data.units_speed },
     })
@@ -82,18 +124,27 @@ export async function saveProfile(_prev: ActionState, formData: FormData): Promi
   if (error) return { error: 'generic' };
 
   // Only touch the encrypted licence number when the user typed something or cleared it.
+  const licenceUpdate: { licence_body: string | null; licence_number_enc?: string | null } = {
+    licence_body: licenceBody.data,
+  };
   if (formData.get('licence_changed') === '1') {
     const value = licence.data;
-    const { error: licenceError } = await supabase
-      .from('profile_private')
-      .update({
-        licence_number_enc: value ? encryptField(value, serverEnv().LICENCE_ENCRYPTION_KEY) : null,
-      })
-      .eq('user_id', user.id);
-    if (licenceError) return { error: 'generic' };
+    licenceUpdate.licence_number_enc = value
+      ? encryptField(value, serverEnv().LICENCE_ENCRYPTION_KEY)
+      : null;
   }
+  const { error: licenceError } = await supabase
+    .from('profile_private')
+    .update(licenceUpdate)
+    .eq('user_id', user.id);
+  if (licenceError) return { error: 'generic' };
 
   revalidatePath('/', 'layout');
+  // The page language comes from the URL; switch to the chosen one right away and remember it
+  // (next-intl's cookie) for visits that start without a language in the address.
+  const chosen = prefs.data.locale;
+  (await cookies()).set(LOCALE_COOKIE.name, chosen, LOCALE_COOKIE.options);
+  if (chosen !== localeFrom(formData)) redirect(`/${chosen}/account?saved=1`);
   return { ok: true };
 }
 

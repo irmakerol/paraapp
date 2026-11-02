@@ -13,6 +13,8 @@ insert into auth.users (id, email, raw_user_meta_data) values
 select is((select status::text from public.profiles where id = '66666666-6666-6666-6666-666666666666'),
   'onboarding', 'sign-up without birth date starts in onboarding');
 
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"66666666-6666-6666-6666-666666666666","role":"authenticated"}', true);
 select is(public.complete_age_gate((current_date - interval '16 years')::date)::text, 'pending_guardian',

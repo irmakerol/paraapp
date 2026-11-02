@@ -1,6 +1,6 @@
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(25);
+select plan(26);
 
 delete from public.sites;
 insert into auth.users (id, email, raw_user_meta_data) values
@@ -8,10 +8,14 @@ insert into auth.users (id, email, raw_user_meta_data) values
   ('33333333-3333-3333-3333-333333333333', 'other@example.com', '{"birth_date":"1990-01-01"}'),
   ('55555555-5555-5555-5555-555555555555', 'member@example.com', '{"birth_date":"1990-01-01"}'),
   ('88888888-8888-8888-8888-888888888888', 'mod@example.com', '{"birth_date":"1985-01-01"}'),
+  ('66666666-6666-6666-6666-666666666666', 'owner@example.com', '{"birth_date":"1980-01-01"}'),
   ('44444444-4444-4444-4444-444444444444', 'teen@example.com', jsonb_build_object('birth_date', (current_date - interval '16 years')::date));
 update public.profiles set status = 'active' where id = '44444444-4444-4444-4444-444444444444';
+-- New accounts are guest members by default; these tests start from accounts without roles.
+delete from public.user_roles where role = 'member';
 insert into public.user_roles (user_id, role) values
   ('88888888-8888-8888-8888-888888888888', 'moderator'),
+  ('66666666-6666-6666-6666-666666666666', 'super_admin'),
   ('55555555-5555-5555-5555-555555555555', 'member');
 
 -- Sites ---------------------------------------------------------------------
@@ -20,8 +24,11 @@ select set_config('request.jwt.claims', '{"sub":"11111111-1111-1111-1111-1111111
 select throws_ok($$ insert into public.sites (slug, name, lat, lng) values ('x', 'X', 36, 29) $$,
   '42501', null, 'pilots cannot add sites');
 select set_config('request.jwt.claims', '{"sub":"88888888-8888-8888-8888-888888888888","role":"authenticated"}', true);
+select throws_ok($$ insert into public.sites (slug, name, lat, lng) values ('y', 'Y', 36, 29) $$,
+  '42501', null, 'moderators cannot add sites');
+select set_config('request.jwt.claims', '{"sub":"66666666-6666-6666-6666-666666666666","role":"authenticated"}', true);
 select lives_ok($$ insert into public.sites (slug, name, kind, lat, lng, elevation_m)
-  values ('babadag', 'Babadağ', 'launch', 36.5326, 29.1902, 1700) $$, 'moderators add sites');
+  values ('babadag', 'Babadağ', 'launch', 36.5326, 29.1902, 1700) $$, 'the super admin adds sites');
 reset role;
 set local role anon;
 select is((select count(*)::int from public.sites), 1, 'guests can read sites');

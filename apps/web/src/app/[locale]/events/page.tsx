@@ -6,6 +6,7 @@ import { eventLocation } from '@/lib/events';
 import { formatDateTime } from '@/lib/format';
 import { Card, PageTitle } from '@/components/ui';
 import { Tabs } from '@/components/tabs';
+import { sampleLabel } from '@/lib/sample';
 
 export async function generateMetadata({
   params,
@@ -66,7 +67,7 @@ export default async function EventsPage({
                 <p
                   className={`mt-1 text-lg font-bold ${e.status === 'cancelled' ? 'line-through' : ''}`}
                 >
-                  {e.title}
+                  {sampleLabel(e.title, locale)}
                 </p>
                 <p className="text-sm text-muted">
                   {formatDateTime(e.starts_at, locale)}

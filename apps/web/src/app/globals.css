@@ -56,6 +56,8 @@
   --color-brand-blue: var(--brand-blue);
   /* Darker than the brand red so white text on it passes WCAG AA (6:1) in both themes. */
   --color-sos: #b4232c;
+  /* The Fly button: white text passes WCAG AA (5:1) on this green. */
+  --color-fly: #15803d;
   --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 

@@ -1,5 +1,12 @@
 import 'server-only';
-import { openMeteoUrl, rateForecast, type HourlyForecast, type HourRating } from '@paraapp/core';
+import {
+  dailyConditions,
+  openMeteoUrl,
+  rateForecast,
+  type DayConditions,
+  type HourlyForecast,
+  type HourRating,
+} from '@paraapp/core';
 import { createClient } from '@/lib/supabase/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { serverEnv } from '@/lib/env';
@@ -66,27 +73,22 @@ export async function siteForecast(
 }
 
 /** Today's best rating per site from the cache only (no fetching), for lists. */
-export async function cachedTodayRatings(
-  sites: Site[],
-): Promise<Map<string, HourRating['rating']>> {
+/** Today's wind, gusts, direction and rain per site, from cached forecasts only (no fetching). */
+export async function cachedTodayConditions(sites: Site[]): Promise<Map<string, DayConditions>> {
   const supabase = await createClient();
   const { data } = await supabase.from('weather_forecasts').select('site_id, data');
   const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Istanbul' }).format(
     new Date(),
   );
-  const rank = { no: 0, marginal: 1, good: 2 } as const;
-  const out = new Map<string, HourRating['rating']>();
+  const out = new Map<string, DayConditions>();
   for (const row of data ?? []) {
     const site = sites.find((s) => s.id === row.site_id);
     const hourly = asHourly(row.data);
     if (!site || !hourly) continue;
-    let best: HourRating['rating'] | null = null;
-    for (const h of rateForecast(hourly, site.wind_directions)) {
-      const hour = Number(h.time.slice(11, 13));
-      if (!h.time.startsWith(today) || hour < 9 || hour > 18) continue;
-      if (best === null || rank[h.rating] > rank[best]) best = h.rating;
-    }
-    if (best) out.set(site.id, best);
+    const day = dailyConditions(rateForecast(hourly, site.wind_directions)).find(
+      (d) => d.date === today,
+    );
+    if (day) out.set(site.id, day);
   }
   return out;
 }

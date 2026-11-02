@@ -1,0 +1,10 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": { "@paraapp/core-tracks": ["../../packages/core/src/tracks/index.ts"] }
+  },
+  "include": ["**/*.ts", "**/*.tsx", "../../packages/core/src/tracks/*.ts"],
+  "exclude": ["node_modules", "ios", "android", "../../packages/core/src/tracks/*.test.ts"]
+}
